@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MobileBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230518131901_mandate2")]
-    partial class mandate2
+    [Migration("20230605170626_First")]
+    partial class First
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -157,6 +157,9 @@ namespace MobileBackend.Migrations
                     b.Property<string>("AccountNo")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("AcOpenDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("AccountFacility")
                         .HasColumnType("text");
 
@@ -205,6 +208,47 @@ namespace MobileBackend.Migrations
                     b.HasKey("AccountNo");
 
                     b.ToTable("AccountInfo");
+                });
+
+            modelBuilder.Entity("MobileBackend.Models.AccountStatments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ApplicantId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Consent_Handle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MobileNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("requestDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("request_status")
+                        .HasColumnType("text");
+
+                    b.Property<string>("statement")
+                        .HasColumnType("text");
+
+                    b.Property<string>("status_request")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("AccountStatments");
                 });
 
             modelBuilder.Entity("MobileBackend.Models.Applicant", b =>
@@ -1275,6 +1319,263 @@ namespace MobileBackend.Migrations
                     b.ToTable("DocumentLoan");
                 });
 
+            modelBuilder.Entity("MobileBackend.Models.ExistingAcMandate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("LoanAc")
+                        .HasColumnType("text");
+
+                    b.Property<int>("amount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("api_response_id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("authentication_mode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("branch")
+                        .HasColumnType("text");
+
+                    b.Property<string>("collection_amount_type")
+                        .HasColumnType("text");
+
+                    b.Property<string>("consumer_reference_number")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("text");
+
+                    b.Property<string>("debtor_account_id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("debtor_account_type")
+                        .HasColumnType("text");
+
+                    b.Property<string>("debtor_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("email_address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("emandate_id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("first_collection_date")
+                        .HasColumnType("text");
+
+                    b.Property<string>("instructed_agent_code")
+                        .HasColumnType("text");
+
+                    b.Property<string>("is_cancelled")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("is_until_cancel")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("last_run_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("last_run_status")
+                        .HasColumnType("text");
+
+                    b.Property<string>("mandate_status")
+                        .HasColumnType("text");
+
+                    b.Property<string>("mandate_type_category_code")
+                        .HasColumnType("text");
+
+                    b.Property<string>("mobile_number")
+                        .HasColumnType("text");
+
+                    b.Property<string>("occurance_frequency_type")
+                        .HasColumnType("text");
+
+                    b.Property<string>("occurance_sequence_type")
+                        .HasColumnType("text");
+
+                    b.Property<string>("phone_number")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("quick_invite")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("reference_id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("scheme_reference_number")
+                        .HasColumnType("text");
+
+                    b.Property<string>("umrn_mandate")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExistingAcMandates");
+                });
+
+            modelBuilder.Entity("MobileBackend.Models.ExistingApplicant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("AccountInfoId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AddlIncome")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Address_Line1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Address_Line2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Adhaar_No")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Applicant_First_Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Applicant_Last_Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Applicant_Middle_Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Caste")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City_Village")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreditScore")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Date_Of_Birth")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Dependent")
+                        .HasColumnType("text");
+
+                    b.Property<string>("District")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DocumentExecution")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Driving_Lic")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Education")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ElectionId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExistingCIF")
+                        .HasColumnType("text");
+
+                    b.Property<int>("GMI")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Guardian_Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LatestIncome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MaritialStatus")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MobileNumber")
+                        .HasColumnType("text");
+
+                    b.Property<int>("NMI")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NetWorth")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Occupation")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PAN_No")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PINCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Passport")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PermanentAddress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PrimaryBankingRelation")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RelationWithAppl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Relationship")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Religion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RemarkOnAddlIncome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RemarkOnNMI")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RemarkOther")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Salutation")
+                        .HasColumnType("text");
+
+                    b.Property<string>("State")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TypeofApplicant")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Voter_Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkPlace")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkPlaceAddress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkingSince")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountInfoId");
+
+                    b.ToTable("ExistingApplicant");
+                });
+
             modelBuilder.Entity("MobileBackend.Models.KCCCropDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -1869,6 +2170,9 @@ namespace MobileBackend.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("scheme_reference_number")
+                        .HasColumnType("text");
+
+                    b.Property<string>("umrn_mandate")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -2499,6 +2803,15 @@ namespace MobileBackend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MobileBackend.Models.AccountStatments", b =>
+                {
+                    b.HasOne("MobileBackend.Models.Application", "Application")
+                        .WithMany("AccountStatments")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MobileBackend.Models.Applicant", b =>
                 {
                     b.HasOne("MobileBackend.Models.Application", null)
@@ -2612,6 +2925,13 @@ namespace MobileBackend.Migrations
                         .HasForeignKey("ApplicationDetailId");
                 });
 
+            modelBuilder.Entity("MobileBackend.Models.ExistingApplicant", b =>
+                {
+                    b.HasOne("MobileBackend.Models.AccountInfo", "Account")
+                        .WithMany("Applicants")
+                        .HasForeignKey("AccountInfoId");
+                });
+
             modelBuilder.Entity("MobileBackend.Models.KCCCropDetail", b =>
                 {
                     b.HasOne("MobileBackend.Models.Application", "ApplicationDetail")
@@ -2630,7 +2950,7 @@ namespace MobileBackend.Migrations
             modelBuilder.Entity("MobileBackend.Models.KCCCropDetailExisting", b =>
                 {
                     b.HasOne("MobileBackend.Models.KCCExistingLand", "KCCExistingLand")
-                        .WithMany()
+                        .WithMany("KCCCrops")
                         .HasForeignKey("KCCExistingLandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2689,7 +3009,7 @@ namespace MobileBackend.Migrations
             modelBuilder.Entity("MobileBackend.Models.Mandate", b =>
                 {
                     b.HasOne("MobileBackend.Models.Application", "ApplicationDetail")
-                        .WithMany()
+                        .WithMany("Mandates")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
