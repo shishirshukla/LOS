@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form method="post" action="/LoanFlow/AddDisb" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Details</label>
+     <input type="text" class="form-control-sm" required name="Details"  placeholder="Details">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Total Amount</label>
+   <input type="number" class="form-control-sm" required name="TotalAmount"  placeholder="Total Amount">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Bank Contribution</label>
+   <input type="number" class="form-control-sm" required name="BankPart"  placeholder="Bank Amount">
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+  </div>
+  
+  
+  
+</form>

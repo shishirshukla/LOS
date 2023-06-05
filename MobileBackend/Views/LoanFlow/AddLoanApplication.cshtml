@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form method="post" action="/LoanFlow/AddLoanApplication" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Facility</label>
+    <select class="form-control-sm" name="TypeOfFacility">
+        <option value="TL">Term Loan</option>
+        <option value="CC">Cash Credit </option>
+       <option value="OD">Overdraft </option>
+       <option value="BG">Bank Guarantee </option>
+      
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Purpose</label>
+   
+   <input type="text" class="form-control-sm" required name="Description"  placeholder="File Details">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Cost</label>
+   <input type="number" class="form-control-sm" required name="Cost" value="@ViewBag.Cost"  placeholder="Cost">
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Applied Amount</label>
+   <input type="number" class="form-control-sm" required name="AppliedAmount" max="@ViewBag.Applied"  value="@ViewBag.Applied" placeholder="Applied Amount">
+
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Moratorium</label>
+   <input type="text" class="form-control-sm" required name="Moratorium"  placeholder="Moratorium (Months)">
+  </div>
+
+ 
+  
+ 
+  </div>
+    <div class="row justify-content-between text-left">
+  
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >PLR</label>
+   <input type="text" class="form-control-sm" required name="PLR"  placeholder="PLR">
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Spread</label>
+   <input type="text" class="form-control-sm" required name="Spread"  placeholder="Rate Above PLR">
+  </div>
+           <div class="form-group col-sm-4 flex-column d-flex">
+    <label >ROI</label>
+   <input type="text" class="form-control-sm" required name="RateOfInterest"  placeholder="RateOfInterest">
+  </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Submit</button>
+ 
+  
+  
+</form>

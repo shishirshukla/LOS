@@ -1,0 +1,254 @@
+﻿@model Application
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    int slno = 1;
+    double elig1 = 0;
+    double elig = 0;
+    double gmiAll = 0;
+    var l = (Dictionary<int, List<CIBILLoanInfo>>)ViewBag.LoanInfo;
+    List<double> repay = new List<double>();
+    List<double> nmiTotal = new List<double>();
+    List<double> gmiTotal = new List<double>();
+    List<DateTime> repayDates = new List<DateTime>();
+    int eminmi = 0;
+}
+
+  
+
+   
+        <div class="border border-dark">
+           
+            <br/>
+            <table width="100%" id="assetTable">
+                <tr>
+                    <th colspan="@Model.Applicants.Count ">
+                         <b>Eligibility</b> (@Model.LoanScheme)
+                    </th>
+                </tr>
+                <tr>
+                    <td><b>Applicant Name</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.Applicant_First_Name @a.Applicant_Middle_Name @a.Applicant_Last_Name</td>   
+                    }
+                </tr>
+                <tr>
+                    <td><b>Occupation</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.Occupation</td>   
+                    }
+                </tr>
+                <tr>
+                    <td><b>Designation</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.Voter_Id</td>   
+                    }
+                </tr>
+                 <tr>
+                    <td><b>Gross MI</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.GMI</td>   
+                    }
+                </tr>
+                 <tr>
+                    <td><b>Net MI</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor" ))
+                    {
+                        <td>@a.NMI</td>   
+                    }
+                </tr>
+                <tr>
+                    <td><b>Remarks</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.RemarkOnNMI</td>   
+                    }
+                </tr>
+                 <tr>
+                    <td><b>Home Loan Form Our Bank</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted" && a.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.Passport</td>   
+                    }
+                </tr>
+                 <tr>
+                    <td><b>EMI / NMI Eligible</b></td>
+                    <td colspan="@Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor").Count()">
+                @{
+                    var annual_inc = (Model.Applicants.Where(a=> a.Driving_Lic != "Deleted" && a.TypeofApplicant != "Guarantor").Sum(a=> a.NMI) + Model.Applicants.Where(a=> a.Driving_Lic != "Deleted" && a.TypeofApplicant != "Guarantor").Sum(a=> a.AddlIncome)) * 12;
+                    var hl_cnt = Model.Applicants.Where(a => a.Driving_Lic != "Deleted" && a.TypeofApplicant != "Guarantor" && a.Passport == "Yes").ToList();
+                    switch(annual_inc) 
+                    {
+
+                        case int n when (n <=  500000):
+
+                            eminmi = 50;
+                            if (hl_cnt.Count > 0)
+                            {
+                                eminmi = 60;
+                            }
+                            break;
+                        case int n when (n <=  800000):
+                            eminmi = 55;
+                            if (hl_cnt.Count > 0)
+                            {
+                                eminmi = 65;
+                            }
+                            break;
+
+                        case int n when (n >  800000):
+                            eminmi = 60;
+                            if (hl_cnt.Count > 0)
+                            {
+                                eminmi = 70;
+                            }
+                            break;
+                        default:
+                            // code block
+                            break;
+                    }
+                    if (Model.LoanScheme == "PL-SECL")
+                    {
+                        eminmi = 50;
+                        if (hl_cnt.Count > 0)
+                        {
+                            eminmi = 60;
+                        }
+                    }
+
+                        }
+                        @eminmi.ToString() %
+
+                    </td>
+                        
+                </tr>
+                <tr>
+                    <td><b>Existing EMIs</b></td>
+                    @foreach(var a in l)
+                    {
+                         <td>@a.Value.Sum(z=> z.EMIConsidered)</td>
+                    }
+                </tr>
+                <tr>
+                    <td><b>Amt Available for EMI</b></td>
+                    @foreach(var a in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor"))
+                    {
+
+                <td>
+                    @{
+                                    
+                                    double NMI = a.NMI * eminmi / 100;
+                                    List<CIBILLoanInfo> loans;
+                                    l.TryGetValue(a.Id, out loans);
+                                    int existingEMI = loans.Sum(z => z.EMIConsidered);
+                                    NMI = NMI - existingEMI;
+                                    repay.Add(NMI);
+                                    gmiTotal.Add(a.GMI);
+                                }
+                                @NMI
+                            </td>
+                         
+                    }
+                </tr>
+                <tr>
+                    <td><b>Total Available Amt</b></td>
+                    <td colspan="@Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor").Count()">
+                        @repay.Sum();
+                    </td>
+                </tr>
+                 <tr>
+                    <td><b>Retirement Date</b></td>
+                    @foreach(var a in Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>
+                        @{
+                            DateTime maxDate = new DateTime();
+                            if (a.NMI > 0 && a.Driving_Lic != "Deleted" ) 
+                            {
+                                maxDate = DateTime.Parse(a.Driving_Lic);
+                                repayDates.Add(maxDate);
+                                <span>@maxDate.ToShortDateString();</span>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        }
+                              
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <td><b>Eligibility As Per EMI/NMI</b></td>
+                    <td colspan="@Model.Applicants.Count">
+                @{
+                    double Amt = repay.Sum();
+                    DateTime retirementDate = repayDates.Min();
+                    DateTime k = DateTime.Now;
+                    if (Model.Status == "Sanctioned")
+                    {
+                        k = Model.SanctionedDate.Value;
+                    }
+                    double months = ((retirementDate.Year - k.Year) * 12 + (retirementDate.Month - k.Month));
+                    if (Model.LoanScheme == "PL-Express" || Model.LoanScheme == "PL-SECL" )
+                    {
+                        months = Math.Min(60, months);
+                    }
+                    else
+                    {
+                        months = Math.Min(72, months);
+                    }
+
+                    double roi = (double)Model.LoanApplications.Where(a => a.TypeOfFacility == "TL" || a.TypeOfFacility == "OD").FirstOrDefault().RateOfInterest;
+                    var amt = Microsoft.VisualBasic.Financial.PV( roi / 1200, months, Amt);
+                    amt = Math.Abs(Math.Round(amt, 0));
+                    elig1 = amt;
+                }
+                @elig1 (Repay Period - @months months, Installment - @Amt)
+                    </td>
+                </tr>
+                 <tr>
+                    <td><b>Applied Amt.</b></td>
+                    <td colspan="@Model.Applicants.Count">
+                            @Model.LoanApplications.Where(a=> a.TypeOfFacility == "TL" || a.TypeOfFacility == "OD").FirstOrDefault().AppliedAmount;
+                    </td>
+                </tr>
+                <tr>
+            @if (Model.LoanScheme == "PL-SECL" )
+            {
+                <td><b>18 Times of GMI</b></td>
+                    <td colspan="@Model.Applicants.Count">
+                        @{
+                             gmiAll = gmiTotal.Sum() * 18;
+                        }
+                            @(gmiAll)
+                </td>
+            }
+            else
+            {
+                gmiAll = (double)Model.LoanApplications.Where(a => a.TypeOfFacility == "TL" || a.TypeOfFacility == "OD").FirstOrDefault().AppliedAmount;
+                 
+            }
+            
+                </tr>
+                <tr>
+                    <td><b>Eligible Amount</b></td>
+                    <td colspan="@Model.Applicants.Count">
+                @{
+                    
+                    elig = Math.Min((double)gmiAll, Math.Min(elig1, (double)Model.LoanApplications.Where(a => a.TypeOfFacility == "TL" || a.TypeOfFacility == "OD").FirstOrDefault().AppliedAmount));
+                }
+                            <b id='eliAmt'>@elig</b>
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+            

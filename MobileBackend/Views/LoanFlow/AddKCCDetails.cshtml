@@ -1,0 +1,119 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemark" >
+
+         <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Other Details</label>
+    <select class="form-control-sm " name="TypeOfRemark" id="SecondaryRemark">
+                    <option data-id="0"  >--</option>
+                    <option data-id="pHL" >Source of Irrigation</option>
+                    <option data-id="proType" >Cropping Pattern</option>
+                    
+                    <option data-id="repType">Type of Farming Practice </option> 
+                    <option data-id="LTV"> Tieups / Buyback Arrangment </option> 
+                    <option data-id="FB"> Family Background </option> 
+                    <option data-id="Tractor"> Tractor </option> 
+                     <option data-id="House"> Pucca House </option> 
+                     <option data-id="Loan"> Loan History </option> 
+                    <option data-id="0">Nominee Name for PAIS</option>
+                    <option data-id="0">Rinn Pustika No.</option>
+      
+                
+        
+       
+    </select>
+  </div>
+  <div class="form-group col-sm-8 flex-column d-flex">
+    <label >Value</label>
+   
+   <textarea rows="3" class="form-control hide1 hide2" name="Statment"  placeholder="Remarks"></textarea>
+   <select id="pHL" class="hide1" name="" style="display:none">
+       <option>Tubewell</option>
+       <option>Canal / River</option>
+       <option>Bore / Well</option>
+       <option>Rainfed</option>
+       <option>Drip Irrigation</option>
+       <option>Other</option>
+      
+   </select>
+
+   <select id="FB" class="hide1" name="" style="display:none">
+       <option>One or More Member is in Govt Service</option>
+       <option>Well Respected / Known in area</option>
+       <option>Position Holder in Panchayat/Board/Municipal etc</option>
+       <option>Other</option>
+      
+   </select>
+
+   <select id="Tractor" class="hide1" name="" style="display:none">
+       <option>Loan Free</option>
+       <option>Our Existing borrower a/c with satisfactory 3yrs or more with repayment of no irregularity</option>
+       
+       <option>Other</option>
+      
+   </select>
+
+    <select id="House" class="hide1" name="" style="display:none">
+       <option>Mortgage Free</option>
+       <option>Property Mortgaged with Regular Repayment</option>
+       
+      
+   </select>
+    <select id="Loan" class="hide1" name="" style="display:none">
+       <option>More than 5 years satisfactory Account with any reputed bank</option>
+       <option>3 to 5 years satisfactory Account with any reputed bank</option>
+       <option>Below 3 years satisfactory Account with any reputed bank</option>
+      
+   </select>
+
+   <select id="proType" class="hide1" name="" style="display:none">
+       <option>Single Crop</option>
+       <option>Dual Crop</option>
+       <option>Multiple Crop</option>
+       <option>Long Term Crop</option>  
+   </select>
+     <select id="repType" class="hide1" name="" style="display:none">
+       <option>Traditional Farmer</option>
+       <option>Progressive Farmer</option>
+       <option>Advanced Farmer</option>
+        <option>Contract Farming</option>
+   </select>
+   <select id="LTV" class="hide1" name="" style="display:none">
+       <option>Yes</option>
+       <option>No</option>
+        
+   </select>
+
+
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>

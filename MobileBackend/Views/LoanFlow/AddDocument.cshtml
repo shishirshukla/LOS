@@ -1,0 +1,47 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form method="post" action="/LoanFlow/AddDocument" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   
+   <div class="row justify-content-between text-left">
+ 
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Details</label>
+    <input type="text" list="options"  class="form-control-sm" id="addDoc" required name="Details">
+<datalist id="options">
+   <option value="KYC">KYC</option>
+        <option value="Salary Slip">Salary Slip</option>
+        <option value="ITR">ITR</option>
+         <option value="Form 16">Form 16</option>
+        <option value="Audit Reports">Audit Reports</option>
+        <option value="Application">Application</option>
+        <option value="Annexure 1 & 2">Annexure 1 & 2</option>
+       <option value="Joining Letter">Joining Letter</option>
+       <option value="Quotation">Quotation</option>
+       <option value="Agreement">Agreement</option>
+       <option value="Visit Report">Visit Report</option>
+       <option value="Process Note">Process Note</option>
+       <option value="Sanction Letter">Sanction Letter</option>
+       <option value="Business KYC">Business KYC</option>
+       <option value="Search Report">Search Report</option>
+       <option value="Valuation Report">Valuation Report</option>
+       <option value="Land Documents">Land Documents</option>
+       <option value="Title Deed">Title Deed</option>
+      
+</datalist>
+   
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Select File (Max 3MB)</label>
+     <input type="file" required name="KYCDocument" class="form-control-sm"/>
+  </div>
+ 
+  </div>
+  
+  
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

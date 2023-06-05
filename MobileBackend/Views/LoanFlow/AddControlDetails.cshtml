@@ -1,0 +1,1031 @@
+﻿@model Application
+@inject CustomIDataProtection _protector
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    int slno = 1;
+    bool editable = (bool)ViewBag.Editable; 
+    string statement1 = "", statement2 = "", statement3 = "", statement4 = "", statement5 = "", statement6 = "", statement7 = "", statement8 = "", statement9 = "", statement10 = "", statement11 = "", statement12 = "", statement13 = "", statement14 = "", statement15 = "";
+
+    if (Model.LoanScheme == "Sme" || Model.LoanScheme == "TPL" || Model.LoanScheme == "PMEGP" || Model.LoanScheme == "MMYSRY" || Model.LoanScheme == "SME-GSS")
+    {
+        statement1 = "Unit Type (New/Old)";
+        statement2 = "Last Filed ITR Details";
+        statement3 = "Loan Type (Fresh/Enhancement/Renewal)";
+        statement4 = "Existing Turnover";
+        statement5 = "Existing Net Profit";
+        statement6 = "Projected Turnover";
+        statement7 = "Projected Net Profit";
+        statement8 = "Other Source of Income";
+        statement9 = "Details of CIBIL";
+        statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        statement12 = "Details of Guarantor";
+        statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Charge Registration Details";
+       
+
+
+    }
+    else  if (Model.LoanScheme == "LAP" || Model.LoanScheme == "Topup" )
+    {
+        statement1 = "Mode of Repayment (SI/ECS) ";
+        statement2 = "Gross Monthly Income";
+        statement3 = "Net Monthly Income";
+        statement4 = "Existing Deduction % (From NMI)";
+        statement5 = "Loan Eligibility";
+        statement6 = "Latest ITR Filled Year";
+        statement7 = "Details of Other Income";
+        statement8 = "Details of CIBIL";
+        //statement9 = "Details of CIBIL";
+        statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        statement12 = "Details of Guarantor";
+        statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Charge Registration Details";
+       
+
+
+    }
+    else  if (Model.LoanScheme == "DL" || Model.LoanScheme == "OD-Dep" )
+    {
+        statement1 = "Type of Security (TDR/STDR/LIC etc) ";
+        statement2 = "Value of Security (As on loan sanction date)";
+        statement3 = "% of Security";
+        //statement4 = "Rate of Interest";
+        //statement5 = "Loan Eligibility";
+        //statement6 = "Latest ITR Filled Year";
+        //statement7 = "Details of Other Income";
+        //statement8 = "Details of CIBIL";
+        //statement9 = "Details of CIBIL";
+        //statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        //statement12 = "Details of Guarantor";
+        //statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Charge Registration Details";
+       
+
+
+    }
+    else   
+    {
+        statement1 = "Irrigated Agri Land";
+        statement2 = "UnIrrigated Agri Land";
+        statement3 = "Details of Milch Cattles";
+        statement4 = "Details of Pond/Water Body";
+        statement5 = "Eligibility";
+        statement6 = "Details of Other Income";
+        //statement7 = "Details of Other Income";
+        statement8 = "Details of CIBIL";
+        //statement9 = "Details of CIBIL";
+        statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        statement12 = "Details of Guarantor";
+        statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Bhuiyan Charge Registration Details";
+       
+
+
+    }
+}
+<div class="container">
+
+    <div class="alert alert-danger" role="alert" style="margin-top:5px;">
+            Application is at : <b>@Model.Owner</b> | Application Type : <b id="LoanScheme">@Model.LoanScheme</b><br/>
+        Application status is : <b>@Model.Status</b> , @if (Model.Status == "Sanctioned")
+        {
+            <span>Controll Status : @Model.ControlStatus</span>
+        }
+    </div>
+
+   
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <tr>
+            <td colspan="6">
+                <b>Basic Application Details</b>
+            </td>
+        </tr>
+        <tr>
+            
+            <td><b>Branch</b></td>
+            <td>@Model.BranchId</td>
+            <td><b>Name</b></td>
+            <td>@Model.ApplicantShortName</td>
+            <td><b>Applicant Type</b></td>
+            <td>@Model.TypeOfApplicant</td>
+        </tr>
+        <tr>
+            
+            <td><b>Scheme</b></td>
+            <td>@Model.LoanScheme</td>
+            <td><b>Purpose</b></td>
+            <td>@Model.Purpose</td>
+            <td><b>Status</b></td>
+            <td>@Model.Status</td>
+        </tr>
+        <tr>
+            
+            <td><b>Sponsoring Agency</b></td>
+            <td>@Model.SponsoringAgency</td>
+            <td><b>Subsidy</b></td>
+            <td>@Model.SubsidyAmt</td>
+            <td><b>Application Date</b></td>
+            <td>@Model.ApplicationDate.ToShortDateString()</td>
+        </tr>
+    </table>
+
+
+      <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="5">Details of Applicant</td>
+                <td colspan="2"> @if (editable)
+                    {
+                        <a href="/LoanFlow/AddApplicant/@Model.Id" class="btn btn-primary btn-sm" >
+                        Add Applicant
+</a> <a href="/LoanFlow/SearchApplicant/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#searchModal">
+ Copy / Search
+</a>    
+                    }
+                    </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Date of Birth
+                </th>
+                <th>
+                    Occupation
+                </th>
+                <th>
+                    KYC Document
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="applicantTable">
+            @foreach(var x in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"))
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Salutation @x.Applicant_First_Name @x.Applicant_Middle_Name @x.Applicant_Last_Name @x.Relationship @x.Guardian_Name</td>
+                    <td>@x.TypeofApplicant</td>
+                    <td>@x.Date_Of_Birth</td>
+                    <td>@x.Occupation</td>
+                    <td> <a href="/@x.KYC_Upload" target="_blank">Download KYC</a>  </td>
+                    <td>
+                        @if (editable)
+                        {
+                            <a class="btn-danger btn btn-sm" href="/LoanFlow/EditApplicant/@x.Id" data-toggle="modal" data-target="#applicantModal">Edit</a>  <button type="button" class="btn btn-sm btn-warning" onclick="deleteApp(@x.Id)" >Delete</button>  <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#loadingModal" onclick="cibilApp(@x.Id);" >Get CIBIL</button>    
+                        }
+                        
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <th colspan="8">Cibil Details (Latest enquiry will be used for calculation)</th>
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>Applicant Name</th>
+                <th>Cibil Score</th>
+                <th>Date</th>
+                <th>Total Accounts</th>
+                <th>Closed Accounts</th>
+                <th>Overdue Accounts</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="cibilTable">
+            @{
+                int crCount = 1;
+            }
+            @foreach(var x in (List<CIBILRequest>)ViewBag.CreditScore)
+            {
+                <tr>
+                    <td>@crCount</td>
+                    <td>@x.ApplicantDetail.Applicant_First_Name @x.ApplicantDetail.Applicant_Last_Name</td>
+                    <td><a href="/Home/CreditScore/@x.Id">@x.ScoreName1 </a>  </td>
+                    <td>@x.RequestDate</td>
+                    <td>@x.CibilLoans.Count()</td>
+                    <td>@x.CibilLoans.Where(a => a.currentBalance == "0").Count()</td>
+                    <td>@x.CibilLoans.Where(a => int.Parse(a.amountOverdue ?? "0") != 0).Count()</td>
+                    <td> @if (editable)
+                        { <a class="btn btn-sm btn-primary" href="/Home/UpdateEmi/@x.Id">Update EMI</a> <a class="btn btn-sm btn-info" href="/LoanFlow/AddCibil/@x.Id" data-toggle="modal" data-target="#applicantModal">Add Additional Loan</a>}
+                         </td>
+                </tr>
+                crCount++;
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="3"><b>Attached Documents</b></td>
+                <td colspan="2">
+                 
+                    
+                        <a href="/LoanFlow/AddDocument/@Model.Id"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">
+ Add 
+</a> 
+                    
+
+                    
+
+</td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    UserId
+                </th>
+                <th>
+                    File Download
+                </th>
+               
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="docTable">
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Documents)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Details </td>
+                    <td>@x.UserId</td>
+                    <td><a href="/@x.FilePath" target="_blank">Download</a></td>
+                    
+                    <td> 
+                        @if (editable)
+                        {
+                            <button type="button" class="btn btn-sm btn-warning" onclick="deleteDocument(@x.Id)" >Delete</button>    
+                        }
+                        
+                        
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+
+
+  <form method="post" action="/LoanFlow/AddControlDetails" enctype="multipart/form-data">
+    <input type="hidden" value="@Model.Id" name="ApplicationId"/>
+     <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>Applied Amount</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="AppliedAmt" value="@Model.ControlInformations.AppliedAmt" />
+             </div>
+     
+            </div>
+             <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>Sanctioned TL</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="SanctionedTL" value="@Model.ControlInformations.SanctionedTL" />
+             </div>
+     
+            </div>
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>Sanctioned CC</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="SanctionedCC" value="@Model.ControlInformations.SanctionedCC" />
+             </div>
+     
+            </div>
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>Sanction Date</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="date" id="datefield" name="SanctionedDate" max="@DateTime.Today.ToString("yyyy-MM-dd")"  />
+             </div>
+     
+            </div>
+        @if (statement1 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement1</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement1" value="@Model.ControlInformations.Statement1" />
+             </div>
+     
+            </div>
+        }
+
+         @if (statement2 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement2</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement2"  value="@Model.ControlInformations.Statement2"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement3 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement3</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement3" value="@Model.ControlInformations.Statement3" />
+             </div>
+     
+            </div>
+        }
+         @if (statement4 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement4</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement4"  value="@Model.ControlInformations.Statement4"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement5 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement5</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement5"  value="@Model.ControlInformations.Statement5"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement6 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement6</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement6" value="@Model.ControlInformations.Statement6"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement7 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement7</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement7" value="@Model.ControlInformations.Statement7"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement8 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement8</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement8" value="@Model.ControlInformations.Statement8" />
+             </div>
+     
+            </div>
+        }
+         @if (statement9 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement9</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement9" value="@Model.ControlInformations.Statement9"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement10 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement10</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement10" value="@Model.ControlInformations.Statement10"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement11 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement11</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement11" value="@Model.ControlInformations.Statement11"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement12 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement12</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement12" value="@Model.ControlInformations.Statement12"/>
+             </div>
+     
+            </div>
+        }
+
+          @if (statement13 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement13</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement13" value="@Model.ControlInformations.Statement13" />
+             </div>
+     
+            </div>
+        }
+          @if (statement14 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement14</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement14" value="@Model.ControlInformations.Statement14" />
+             </div>
+     
+            </div>
+        }
+          @if (statement15 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement15</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement15" value="@Model.ControlInformations.Statement15" />
+             </div>
+     
+            </div>
+        }
+
+        @if (editable)
+        {
+            <button type="submit">Mark Sanction</button>
+            <a  href="#" class="btn btn-danger" onclick="reject('@_protector.Decode(Model.Id.ToString())');">Mark Reject</a>
+        }
+
+     
+ </form>
+
+  
+
+</div> 
+
+
+<div class="modal" id="applicantModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Applicant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="searchModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Search Applicant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+       
+      <div class="modal-body">
+        <img src="/images/loading-6.gif" class="img-fluid"/>
+      </div>
+       
+    </div>
+  </div>
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $("#datefield").focusout(function(){
+            date = $("#datefield").val();
+            var d = new Date();
+            if(date> d ){
+                alert("Please enter a valid date.");
+                $("#datefield").val("");
+            }
+ });
+
+        $('body, html').on('change','#SecondaryRemark', function(e) {
+           var id =  $('#SecondaryRemark').find(":selected").attr('data-id');
+           if(id !='0')
+           {
+               $('.hide1').hide();
+               $('.hide1').removeAttr('name');
+               $('#' + id).show();
+               $('#' + id).attr('name','Statment');
+           }
+           else{
+               $('.hide1').hide();
+               $('.hide1').removeAttr('name');
+               $('.hide2').show();
+               $('.hide2').attr('name','Statment');
+           }
+
+        });
+        function reject(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+           window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Reject';
+        }
+        
+    }
+
+        function pNote(a,b)
+       {
+            
+           //http://10.80.1.123:2000/docGenerate/processNotePer?appID=4
+           window.location = 'http://10.80.1.123:2000/docGenerate/processNotePer?appID=' + a;
+       }
+       function arrLetter(a,b)
+       {
+           window.location = 'http://10.80.1.123:2000/docGenerate/getDoc?AppId=' + a + '&LoanType='+b+'&docId=1';
+       }
+       function agLetter(a,b)
+       {
+           window.location = 'http://10.80.1.123:2000/docGenerate/getDoc?AppId=' + a + '&LoanType='+b+'&docId=2';
+       }
+       function gLetter(a,b)
+       {
+           window.location = 'http://10.80.1.123:2000/docGenerate/getDoc?AppId=' + a + '&LoanType='+b+'&docId=3';
+       }
+       function adLetter(a,b)
+       {
+           var count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Remarks not recorded , Cannot proceed !');
+                return;
+            }
+            else
+            {
+                count = $('#Mode_of_Repayment').length;
+                if(count == 0)
+                {
+                    alert('Repayment Mode not recorded , Cannot proceed  !');
+                    return;
+                }
+                
+            }
+           window.location = 'http://10.80.1.123:2000/docGenerate/loanForm?appID=' + a ;
+       }
+    function sanction(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            if ($('#LoanScheme').val() == "HL")
+            {
+                
+                var count = $("#HLRemarks tr").length;
+                if(count == 0)
+                {
+                    alert('No Hl Remarks present , Cannot proceed to sanction !');
+                    return;
+                }
+                count = $("#LTV").length;
+                if(count == 0)
+                {
+                    alert('LTV Not defined, Cannot proceed to sanction !');
+                    return;
+                }
+                count = $("#Repayment_During_Moratorium").length;
+                if(count == 0)
+                {
+                    alert('Moratorium Interest Repayment Not defined, Cannot proceed to sanction !');
+                    return;
+                }
+                count = $("#Purpose_of_HL").length;
+                if(count == 0)
+                {
+                    alert('HL Purpose not defined, Cannot proceed to sanction !');
+                    return;
+                }
+                count = $("#Proposed_HL_Address").length;
+                if(count == 0)
+                {
+                    alert('LTV Not defined, Cannot proceed to sanction !');
+                    return;
+                }
+            }
+            var count = $("#applicantTable tr").length;
+            if(count == 0)
+            {
+                alert('No Applicant present , Cannot proceed to sanction !');
+                return;
+            }
+            count = $("#cibilTable tr").length;
+            if(count == 0)
+            {
+                alert('CIBIL not verified , Cannot proceed to sanction !');
+                return;
+            }
+            count = $("#loanTable tr").length;
+            if(count == 0)
+            {
+                alert('Loan application not present , Cannot proceed to sanction !');
+                return;
+            }
+            count = $("#inspectionTable tr").length;
+            if(count == 0)
+            {
+                alert('Presanction not recorded , Cannot proceed to sanction !');
+                return;
+            }
+            count = $("#docTable tr").length;
+            if(count == 0)
+            {
+                alert('No documents uploaded, Cannot proceed to sanction !');
+                return;
+            }
+            count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Recomendation not recorded , Cannot proceed to sanction !');
+                return;
+            }
+            else
+            {
+                count = $('#CreditScore').length;
+                if(count == 0)
+                {
+                    alert('Score card details not filled , Cannot proceed to sanction !');
+                    return;
+                }
+                count = $('#Branch_Recomendation').length;
+                if(count == 0)
+                {
+                    alert('Branch Recomendation not filled , Cannot proceed to sanction !');
+                    return;
+                }
+                if($('#LoanScheme').text() == 'HL')
+                {
+                     count = $('#LTV').length;
+                     if(count == 0)
+                     {
+                        alert('LTV not filled , Cannot proceed to sanction !');
+                        return;
+                     }
+                }
+            }
+           
+            window.location = '/LoanFlow/Sanction?Id=' + a;
+             
+            
+        }
+       
+    }
+     
+     function viewPresanction(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+             if ($('#LoanScheme').text() == "HL")
+            {
+                
+                var count = $("#HLRemarks tr").length;
+                if(count == 0)
+                {
+                    alert('No Hl Remarks present , Cannot proceed ! !');
+                    return;
+                }
+                count = $("#LTV").length;
+                if(count == 0)
+                {
+                    alert('LTV Not defined, Cannot proceed ! !');
+                    return;
+                }
+                count = $("#Repayment_During_Moratorium").length;
+                if(count == 0)
+                {
+                    alert('Moratorium Interest Repayment Not defined, Cannot proceed ! !');
+                    return;
+                }
+                count = $("#Purpose_of_HL").length;
+                if(count == 0)
+                {
+                    alert('HL Purpose not defined, Cannot proceed ! !');
+                    return;
+                }
+                count = $("#Proposed_HL_Address").length;
+                if(count == 0)
+                {
+                    alert('LTV Not defined, Cannot proceed ! !');
+                    return;
+                }
+            }
+            var count = $("#applicantTable tr").length;
+            if(count == 0)
+            {
+                alert('No Applicant present , Cannot proceed ! !');
+                return;
+            }
+            count = $("#cibilTable tr").length;
+            if(count == 0)
+            {
+                alert('CIBIL not verified , Cannot proceed ! !');
+                return;
+            }
+            
+            count = $("#inspectionTable tr").length;
+            if(count == 0)
+            {
+                alert('Presanction not recorded , Cannot proceed ! !');
+                return;
+            }
+            
+            count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Recomendation not recorded , Cannot proceed ! !');
+                return;
+            }
+            else
+            {
+                count = $('#CreditScore').length;
+                if(count == 0)
+                {
+                    alert('Score card details not filled , Cannot proceed ! !');
+                    return;
+                }
+                count = $('#Branch_Recomendation').length;
+                if(count == 0)
+                {
+                    alert('Branch Recomendation not filled , Cannot proceed ! !');
+                    return;
+                }
+                
+            }
+            window.location = 'http://10.80.1.123:2000/docGenerate/preSanction?appID=' + a;
+        }
+        
+    }
+    function returnp(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Remarks not recorded , Cannot proceed !');
+                return;
+            }
+            else
+            {
+                count = $('#ReturnRemarks').length;
+                if(count == 0)
+                {
+                    alert('Return Remarks not recorded , Cannot proceed  !');
+                    return;
+                }
+                
+            }
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Return';
+        }
+        
+    }
+    function forward(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Forward';
+        }
+        
+    }
+
+    
+    function deleteRemark(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteRemark?Id=' + a + '&action1=Forward';
+        }
+        
+    }
+
+    function deleteApp(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteApplicant?Id=' + a;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+    function cibilApp(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/Home/GetCibil?AppId=' + a;
+        }
+        else
+        {
+            alert('Not generated');
+        }
+    
+    }
+    function deletePj(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteProjectCost?Id=' + a;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+    function deleteKCC(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteKCCLand?Id=' + a;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+    function deleteInspection(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteInspection?Id=' + a;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+    function deleteApplication(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteApplication?Id=' + a;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+    function deleteDocument(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteDocument?Id=' + a;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+     function deleteSecurity(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/DeleteSecurity?Id=' + a;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+    function addInspection()
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/ManualInspection';
+        }
+        
+    }
+    function copyApp(a,b)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/CopyApplicant?Id=' + a + '&AppId=' + b;
+        }
+        else
+        {
+            alert('Not Deleted');
+        }
+    }
+    function formSearch(){
+     var valdata = $("#formsearch").serialize();   
+           
+            $.ajax({   
+                url: "/LoanFlow/SearchApplicant",   
+                type: "POST",   
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
+                data: valdata   
+            }).done(function (data) {
+                    console.log(data);
+                    $('#searchResult').html(data);
+            });   
+    } 
+  $('#applicantModal').on('show.bs.modal', function (e) {
+    $(this).find('.modal-body').load(e.relatedTarget.href);
+  });
+   $('#searchModal').on('show.bs.modal', function (e) {
+    $(this).find('.modal-body').load(e.relatedTarget.href);
+  });
+</script>
+}

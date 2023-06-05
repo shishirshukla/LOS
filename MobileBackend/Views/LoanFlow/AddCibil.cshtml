@@ -1,0 +1,82 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form method="post" action="/LoanFlow/AddCibil" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+    <input type="hidden" value="@ViewBag.Id" name="CIBILRequestId"/>
+   
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Bank Name</label>
+     <input type="text" class="form-control-sm" required name="memberShortName"  placeholder="memberShortName">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Ownership</label>
+    <select class="form-control-sm" name="ownershipIndicator">
+        <option value="Individual">Individual</option>
+        <option value="Guarantor">Guarantor</option>
+        <option value="Joint">Joint</option>
+      
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Opened Date</label>
+   <input type="text" class="form-control-sm" required name="dateOpened"  placeholder="Bank Amount">
+  </div>
+ 
+  </div>
+
+   <div class="row justify-content-between text-left">
+        <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Type of Account</label>
+    <input type="text" class="form-control-sm" required name="accountType"  placeholder="accountType">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Current Balance</label>
+     <input type="number" class="form-control-sm" required name="currentBalance"  placeholder="currentBalance">
+  </div>
+ 
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Overdue Amount</label>
+   <input type="number" class="form-control-sm" required name="amountOverdue"  placeholder="amountOverdue">
+  </div>
+ 
+  </div>
+  <div class="row justify-content-between text-left">
+        <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Classification</label>
+     <select class="form-control-sm" name="paymentHistory">
+        <option value="STD">Standard</option>
+        <option value="SUB">Sub Standard</option>
+        <option value="DOU">Doubtfull</option>
+        <option value="LOS">Loss</option>
+      
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >EMI</label>
+     <input type="number" class="form-control-sm" required name="EMIConsidered"  placeholder="EMIConsidered">
+  </div>
+ 
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Remark</label>
+   <input type="text" class="form-control-sm" required name="EmployeeResponse"  placeholder="Employee Response">
+  </div>
+ 
+  </div>
+
+
+   <div class="row justify-content-between text-left">
+  
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+  </div>
+  
+  
+  
+</form>

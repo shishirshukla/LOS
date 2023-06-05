@@ -1,0 +1,150 @@
+﻿
+@using MobileBackend.Models;
+@model AAStatement
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //Layout = null;
+}
+
+
+@if (Model is null)
+{
+
+    <b>Statement is not fetched by Aggregator</b>
+
+}
+else
+{
+    
+@foreach (var item in Model.data)
+{
+    <div class="container" >
+
+        <table class="table table-sm border-secondary">
+            <tr>
+                <td colspan="2"> <b>@item.bank.ToUpper()</b> <br/>  @item.Summary.branch</td>
+            </tr>
+            <tr>
+                <td class="text-left"><b>Ref No - </b>@item.linkReferenceNumber <br/>
+                 <b>A/c No :</b>  @item.maskedAccountNumber (@item.Summary.type)<br/>
+                  <b>Open Date:</b>  @item.Summary.openingDate <br/>
+                  <b>OD Limit :</b>  @item.Summary.currentODLimit
+                </td>
+                <td class="text-right">
+                     <b>Current Balance :</b> @item.Summary.currentBalance<br/>
+                     <b>Balance as on :</b> @item.Summary.balanceDateTime
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-sm border-secondary">
+            <tr>
+                <td colspan="3"> <b>Account Holders</b> </td>
+            </tr>
+             
+        @try
+            {
+                foreach (var p in item.Profile.Holders.Holder)
+        {
+             <tr >
+                 <td>
+                    <b>Name :</b> @p.name                     
+                 </td>
+                <td>
+                    <b>PAN :</b> @p.pan
+                </td>
+                  <td>
+                    <b>Dob :</b> @p.dob
+                </td>
+                </tr>
+                <tr>
+
+               
+                <td colspan="2">
+                    <b>Address :</b> @p.address
+                </td>
+                <td>
+                    <b>Mobile :</b> @p.mobile
+                </td>
+               
+
+            </tr>
+        }
+            }
+            catch
+            {
+                <tr>
+                    <td>Some Error in Data</td>
+                </tr>
+            }
+            
+
+            
+        </table>
+
+          
+       
+            
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm">
+           <thead>
+               <tr>
+                   <th colspan="7">Transaction Between @item.Transactions.startDate and @item.Transactions.endDate</th>
+               </tr>
+               <tr>
+                   <th>Txn Timestamp</th>
+                   <th>Value Date</th>
+                   <th>Cr / Dr</th>
+                   <th>Narration</th>
+                   <th>Debit</th>
+                   <th>Credit</th>
+                   
+                   <th>Balance</th>
+               </tr>
+           </thead>
+           <tbody>
+               @foreach (var z in item.Transactions.Transaction)
+                {
+                    <tr>
+                        <td>@z.transactionTimestamp</td>
+                        <td>@z.valueDate</td>
+                        <td>@z.type</td>
+                        <td>@z.narration</td>
+                        <td>
+                            @if(z.type == "DEBIT")
+                            {
+                                <span>@z.amount</span>
+                            }
+                       
+                       </td>
+                        <td>
+                       @if(z.type == "CREDIT")
+                       {
+                           <span>@z.amount</span>
+                       }
+                       </td>
+                   <td>@z.currentBalance</td>
+                    </tr>
+                }
+           </tbody>
+       </table>
+       </div>
+       
+      
+    </div>
+}
+    
+}
+
+
+
+
+@section scripts
+{
+  
+      
+       
+}
+

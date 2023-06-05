@@ -1,0 +1,104 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemarkList" >
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+
+
+
+   <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Residing in Area of Operation</label>
+                                <select id="pHL"   name="Residing in Area of Operation"  >
+                                       <option>5 Years or More</option>
+                                       <option>Less than 5 Years</option>
+                                    
+                                </select>
+                        </div>
+
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                          <label class="form-control-label px-1">
+                                Experience in Transport Line</label>
+                                <select   name="Experience in Transport Line"  >
+                                       <option>Existing (>= 3 years)</option>
+                                       <option>Existing (1 to 3 years)</option>
+                                       <option>New</option>
+                                </select>
+                        </div>
+
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Frequecy of TO Ownership</label>
+                                <select   name="Frequecy of TO Ownership"  >
+                                       <option>Owned Transport Veh 2 Times & More</option>
+                                       <option>Owned Transport Veh 1 Time</option>
+                                       <option>Minimum 2 Years Experience of Driving of Commercial Vehichle</option>
+                                </select>
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Period of Bank Connection</label>
+                                <select   name="Period of Bank Connection"  >
+                                       <option>3 Years satisfactory Account with any reputed bank/our bank</option>
+                                       <option>2 Years satisfactory Account with any reputed bank/our bank</option>
+                                       <option>Less Than 2 Years satisfactory Account with any reputed bank/our bank</option>
+                                </select>
+                        </div>
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                House / Asset</label>
+                                <select id="proType"  name="Type of Property" >
+       <option>Owned House (Mort. Free)</option>
+       <option>Owned House (Mortgaged)</option>
+       <option>Rented House</option>
+        
+   </select>
+                        </div>
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Udyog Adhaar / Udyam Akanksha</label>
+                                <input type="text" required name="Udyog Adhaar / Udyam Akanksha" value=""/>
+                        </div>
+
+                         
+                       
+    </div>
+
+    <div class="row justify-content-between text-left">
+                       
+
+                         
+                         
+                       
+    </div>
+
+
+
+   
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>

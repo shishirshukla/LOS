@@ -1,0 +1,58 @@
+﻿@model List<CIBILLoanInfo>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+     CibilHelper cibilHelper = new CibilHelper();
+     var cnt = 0;
+     cnt++;
+}
+
+<b>Update EMIs & Remarks in all Accounts</b>
+<form method="post" action="/Home/UpdateEmi">
+    <input type="hidden" name="RequestId" value="@ViewBag.ReqId"/>
+
+    
+
+        @foreach(var x in Model)
+            
+{
+             <div class="tab-pane active" id="tabs-@(cnt)" role="tabpanel">
+                     <div style="margin-top:5px;" class="row border border-primary">
+
+                    <div class="col-4"><b>Member Short Name :</b> @x.memberShortName</div>
+                    <div class="col-4"><b>Account Type :</b> @cibilHelper.GetAccountType(x.accountType)</div>
+                    <div class="col-4"><b>Ownership :</b> @CibilHelper.GetOwnership(x.ownershipIndicator)</div>
+
+
+                    <div class="col-4"><b>Date Opened :</b> @CibilHelper.ConvertDate(x.dateOpened).ToShortDateString()</div>
+                    <div class="col-4"><b>Date Reported :</b> @CibilHelper.ConvertDate(x.dateReported).ToShortDateString()</div>
+                    <div class="col-4"><b>Account Classification</b> @CibilHelper.GetAccountClassification(x.paymentHistory)</div>
+
+
+                    <div class="col-4"><b>Limit / High Credit :</b> @x.highCreditAmount , @x.creditLimit</div>
+                    <div class="col-4"><b>Current Balance :</b> @x.currentBalance</div>
+                    <div class="col-4" style="color:red;"><b>Overdue :</b> @x.amountOverdue</div>
+
+                    <div class="col-4"><b>EMI (Considered) :</b> <input type="number" name="EMI-@x.Id" value="@x.EMIConsidered" class="form-control" required/> </div>
+                    <div class="col-8"><b>Remark By Employee</b> <input type="text" name="Remark-@x.Id" value="@x.EmployeeResponse" class="form-control" required/> </div>
+
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary btnNext float-right" style="margin-top:15px;margin-bottom:10px;" onclick="nextTab();" >Next</button>
+                    </div>
+
+                    
+                </div>
+
+                </div>
+          
+        }
+
+   
+
+   <button type="submit" class="btn btn-primary" style="margin-top:10px"> Final Save </button>
+
+
+
+</form>
+

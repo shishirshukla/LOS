@@ -1,0 +1,233 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="container">
+
+    <div class="alert alert-danger" role="alert" style="margin-top:5px;">
+            <b id="message">
+
+            </b>
+    </div>
+
+    <br/>
+    <hr/>
+    <b>Change Scheme for Loan Application</b>
+     <div class="row">
+         
+        <div class="col-md-3">
+            <input type="text" id="appIdLS" class="form-control" placeholder="Application Id"/>
+        </div>
+        <div class="col-md-2">
+            Select Branch
+        </div>
+        <div class="col-md-3">
+             <select class="form-control" name="LoanScheme" id="loanScheme">
+                                   <option value="PL">Personal Loan</option>
+                                <option value="PL-Ag">Personal Loan Agri</option>
+                                <option value="PL-SECL">Personal Loan SECL</option>
+                                <option value="PL-Express">Personal Loan Express</option>
+                                <option value="Car">Car Loan</option>
+                                <option value="HL">Home Loan</option>
+                                <option value="LAP">Loan Against Property</option>
+                                <option value="Topup">Home Top Up</option>
+                                <option value="Sme">SME</option>
+                                <option value="PMEGP">PMEGP</option>
+                                <option value="KCC">KCC</option>
+                                <option value="KCC-20">KCC (With 20% Additional)</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Gold-Agri">Gold (Agri)</option>
+                                <option value="KCC-AH">KCC Animal Husbandry</option>
+                                <option value="KCC-Fish">KCC Fisheries</option>
+                                <option value="NRLM">NRLM</option>
+                                <option value="NULM">NULM</option>
+                                <option value="TPL">Transport</option>
+                                <option value="Svanidhi">PM Svanidhi</option>
+                                <option value="Edu">Education Loan</option>
+                                <option value="ATL">Agri Term Loan</option>
+                                <option value="SME-GSS">Govt. Sponsored SME</option>
+                                <option value="MMYSRY">MMYSRY</option>
+                                <option value="DL">Demand Loan</option>
+                                <option value="OD-Dep">OD Against Liquid Security</option>
+                                <option value="2Wheeler">Two Wheeler</option>
+                                <option value="2Wheeler-Agri">Two Wheeler (Agri)</option>
+                                <option value="2Wheeler-Mudra">Two Wheeler (MUDRA)</option>
+                                <option value="KisanCar">Kisan Car</option>
+                                <option value="MUDRA-Simplified">MUDRA-Simplified</option>
+                                <option value="MUDRA-Transport">MUDRA-Transport</option>
+                                 <option value="CRGB-Realty">CRGB-Realty</option>
+ 
+                                
+                        </select> 
+        </div>
+        <div class="col-md-2">
+            <button onclick="javascript:changeSchemeLoan();">Change Scheme</button>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+
+    <b>Branch Managment</b>
+<div class="row">
+        <div class="col-md-2">
+            Select Branch
+        </div>
+        <div class="col-md-3">
+            <select id="br1" class="form-control">
+                            @foreach (var item in (List<string>)ViewBag.BranchList)
+           {
+                <option value="@item">@item</option>               
+           }
+
+            </select>
+        </div>
+        <div class="col-md-2">
+            Select AMH
+        </div>
+        <div class="col-md-3">
+            <select id="amh1" class="form-control">
+                            @foreach (var item in (List<Branch>)ViewBag.AmhList)
+           {
+                <option value="@item.Id">@item.BranchName</option>               
+           }
+
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button onclick="javascript:updtAMH();">Update AMH</button>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+      <b>Change User's Branch</b>
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" id="userID" class="form-control" placeholder="User Id"/>
+        </div>
+        <div class="col-md-2">
+            Select Branch
+        </div>
+        <div class="col-md-3">
+            <select id="brC" class="form-control">
+                            @foreach (var item in (List<string>)ViewBag.BranchList)
+           {
+                <option value="@item">@item</option>               
+           }
+
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button onclick="javascript:changeBranch();">Change Branch</button>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-4">
+            Select Branch
+        </div>
+        <div class="col-md-4">
+            <select id="br" class="form-control">
+                            @foreach (var item in (List<string>)ViewBag.BranchList)
+           {
+                <option value="@item">@item</option>               
+           }
+
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button onclick="javascript:getUsers();">Get User List</button>
+        </div>
+    </div>
+
+    
+
+    <div class="row" style="padding-top:15px;" id="ulist">
+
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        function getUsers(){
+            $.get('/LoanFlow/GetUsers?br=' + $(br).val() , function(x) {
+                $('#ulist').html(x);
+            } );
+        }
+
+        function resetPassword(a)
+        {
+            if(confirm("Are you sure ?"))
+            {
+                $.get( '/LoanFlow/ResetPassword?Id=' + a , function(x) {
+                     $('#message').html(x);
+                  } );
+              
+            }
+        }
+        function updtAMH()
+        {
+            if(confirm("Are you sure ?"))
+            {
+                var a = $('#br1').find(":selected").val();
+                var b = $('#amh1').find(":selected").val();
+                $.get( '/LoanFlow/UpdateAMH?BrId=' + a + '&AMHId=' + b, function(x) {
+                     $('#message').html(x);
+                  } );
+              
+            }
+        }
+
+        function changeDesignation(a)
+        {
+            if(confirm("Are you sure ?"))
+            {
+
+                 $.get( '/LoanFlow/UpdateDesignation?Id=' + a + '&desig=' + $('#'+a).val() , function(x) {
+                     $('#message').html(x);
+                  } );
+                 
+            }
+        }
+        function changeBranch()
+        {
+            if(confirm("Are you sure ?"))
+            {
+                var a = $('#userID').val();
+                var b = $('#brC').find(":selected").val();
+                 $.get( '/LoanFlow/UpdateBranch?Id=' + a + '&desig=' + b , function(x) {
+                     $('#message').html(x);
+                  } );
+                 
+            }
+        }
+
+        function changeBranchLoan()
+        {
+            if(confirm("Are you sure ?"))
+            {
+                var a = $('#appId').val();
+                var b = $('#brC').find(":selected").val();
+                 $.get( '/LoanFlow/UpdateBranchLoan?Id=' + a + '&desig=' + b , function(x) {
+                     $('#message').html(x);
+                  } );
+                 
+            }
+        }
+         function changeSchemeLoan()
+        {
+            if(confirm("Are you sure ?"))
+            {
+                var a = $('#appIdLS').val();
+                var b = $('#loanScheme').find(":selected").val();
+                 $.get( '/LoanFlow/UpdateSchemeLoan?Id=' + a + '&desig=' + b , function(x) {
+                     $('#message').html(x);
+                  } );
+                 
+            }
+        }
+    </script>
+}

@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+
+}
+@if (ViewBag.Branches == null)
+{
+    <option value="@ViewBag.Data1" selected="selected">@ViewBag.Data1</option>
+}
+else
+{
+    foreach(Branch branchMaster in (List<Branch>)ViewBag.Branches)
+    {
+        if (branchMaster.Id.StartsWith("099"))
+        {
+            <option value="@branchMaster.Id" selected="selected">@branchMaster.BranchName</option>
+
+        }
+        else
+        {
+            <option value="@branchMaster.Id">@branchMaster.BranchName</option>
+        }
+
+    }
+}

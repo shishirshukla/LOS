@@ -1,0 +1,45 @@
+﻿@using MobileBackend.Models
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<b>Use Mobile Number linked with bank account</b>
+<form method="post" action="/LoanFlow/AddStatement" enctype="multipart/form-data" onsubmit="checkSubmit(event)">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="AppId"/>
+   
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Applicant</label>
+    <select class="form-control-sm" name="ApplicantId" id="PjDesc">
+         <option value="0">--Select--</option>
+        @foreach(var a in (List<Applicant>)ViewBag.Apps)
+                {
+                    <option value="@a.Id">@a.Applicant_First_Name @a.Applicant_Last_Name</option>
+                }
+
+    </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label> Mobile</label>
+    <input type="text" name="mobile"  class="form-control-sm" />
+  </div>
+  
+ 
+  </div>
+  
+  
+   
+  
+    <button type="submit" class="btn btn-primary">Submit</button>
+ 
+  
+  
+</form>
+
+@section scripts
+{
+       
+}
+

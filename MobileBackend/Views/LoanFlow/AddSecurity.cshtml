@@ -1,0 +1,197 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //Layout = null;
+}
+<form method="post" action="/LoanFlow/AddSecurity" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   
+   <div class="row justify-content-between text-left border border-primary">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Type of Security</label>
+     <select name="TypeOfSecurity" class="form-control">
+         <option value="Primary">Primary </option>
+         <option value="Collateral">Collateral </option>
+     </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Category</label>
+     <select name="Category" class="form-control">
+         <option value="Movable">Movable </option>
+         <option value="Immovable">Immovable </option>
+         <option value="Liquid">Liquid </option>
+     </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Charge</label>
+     <select name="TypeOfCharge" class="form-control">
+         <option value="Hypothecation">Hypothecation </option>
+         <option value="EM">Equitable Mortgage </option>
+         <option value="RM">Registered Mortgage </option>
+         <option value="Lien">Lien </option>
+         <option value="Assignment">Assignment</option>
+     </select>
+ 
+  </div>
+  </div>
+  <div class="row justify-content-between text-left border border-primary">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Security Detail</label>
+     <select name="Description" class="form-control">
+         <option value="Plant & Machinary">Plant & Machinary  </option>
+         <option value="Vehichle">Vehichle  </option>
+         <option value="Equipments">Equipments  </option>
+         <option value="Stock & Book Debts">Stock & Book Debts  </option>
+         <option value="Land">Land  </option>
+         <option value="Flat">Flat </option>
+         <option value="Land & Building"> Land & Building </option>
+         <option value="Crop"> Crop </option>
+     </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Plot / Khasra No.</label>
+     <input type="text" name="PlotNo" class="form-control" placeholder="Plot / Khasra No."/> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Detail / Location </label>
+     <input type="text" name="Location" class="form-control"/> 
+  </div>
+  
+  </div>
+
+   <div class="row justify-content-between text-left border border-primary">
+    <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Advocate Name (TSR1) </label>
+     <input type="text" name="Advocate1" class="form-control" placeholder="Name of Advocate"/> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >TSR 1 Date </label>
+     <input type="date" name="DateTSR1" class="form-control"  /> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Details of TSR1 </label>
+     <textarea type="text" name="DetailsofTSR1" class="form-control" placeholder="Details including Remarks" rows="3"></textarea> 
+ 
+  </div>
+   
+   </div>
+
+   <div class="row justify-content-between text-left border border-primary">
+    <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Advocate Name (TSR2) </label>
+     <input type="text" name="Advocate2" class="form-control" placeholder="Name of Advocate"/> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >TSR 2 Date </label>
+     <input type="date" name="DateTSR2" class="form-control"  /> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Details of TSR2 </label>
+     <textarea type="text" name="DetailsofTSR2" class="form-control" placeholder="Details including Remarks" rows="3"></textarea> 
+ 
+  </div>
+   
+   </div>
+
+   <div class="row justify-content-between text-left border border-primary">
+    <div class="form-group col-sm-6 flex-column d-flex">
+    <label  >Valuer Name  (For Val1)</label>
+     <input type="text" name="Valuer1" class="form-control" placeholder="Name of Valuer"/> 
+ 
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label  >Valuation Date (For Val1)</label>
+     <input type="date" name="DateVal1" class="form-control"  /> 
+ 
+  </div>
+ 
+   
+   </div>
+
+   <div class="row justify-content-between text-left border border-primary">
+    <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Govt. Value (For Val1) </label>
+     <input type="number" name="GovtVal1" class="form-control" placeholder=""/> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Market Value (For Val1) </label>
+     <input type="number" name="MarketVal1" class="form-control"  /> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Distress Value (For Val1) </label>
+     <input type="number" name="DistressVal1" class="form-control" placeholder="" /> 
+ 
+  </div>
+   
+   </div>
+
+   <div class="row justify-content-between text-left border border-primary">
+    <div class="form-group col-sm-6 flex-column d-flex">
+    <label  >Valuer Name  (For Val2)</label>
+     <input type="text" name="Valuer2" class="form-control" placeholder=""/> 
+ 
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label  >Valuation Date (For Val2)</label>
+     <input type="date" name="DateVal2" class="form-control"  /> 
+ 
+  </div>
+ 
+   
+   </div>
+
+   <div class="row justify-content-between text-left border border-primary">
+    <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Govt. Value (For Val2) </label>
+     <input type="number" name="GovtVal2" class="form-control" placeholder=""/> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Market Value (For Val2) </label>
+     <input type="number" name="MarketVal2" class="form-control"  /> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Distress Value (For Val2) </label>
+     <input type="number" name="DistressVal2" class="form-control" placeholder="" /> 
+ 
+  </div>
+   
+   </div>
+
+
+
+
+   <div class="row justify-content-between text-left border border-primary">
+       <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Owner </label>
+     <input type="text" name="Owner" class="form-control" placeholder="" /> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label  >Boundary (For Land / Flat) </label>
+     <input type="text" name="Boundary" class="form-control" value="North: , South : , East : , West :" placeholder="Boundary Details for Immovable"/> 
+ 
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label  > Valuation Considered </label>
+     <input type="number" name="Valuation" class="form-control" placeholder="Value"/> 
+ 
+  </div>
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+  </div>
+  
+  
+  
+</form>

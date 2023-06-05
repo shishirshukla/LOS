@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form id="formsearch">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+    <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label>Search Criteria</label>
+    <select class="form-control-sm" name="idType">
+        <option value="PAN">PAN</option>
+        <option value="Adhar">Adhaar</option>
+        <option value="Voter">Voter Id</option>
+        <option value="Mobile">Mobile Number</option>
+        <option value="Name">First Name</option>
+    </select>
+    
+  </div>
+  
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Value</label>
+    <input type="text" class="form-control-sm" required name="IdNumber" placeholder="Value">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+      <label>Search</label>
+    <button type="button" class="btn btn-sm btn-primary" onclick="formSearch();">Search</button>
+  </div>
+  </div>
+  </form>
+  <div id="searchResult">
+
+  </div>

@@ -1,0 +1,384 @@
+﻿@model Applicant
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/EditApplicant" enctype="multipart/form-data">
+    <input type="hidden" value="@Model.ApplicationId" name="ApplicationId"/>
+    <input type="hidden" value="@Model.Id" name="Id"/>
+    <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-2 flex-column d-flex">
+    <label>Salutation</label>
+    <select class="form-control-sm" name="Salutation">
+        <option value="Mr." selected="@(Model.Salutation == "Mr.")">Mr.</option>
+        <option value="Mrs." selected="@(Model.Salutation == "Mrs.")">Mrs.</option>
+        <option value="Ms." selected="@(Model.Salutation == "Ms.")">Ms.</option>
+        <option value="Dr." selected="@(Model.Salutation == "Dr.")">Dr.</option>
+    </select>
+    
+  </div>
+  
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >First Name</label>
+    <input type="text" class="form-control-sm" required name="Applicant_First_Name" value="@Model.Applicant_First_Name" placeholder="Applicant_First_Name">
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >Middle Name</label>
+    <input type="text" class="form-control-sm" name="Applicant_Middle_Name" value="@Model.Applicant_Middle_Name" placeholder="Applicant_Middle_Name">
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >Last Name</label>
+    <input type="text" class="form-control-sm" name="Applicant_Last_Name" value="@Model.Applicant_Last_Name" placeholder="Applicant_Last_Name">
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label>Maritial Status</label>
+    <select class="form-control-sm" name="MaritialStatus">
+        <option value="Single" selected="@(Model.MaritialStatus == "Single")">Single</option>
+        <option value="Married" selected="@(Model.MaritialStatus == "Married")">Married</option>
+       
+    </select>
+    
+  </div>
+  
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >Relationship Indicator</label>
+     <select class="form-control-sm" name="Relationship">
+         <option value="--">Not Selected</option>
+        <option value="S/o"  selected="@(Model.Relationship == "S/o")">S/o</option>
+        <option value="W/o" selected="@(Model.Relationship == "W/o")">W/o</option>
+        <option value="D/o" selected="@(Model.Relationship == "D/o")">D/o</option>
+       
+    </select>
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >Guardian_Name</label>
+    <input type="text" class="form-control-sm" name="Guardian_Name" placeholder="Guardian_Name" value="@Model.Guardian_Name">
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >Gender</label>
+     <select class="form-control-sm" name="Gender">
+        <option selected="@(Model.Gender == "Male")" value="Male">Male</option>
+        <option selected="@(Model.Gender == "Female")"   value="Female">Female</option>
+        <option selected="@(Model.Gender == "Other")" value="Other">Other</option>
+       
+    </select>
+  </div>
+
+  </div>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Election Id</label>
+    <input type="text" class="form-control-sm" id="ElectionId" value="@Model.ElectionId"  name="ElectionId"  placeholder="Voter Id">
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >PAN_No</label>
+    <input type="text" class="form-control-sm"  name="PAN_No" value="@Model.PAN_No" placeholder="PAN_No">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Adhaar_No</label>
+    <input type="text" class="form-control-sm" required name="Adhaar_No"  value="@Model.Adhaar_No" placeholder="Adhaar_No">
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Designation</label>
+    <input type="text" class="form-control-sm" name="Voter_Id" placeholder="Designation" value="@Model.Voter_Id">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Date of Birth</label>
+    <input type="text" class="form-control-sm" name="Date_Of_Birth" placeholder="Date_Of_Birth" value="@Model.Date_Of_Birth">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Occupation</label>
+     <select class="form-control-sm" name="Occupation">
+        <option value="Govt. / PSU Job" selected="@(Model.Occupation == "Govt. / PSU Job")">Govt. / PSU Job</option>
+        <option value="Private Job" selected="@(Model.Occupation == "Private Job")">Private Job</option>
+        <option value="Professional" selected="@(Model.Occupation == "Professional")">Professional</option>
+       <option value="Self Employed" selected="@(Model.Occupation == "Self Employed")">Self Employed</option>
+       <option value="Businessman" selected="@(Model.Occupation == "Businessman")">Businessman</option>
+       <option value="Farming" selected="@(Model.Occupation == "Farming")">Farming</option>
+       <option value="Not Working" selected="@(Model.Occupation == "Not Working")">Not Working</option>
+    </select>
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Name of Work Place</label>
+    <input type="text" class="form-control-sm" name="WorkPlace" value="@Model.WorkPlace" required placeholder="Institute / Business Name">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Working Since</label>
+    <input type="date" class="form-control-sm" name="WorkingSince" value="@Model.WorkingSince" required placeholder="Job / Business Start Date">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Education Qualificatin</label>
+     <select class="form-control-sm" name="Education">
+        <option selected="@(Model.Education == "Post Graduate")" value="Post Graduate">Post Graduate</option>
+        <option selected="@(Model.Education == "Graduate")" value="Graduate">Graduate</option>
+        <option selected="@(Model.Education == "Professional Course")" value="Professional Course">Professional Course</option>
+       <option selected="@(Model.Education == "Intermediate")" value="Intermediate">Intermediate</option>
+       <option selected="@(Model.Education == "10th")" value="10th">10th</option>
+       <option selected="@(Model.Education == "Illiterate")" value="Illiterate">Illiterate</option>
+       
+    </select>
+  </div>
+  </div>
+   <div class="row justify-content-between text-left">
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >No of Dependents</label>
+    <input type="text" class="form-control-sm" name="Dependent" value="@Model.Dependent" required placeholder="No of Dependents">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Annual Income</label>
+    <input type="number" class="form-control-sm" name="LatestIncome" value="@Model.LatestIncome" required placeholder="As per latest ITR/Form 16">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Relation With 1st Applicant</label>
+     <select class="form-control-sm" name="RelationWithAppl">
+        <option selected="@(Model.RelationWithAppl == "Self")" value="Self">Self</option>
+        <option selected="@(Model.RelationWithAppl == "Spouse")" value="Spouse">Spouse</option>
+        <option selected="@(Model.RelationWithAppl == "Parent")" value="Parent">Parent</option>
+       <option selected="@(Model.RelationWithAppl == "Ward")" value="Ward">Ward</option>
+       <option selected="@(Model.RelationWithAppl == "Sibling")" value="Sibling">Sibling</option>
+       <option selected="@(Model.RelationWithAppl == ".......")" value=".......">Other</option>
+       
+    </select>
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+      <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Primary Banking Relation</label>
+     <select class="form-control-sm" name="PrimaryBankingRelation">
+        <option  selected="@(Model.PrimaryBankingRelation == "CRGB")" value="CRGB">CRGB</option>
+        <option selected="@(Model.PrimaryBankingRelation == "State Bank of India")"  value='State Bank of India'>State Bank of India</option>
+       <option selected="@(Model.PrimaryBankingRelation == "Bank of Baroda")"  value='Bank of Baroda'>Bank of Baroda</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Bank of India")"  value='Bank of India'>Bank of India</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Bank of Maharashtra")"  value='Bank of Maharashtra'>Bank of Maharashtra</option>
+    <option  selected="@(Model.PrimaryBankingRelation == "Canara Bank")"  value='Canara Bank'>Canara Bank</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Central Bank of India")"  value='Central Bank of India'>Central Bank of India</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Indian Bank")"  value='Indian Bank'>Indian Bank</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Indian Overseas Bank")"  value='Indian Overseas Bank'>Indian Overseas Bank</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Punjab National Bank")"  value='Punjab National Bank'>Punjab National Bank</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Punjab & Sind Bank")"  value='Punjab & Sind Bank'>Punjab & Sind Bank</option>
+    <option selected="@(Model.PrimaryBankingRelation == "Union Bank of India")"  value='Union Bank of India'>Union Bank of India</option>
+    <option selected="@(Model.PrimaryBankingRelation == "UCO Bank")"  value='UCO Bank'>UCO Bank</option>
+    
+    <option selected="@(Model.PrimaryBankingRelation == "Axis Bank Ltd.")"  value='Axis Bank Ltd.'>Axis Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "Bandhan Bank Ltd.")"  value='Bandhan Bank Ltd.'>Bandhan Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "CSB Bank Ltd.")"  value='CSB Bank Ltd.'>CSB Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "City Union Bank Ltd.")"  value='City Union Bank Ltd.'>City Union Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "DCB Bank Ltd.")"  value='DCB Bank Ltd.'>DCB Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "Dhanlaxmi Bank Ltd")"  value='Dhanlaxmi Bank Ltd'>Dhanlaxmi Bank Ltd</option>
+<option selected="@(Model.PrimaryBankingRelation == "Federal Bank Ltd.")"  value='Federal Bank Ltd.'>Federal Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "HDFC Bank Ltd")"   value='HDFC Bank Ltd'>HDFC Bank Ltd</option>
+<option selected="@(Model.PrimaryBankingRelation == "ICICI Bank Ltd.")"  value='ICICI Bank Ltd.'>ICICI Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "Induslnd Bank Ltd")"  value='Induslnd Bank Ltd'>Induslnd Bank Ltd</option>
+<option selected="@(Model.PrimaryBankingRelation == "IDFC First Bank Ltd")"  value='IDFC First Bank Ltd'>IDFC First Bank Ltd</option>
+<option  selected="@(Model.PrimaryBankingRelation == "Jammu & Kashmir Bank Ltd.")"  value='Jammu & Kashmir Bank Ltd.'>Jammu & Kashmir Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "Karnataka Bank Ltd.")"  value='Karnataka Bank Ltd.'>Karnataka Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "Karur Vysya Bank Ltd")"  value='Karur Vysya Bank Ltd'>Karur Vysya Bank Ltd</option>
+<option selected="@(Model.PrimaryBankingRelation == "Kotak Mahindra Bank Ltd.")"  value='Kotak Mahindra Bank Ltd.'>Kotak Mahindra Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "Lakshmi Vilas Bank Ltd")"  value='Lakshmi Vilas Bank Ltd'>Lakshmi Vilas Bank Ltd</option>
+<option selected="@(Model.PrimaryBankingRelation == "Nainital Bank Ltd.")"  value='Nainital Bank Ltd.'>Nainital Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "RBL Bank Ltd.")"  value='RBL Bank Ltd.'>RBL Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "South Indian Bank Ltd.")"  value='South Indian Bank Ltd.'>South Indian Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "Tamilnad Mercantile Bank Ltd.")"  value='Tamilnad Mercantile Bank Ltd.'>Tamilnad Mercantile Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "YES Bank Ltd.")"  value='YES Bank Ltd.'>YES Bank Ltd.</option>
+<option selected="@(Model.PrimaryBankingRelation == "IDBI Bank Ltd.")"  value='IDBI Bank Ltd.'>IDBI Bank Ltd.</option>
+
+       <option value=".......">Other</option>
+       
+    </select>
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Primary Bank A/C Number</label>
+    <input type="text" class="form-control-sm" name="AccountNumber" value="@Model.AccountNumber" required placeholder="A/C Number">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Networth (As per Annex-1)</label>
+    <input type="text" class="form-control-sm" name="NetWorth" required  value="@Model.NetWorth"  placeholder="Networth">
+  </div>
+  
+  </div>
+
+
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Address_Line1</label>
+    <input type="text" class="form-control-sm"  name="Address_Line1" placeholder="Address_Line1" maxlength="39" value="@Model.Address_Line1">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Address_Line2</label>
+    <input type="text" class="form-control-sm" required name="Address_Line2" placeholder="Address_Line2" maxlength="39" value="@Model.Address_Line2">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >City_Village</label>
+    <input type="text" class="form-control-sm" required name="City_Village" placeholder="City_Village" maxlength="39" value="@Model.City_Village">
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >District</label>
+    <input type="text" class="form-control-sm"  name="District" placeholder="District" maxlength="39" value="@Model.District">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >State</label>
+    
+    <select name="State">
+      <option value='01'  selected='@(Model.State == "01")'>Jammu & Kashmir</option>
+<option value='02'  selected='@(Model.State == "02")'>Himachal Pradesh</option>
+<option value='03'  selected='@(Model.State == "03")'>Punjab</option>
+<option value='04'  selected='@(Model.State == "04")'>Chandigarh</option>
+<option value='05'  selected='@(Model.State == "05")'>Uttaranchal</option>
+<option value='06'  selected='@(Model.State == "06")'>Haryana</option>
+<option value='07'  selected='@(Model.State == "07")'>Delhi</option>
+<option value='08'  selected='@(Model.State == "08")'>Rajasthan</option>
+<option value='09'  selected='@(Model.State == "09")'>Uttar Pradesh</option>
+<option value='10'  selected='@(Model.State == "10")'>Bihar</option>
+<option value='11'  selected='@(Model.State == "11")'>Sikkim</option>
+<option value='12'  selected='@(Model.State == "12")'>Arunachal Pradesh</option>
+<option value='13'  selected='@(Model.State == "13")'>Nagaland</option>
+<option value='14'  selected='@(Model.State == "14")'>Manipur</option>
+<option value='15'  selected='@(Model.State == "15")'>Mizoram</option>
+<option value='16'  selected='@(Model.State == "16")'>Tripura</option>
+<option value='17'  selected='@(Model.State == "17")'>Meghalaya</option>
+<option value='18'  selected='@(Model.State == "18")'>Assam</option>
+<option value='19'  selected='@(Model.State == "19")'>West Bengal</option>
+<option value='20'  selected='@(Model.State == "20")'>Jharkhand</option>
+<option value='21'  selected='@(Model.State == "21")'>Orissa</option>
+<option value='22'  selected='@(Model.State == "22")'>Chhattisgarh</option>
+<option value='23'  selected='@(Model.State == "23")'>Madhya Pradesh</option>
+<option value='24'  selected='@(Model.State == "24")'>Gujarat</option>
+<option value='25'  selected='@(Model.State == "25")'>Daman & Diu</option>
+<option value='26'  selected='@(Model.State == "26")'>Dadra & Nagar Hav</option>
+<option value='27'  selected='@(Model.State == "27")'>Maharashtra</option>
+<option value='28'  selected='@(Model.State == "28")'>Andhra Pradesh</option>
+<option value='29'  selected='@(Model.State == "29")'>Karnataka</option>
+<option value='30'  selected='@(Model.State == "30")'>Goa</option>
+<option value='31'  selected='@(Model.State == "31")'>Lakshadweep</option>
+<option value='32'  selected='@(Model.State == "32")'>Kerala</option>
+<option value='33'  selected='@(Model.State == "33")'>Tamil Nadu</option>
+<option value='34'  selected='@(Model.State == "34")'>Pondicherry</option>
+<option value='35'  selected='@(Model.State == "35")'>Andaman</option>
+<option value='36'  selected='@(Model.State == "36")'>Telangana</option>
+
+
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >PINCode</label>
+    <input type="text" class="form-control-sm" required name="PINCode" placeholder="PINCode" value="@Model.PINCode">
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Permanent Address</label>
+    <input type="text" class="form-control-sm"  name="PermanentAddress" placeholder="PermanentAddress" value="@Model.PermanentAddress">
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Work Place Address</label>
+    <input type="text" class="form-control-sm" required name="WorkPlaceAddress" placeholder="WorkPlaceAddress" value="@Model.WorkPlaceAddress">
+  </div>
+  
+  </div>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Gross MI</label>
+    <input type="text" class="form-control-sm"  name="GMI" placeholder="GMI" value="@Model.GMI">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Net MI</label>
+    <input type="text" class="form-control-sm" required name="NMI" placeholder="NMI" value="@Model.NMI">
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Addl Income</label>
+    <input type="text" class="form-control-sm" required name="AddlIncome" placeholder="Addl Income" value="@Model.AddlIncome">
+  </div>
+  
+  </div>
+  <div class="row justify-content-between text-left">
+      <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Home Loan (Our Bank)</label>
+    <select class="form-control-sm" name="Passport">
+        <option value="Yes" selected="@(Model.Passport == "Yes")">Yes</option>
+        <option value="No" selected="@(Model.Passport == "No")">No</option>
+     
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Remark NMI</label>
+    <textarea rows="3" class="form-control-sm"  name="RemarkOnNMI" placeholder="Remark On NMI"> @Model.RemarkOnNMI</textarea>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Remark Addl Income</label>
+    <textarea rows="3" class="form-control-sm" required name="RemarkOnAddlIncome" placeholder="Remark On Addl Income">@Model.RemarkOnAddlIncome</textarea>
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Caste</label>
+    <select class="form-control-sm" name="Caste">
+        <option value="Gen" selected="@(Model.Caste == "Gen")">Gen</option>
+        <option value="SC" selected="@(Model.Caste == "SC")">SC</option>
+        <option value="ST" selected="@(Model.Caste == "ST")">ST</option>
+       <option value="OBC" selected="@(Model.Caste == "OBC")">OBC</option>
+       <option value="Other" selected="@(Model.Caste == "Other")">Other</option>
+      
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Religion</label>
+    <select class="form-control-sm" name="Religion">
+        <option value="Hindu" selected="@(Model.Religion == "Hindu")">Hindu</option>
+        <option value="Muslim" selected="@(Model.Religion == "Muslim")">Muslim</option>
+        <option value="Sikh" selected="@(Model.Religion == "Sikh")">Sikh</option>
+       <option value="Christian" selected="@(Model.Religion == "Christian")">Christian</option>
+       <option value="Jain" selected="@(Model.Religion == "Jain")">Jain</option>
+      <option value="Other" selected="@(Model.Religion == "Other")">Other</option>
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Classification</label>
+    <select class="form-control-sm" name="TypeofApplicant">
+        <option value="Primary Applicant" selected="@(Model.TypeofApplicant == "Primary Applicant")">Primary Applicant</option>
+        <option value="Co-Applicant" selected="@(Model.TypeofApplicant == "Co-Applicant")">Co-Applicant</option>
+        <option value="Proprieter" selected="@(Model.TypeofApplicant == "Proprieter")">Proprieter</option>
+       <option value="Partner" selected="@(Model.TypeofApplicant == "Partner")">Partner</option>
+       <option value="Director" selected="@(Model.TypeofApplicant == "Director")">Director</option>
+      <option value="President" selected="@(Model.TypeofApplicant == "President")">President</option>
+      <option value="Secretary" selected="@(Model.TypeofApplicant == "Secretary")">Secretary</option>
+      <option value="Guarantor" selected="@(Model.TypeofApplicant == "Guarantor")">Guarantor</option>
+    </select>
+  </div>
+  </div>
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Will Execute Document</label>
+    <select class="form-control-sm" name="DocumentExecution">
+        <option value="Yes" selected="@(Model.DocumentExecution == "Yes")">Yes</option>
+        <option value="No" selected="@(Model.DocumentExecution == "No")">No</option>
+       
+      
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Mobile Number</label>
+   <input type="text" class="form-control-sm" required name="MobileNumber" maxlength="10" placeholder="MobileNumber" value="@Model.MobileNumber">
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Max Repay Date (Retirement)</label>
+     <input type="date" required value="@Model.Driving_Lic" name="Driving_Lic" class="form-control-sm"/>
+  </div>
+  
+ 
+  </div>
+
+   
+
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>

@@ -1,0 +1,29 @@
+﻿1. Sourced
+2. Contact With Customer
+3. Documents Obtained
+4. Converted To Application
+5. Not Eligible
+6. Migrated to Different Bank
+7. Not Interested
+8. Fake Lead
+
+
+BC Application : 
+
+1. /Mobile/Login (string userid, string password) | POST
+2. /Mobile/SaveKCCLead | POST
+3. /Mobile/SaveTPLLead | POST
+4. /Mobile/SaveGoldLead | POST
+
+
+
+dRI:पिलखा
+	dVillage:रविन्द्रनगर	
+	 revcase:null
+	dDistrict:सूरजपुर
+	dharanAdhikar:भूमिस्वामी - कृषि भूमि
+	ownKhasra:300/1 ( 0.5700 हे॰ )
+	otherKhasra:393/1 (0.2300 हे॰), 394/1 (0.6200 हे॰)
+	dTehsil:लटोरी
+	bhuswami:(1) रतन कुमार जोत का प्रकार - अकेला
+	b1:https://bhuiyan.cg.nic.in/administrator/CheckSignedFileExistance.aspx?DscUrl=B1/6407218/20220928640700027.pdf

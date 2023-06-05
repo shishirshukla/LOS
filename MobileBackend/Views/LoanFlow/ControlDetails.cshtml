@@ -1,0 +1,450 @@
+﻿@model Application
+@inject CustomIDataProtection _protector
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    int slno = 1;
+    bool editable = (bool)ViewBag.Editable; 
+    string statement1 = "", statement2 = "", statement3 = "", statement4 = "", statement5 = "", statement6 = "", statement7 = "", statement8 = "", statement9 = "", statement10 = "", statement11 = "", statement12 = "", statement13 = "", statement14 = "", statement15 = "";
+
+    if (Model.LoanScheme == "Sme" || Model.LoanScheme == "TPL" || Model.LoanScheme == "PMEGP" || Model.LoanScheme == "MMYSRY" || Model.LoanScheme == "SME-GSS")
+    {
+        statement1 = "Unit Type (New/Old)";
+        statement2 = "Last Filed ITR Details";
+        statement3 = "Loan Type (Fresh/Enhancement/Renewal)";
+        statement4 = "Existing Turnover";
+        statement5 = "Existing Net Profit";
+        statement6 = "Projected Turnover";
+        statement7 = "Projected Net Profit";
+        statement8 = "Other Source of Income";
+        statement9 = "Details of CIBIL";
+        statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        statement12 = "Details of Guarantor";
+        statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Charge Registration Details";
+       
+
+
+    }
+    else  if (Model.LoanScheme == "LAP" || Model.LoanScheme == "Topup" )
+    {
+        statement1 = "Mode of Repayment (SI/ECS) ";
+        statement2 = "Gross Monthly Income";
+        statement3 = "Net Monthly Income";
+        statement4 = "Existing Deduction % (From NMI)";
+        statement5 = "Loan Eligibility";
+        statement6 = "Latest ITR Filled Year";
+        statement7 = "Details of Other Income";
+        statement8 = "Details of CIBIL";
+        //statement9 = "Details of CIBIL";
+        statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        statement12 = "Details of Guarantor";
+        statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Charge Registration Details";
+       
+
+
+    }
+    else  if (Model.LoanScheme == "DL" || Model.LoanScheme == "OD-Dep" )
+    {
+        statement1 = "Type of Security (TDR/STDR/LIC etc) ";
+        statement2 = "Value of Security (As on loan sanction date)";
+        statement3 = "% of Security";
+        //statement4 = "Rate of Interest";
+        //statement5 = "Loan Eligibility";
+        //statement6 = "Latest ITR Filled Year";
+        //statement7 = "Details of Other Income";
+        //statement8 = "Details of CIBIL";
+        //statement9 = "Details of CIBIL";
+        //statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        //statement12 = "Details of Guarantor";
+        //statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Charge Registration Details";
+       
+
+
+    }
+    else   
+    {
+        statement1 = "Irrigated Agri Land";
+        statement2 = "UnIrrigated Agri Land";
+        statement3 = "Details of Milch Cattles";
+        statement4 = "Details of Pond/Water Body";
+        statement5 = "Eligibility";
+        statement6 = "Details of Other Income";
+        //statement7 = "Details of Other Income";
+        statement8 = "Details of CIBIL";
+        //statement9 = "Details of CIBIL";
+        statement10 = "Project Cost Details";
+        statement11 = "Details of Security";
+        statement12 = "Details of Guarantor";
+        statement13 = "Repayment Details";
+        statement14 = "Details of Other Loans";
+        statement15 = "CERSAI / Bhuiyan Charge Registration Details";
+       
+
+
+    }
+}
+<div class="container">
+
+    <div class="alert alert-danger" role="alert" style="margin-top:5px;">
+            Application is at : <b>@Model.Owner</b> | Application Type : <b id="LoanScheme">@Model.LoanScheme</b><br/>
+        Application status is : <b>@Model.Status</b> , @if (Model.Status == "Sanctioned")
+        {
+            <span>Controll Status : @Model.ControlStatus</span>
+        }
+    </div>
+
+   
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <tr>
+            <td colspan="6">
+                <b>Basic Application Details</b>
+            </td>
+        </tr>
+        <tr>
+            
+            <td><b>Branch</b></td>
+            <td>@Model.BranchId</td>
+            <td><b>Name</b></td>
+            <td>@Model.ApplicantShortName</td>
+            <td><b>Applicant Type</b></td>
+            <td>@Model.TypeOfApplicant</td>
+        </tr>
+        <tr>
+            
+            <td><b>Scheme</b></td>
+            <td>@Model.LoanScheme</td>
+            <td><b>Purpose</b></td>
+            <td>@Model.Purpose</td>
+            <td><b>Status</b></td>
+            <td>@Model.Status</td>
+        </tr>
+        <tr>
+            
+            <td><b>Sponsoring Agency</b></td>
+            <td>@Model.SponsoringAgency</td>
+            <td><b>Subsidy</b></td>
+            <td>@Model.SubsidyAmt</td>
+            <td><b>Application Date</b></td>
+            <td>@Model.ApplicationDate.ToShortDateString()</td>
+        </tr>
+    </table>
+
+  <form method="post" action="#" enctype="multipart/form-data">
+    <input type="hidden" value="@Model.Id" name="ApplicationId"/>
+     <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>Applied Amount</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="AppliedAmt" value="@Model.ControlInformations.AppliedAmt" />
+             </div>
+     
+            </div>
+             <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>Sanctioned TL</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="SanctionTL" value="@Model.ControlInformations.SanctionedTL" />
+             </div>
+     
+            </div>
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>Sanctioned CC</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="SanctionCC" value="@Model.ControlInformations.SanctionedCC" />
+             </div>
+     
+            </div>
+        @if (statement1 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement1</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement1" value="@Model.ControlInformations.Statement1" />
+             </div>
+     
+            </div>
+        }
+
+         @if (statement2 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement2</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement2"  value="@Model.ControlInformations.Statement2"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement3 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement3</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement3" value="@Model.ControlInformations.Statement3" />
+             </div>
+     
+            </div>
+        }
+         @if (statement4 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement4</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement4"  value="@Model.ControlInformations.Statement4"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement5 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement5</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement5"  value="@Model.ControlInformations.Statement5"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement6 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement6</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement6" value="@Model.ControlInformations.Statement6"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement7 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement7</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement7" value="@Model.ControlInformations.Statement7"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement8 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement8</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement8" value="@Model.ControlInformations.Statement8" />
+             </div>
+     
+            </div>
+        }
+         @if (statement9 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement9</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement9" value="@Model.ControlInformations.Statement9"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement10 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement10</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement10" value="@Model.ControlInformations.Statement10"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement11 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement11</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement11" value="@Model.ControlInformations.Statement11"/>
+             </div>
+     
+            </div>
+        }
+         @if (statement12 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement12</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement12" value="@Model.ControlInformations.Statement12"/>
+             </div>
+     
+            </div>
+        }
+
+          @if (statement13 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement13</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement13" value="@Model.ControlInformations.Statement13" />
+             </div>
+     
+            </div>
+        }
+          @if (statement14 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement14</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement14" value="@Model.ControlInformations.Statement14" />
+             </div>
+     
+            </div>
+        }
+          @if (statement15 != "")
+        {
+            <div class="row justify-content-between text-left">
+                <div class="form-group col-sm-6 flex-column d-flex">
+                     <label>@statement15</label>
+               </div>
+            <div class="form-group col-sm-5 flex-column d-flex">
+                <input type="text" name="statement15" value="@Model.ControlInformations.Statement15" />
+             </div>
+     
+            </div>
+        }
+
+      
+            
+       
+
+     
+ </form>
+  <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex"> 
+                            <button class="btn btn-success" onclick="sanction('@_protector.Decode(Model.Id.ToString())')">Control</button>  
+                        </div>
+                      <div class="form-group col-sm-3 flex-column d-flex"> 
+                            <button class="btn btn-danger" onclick="returnp('@_protector.Decode(Model.Id.ToString())')">Return</button>  
+                        </div>
+                      
+                    </div>
+  
+
+</div> 
+
+<div class="modal" id="applicantModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Applicant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="searchModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Search Applicant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+       
+      <div class="modal-body">
+        <img src="/images/loading-6.gif" class="img-fluid"/>
+      </div>
+       
+    </div>
+  </div>
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        function sanction(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Control';
+        }
+        
+    }
+    function returnp(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=ControlReturn';
+        }
+        
+    }
+    
+
+
+    
+</script>
+}

@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+
+}
+
+
+@if (ViewBag.Doc != "NILL")
+{
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <iframe id="b1View" style="width: 100%;min-height: 600px;position: relative;height: 100%"  frameborder="0" src="/@ViewBag.Doc" ></iframe>
+        </div>
+    </div>
+
+}
+else
+{
+    @Html.Raw(ViewBag.DocumentType)
+    @if ((bool)ViewBag.IsScore && (bool)ViewBag.ShowAccept)
+    {
+       <form action="/LoanFlow/AddScore" method="post" onsubmit="saveScore()" style="margin-left:auto;margin-right:auto;">
+            <input type="hidden" id="appID" name="ApplicationId" value="@ViewBag.AppId"/>
+            <input type="hidden"   name="TypeOfRemark" value="CreditScore"/>
+            <input type="hidden"   name="Statment" value="" id="score"/>
+            <center>
+                <button onclick="javascript:saveScore()" type="submit">Accept Score</button>
+            </center>
+            
+       </form>    
+    }
+    
+}
+
+@if ((bool)ViewBag.IsScore )
+{
+    <script type="text/javascript">
+        function saveScore()
+        {
+            console.log('Save Score');
+            console.log(document.getElementById('totalScore').innerText);
+            document.getElementById("score").value  = document.getElementById('totalScore').innerText;
+
+        }
+    </script>
+ 
+    
+}
+

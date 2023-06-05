@@ -1,0 +1,719 @@
+﻿@model Application
+@inject CustomIDataProtection _protector
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    int slno = 1;
+    bool editable = (bool)ViewBag.Editable;
+    AccountData acct = new AccountData();
+    if (ViewBag.AccountDetails != null)
+    {
+        acct = (AccountData)ViewBag.AccountDetails;
+    }
+     
+}
+<div class="container">
+
+    <div class="alert alert-danger" role="alert" style="margin-top:5px;">
+            Application is at : <b>@Model.Owner</b><br/>
+            Application status is : <b>@Model.Status</b>
+    </div>
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <tr>
+            <td colspan="6">
+                <b>Basic Application Details</b>
+            </td>
+        </tr>
+        <tr>
+            
+            <td><b>Branch</b></td>
+            <td>@Model.BranchId</td>
+            <td><b>Name</b></td>
+            <td>@Model.ApplicantShortName</td>
+            <td><b>Applicant Type</b></td>
+            <td>@Model.TypeOfApplicant</td>
+        </tr>
+        <tr>
+            
+            <td><b>Scheme</b></td>
+            <td>@Model.LoanScheme</td>
+            <td><b>Purpose</b></td>
+            <td>@Model.Purpose</td>
+            <td><b>Status</b></td>
+            <td>@Model.Status</td>
+        </tr>
+        <tr>
+            
+            <td><b>Sponsoring Agency</b></td>
+            <td>@Model.SponsoringAgency</td>
+            <td><b>Subsidy</b></td>
+            <td>@Model.SubsidyAmt</td>
+            <td><b>Application Date</b></td>
+            <td>@Model.ApplicationDate.ToShortDateString()</td>
+        </tr>
+    </table>
+
+    @if (acct != null)
+    {
+        <table class="table table-bordered table-sm">
+        <tr>
+            <td><b>Mapped Account</b></td>
+            <td>@acct.account_no</td>
+            <td><b>Limit</b></td>
+            <td>@acct.odlimit</td>
+            <td><b>Current Balance</b></td>
+            <td>@acct.currentbalance</td>
+        </tr>
+        <tr>
+            <td><b>Product Code</b></td>
+            <td>@acct.accounttype - @acct.interestcat</td>
+            <td><b>ROI</b></td>
+            <td>@acct.intrate</td>
+            <td><b>Product Desc</b></td>
+            <td>@acct.name</td>
+        </tr>
+
+    </table>
+    }
+    
+      <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <th colspan="8">Cibil Details (Latest enquiry will be used for calculation)</th>
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>Applicant Name</th>
+                <th>Cibil Score</th>
+                <th>Date</th>
+                <th>Total Accounts</th>
+                <th>Closed Accounts</th>
+                <th>Overdue Accounts</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="cibilTable">
+            @{
+                int crCount = 1;
+            }
+            @foreach(var x in (List<CIBILRequest>)ViewBag.CreditScore)
+            {
+                <tr>
+                    <td>@crCount</td>
+                    <td>@x.ApplicantDetail.Applicant_First_Name @x.ApplicantDetail.Applicant_Last_Name</td>
+                    <td><a href="/Home/CreditScore/@x.Id">@x.ScoreName1 </a>  </td>
+                    <td>@x.RequestDate</td>
+                    <td>@x.CibilLoans.Count()</td>
+                    <td>@x.CibilLoans.Where(a => a.currentBalance == "0").Count()</td>
+                    <td>@x.CibilLoans.Where(a => int.Parse(a.amountOverdue ?? "0") != 0).Count()</td>
+                    <td> @if (editable)
+                        { <a class="btn btn-sm btn-primary" href="/Home/UpdateEmi/@x.Id">Update EMI</a> <a class="btn btn-sm btn-info" href="/LoanFlow/AddCibil/@x.Id" data-toggle="modal" data-target="#applicantModal">Add Additional Loan</a>}
+                         </td>
+                </tr>
+                crCount++;
+            }
+        </tbody>
+    </table>
+   
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="5">Details of Applicant</td>
+                <td colspan="2"> @if (editable)
+                    {
+                        <a href="/LoanFlow/AddApplicant/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">
+                        Add Applicant
+</a> <a href="/LoanFlow/SearchApplicant/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#searchModal">
+ Copy / Search
+</a>    
+                    }
+                    </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Date of Birth
+                </th>
+                <th>
+                    Occupation
+                </th>
+                <th>
+                    KYC Document
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"))
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Salutation @x.Applicant_First_Name @x.Applicant_Middle_Name @x.Applicant_Last_Name @x.Relationship @x.Guardian_Name</td>
+                    <td>@x.TypeofApplicant</td>
+                    <td>@x.Date_Of_Birth</td>
+                    <td>@x.Occupation</td>
+                    <td> <a href="/@x.KYC_Upload">Download KYC</a>  </td>
+                    <td>
+                        @if (editable)
+                        {
+                            <a class="btn-danger btn btn-sm" href="/LoanFlow/EditApplicant/@x.Id" data-toggle="modal" data-target="#applicantModal">Edit</a>  <button type="button" class="btn btn-sm btn-warning" onclick="deleteApp(@x.Id)" >Delete</button>    
+                        }
+                        
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+
+     <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="3"><b>Attached Documents</b></td>
+                <td colspan="2">
+                    
+                        <a href="/LoanFlow/AddDocument/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">
+ Add 
+</a> 
+                   
+
+                    
+
+</td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    UserId
+                </th>
+                <th>
+                    File Download
+                </th>
+               
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Documents)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Details </td>
+                    <td>@x.UserId</td>
+                    <td><a href="/@x.FilePath">Download</a></td>
+                    
+                    <td> 
+                        @if (editable)
+                        {
+                            <button type="button" class="btn btn-sm btn-warning" onclick="deleteDocument(@x.Id)" >Delete</button>    
+                        }
+                        
+                        
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+
+     @if (Model.Status == "Sanctioned")
+    {
+          <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="10"><b>Sanction Details</b></td>
+               
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Type of Facility
+                </th>
+                <th>
+                    Purpose
+                </th>
+                <th>
+                    Cost
+                </th>
+                <th>
+                    Applied Amount
+                </th>
+                <th>Sanctioned Amount</th>
+                <th>ROI</th>
+                <th>Repay Start Date</th>
+                <th>Repay Amount</th>
+                <th>Repay Term</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.LoanApplications)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.TypeOfFacility </td>
+                    <td>@x.Description</td>
+                    <td>@x.Cost</td>
+                    <td>@x.AppliedAmount</td>
+                     <td>@x.SanctionedAmount</td>
+                    <td>@x.RateOfInterest</td>
+                    <td>@x.RepayStartDate</td>
+                    <td>@x.Repayment</td>
+                    <td>@x.RepayTerm</td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+        </table>
+        <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td ><b>Charges</b></td>
+               
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Percentage (For Document)
+                </th>
+               
+                
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Charges)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Details </td>
+                    <td>@x.TotalAmount</td>
+                    <td>@x.Percentage</td>
+                   
+                    
+                     
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+     <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td ><b>Disbursement Schedule</b></td>
+             
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Total Investment
+                </th>
+                <th>
+                    Bank Contribution
+                </th>
+               
+                
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Disbursements)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Details </td>
+                    <td>@x.TotalAmount</td>
+                    <td>@x.BankPart</td>
+                    
+                  
+                    
+                     
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+    }
+    else
+    {
+        <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="4"><b>Applied Amount Details</b></td>
+                <td colspan="2">
+
+                    @if (editable)
+                    {
+                                        <a href="/LoanFlow/AddLoanApplication/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">
+ Add 
+</a>                    
+                    }
+     
+</td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Type of Facility
+                </th>
+                <th>
+                    Purpose
+                </th>
+                <th>
+                    Cost
+                </th>
+                <th>
+                    Applied Amount
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.LoanApplications)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.TypeOfFacility </td>
+                    <td>@x.Description</td>
+                    <td>@x.Cost</td>
+                    <td>@x.AppliedAmount</td>
+                    <td>
+                        @if (editable)
+                        {
+                            <button type="button" class="btn btn-sm btn-warning" onclick="deleteApplication(@x.Id)" >Delete</button>    
+                        }
+
+                        
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+    }
+    
+   
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td><b>Inspection Reports</b></td>
+               
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    UserId
+                </th>
+                <th>
+                    Visit Date
+                </th>
+                <th>
+                    Report
+                </th>
+               
+                <th><button type="button" class="btn btn-sm btn-warning" onclick="viewPresanction(@Model.Id,'@Model.LoanScheme')" >View Report</button></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Inspections)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Status </td>
+                    <td>@x.UserId</td>
+                    <td>@x.VisitDate</td>
+                  
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+      <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="2"><b>Remarks / Recommendation</b></td>
+                <td>
+                    <a href="/LoanFlow/AddRemark?Id=@Model.Id&formName=control" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Add</a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Type
+                </th>
+                 <th>
+                    User Id
+                </th>
+                <th>
+                    Remark
+                </th>
+               
+               
+                
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Remarks)
+            {
+
+                <tr id="@x.TypeOfRemark.Replace(' ','_')">
+                    <td>@slno</td>
+                    <td>@x.TypeOfRemark </td>
+                    <td>@x.UserId</td>
+                    <td>@x.Statment</td>
+                    
+                   
+                     
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+
+
+       <div class="row justify-content-between text-left">
+                  <div class="form-group col-sm-2 flex-column d-flex"> 
+                            <button class="btn btn-danger" onclick="scoreCard(@Model.Id,'@Model.LoanScheme');">Score Card</button>
+                        </div>
+               
+                 <div class="form-group col-sm-2 flex-column d-flex"> 
+                            <button class="btn btn-success" onclick="pNote(@Model.Id,'@Model.LoanScheme');">Process Note</button>  
+                        </div>
+                        <div class="form-group col-sm-2 flex-column d-flex"> 
+                            <button class="btn btn-success" onclick="arrLetter(@Model.Id,'@Model.LoanScheme');">Arrangment Letter</button>  
+                        </div>
+                        <div class="form-group col-sm-2 flex-column d-flex"> 
+                            <button class="btn btn-warning" onclick="agLetter(@Model.Id,'@Model.LoanScheme');">Agreement Letter</button>
+                        </div>
+                       <div class="form-group col-sm-2 flex-column d-flex"> 
+                            <button class="btn btn-primary" onclick="gLetter(@Model.Id,'@Model.LoanScheme');">Guarantee Letter / Other</button>
+                        </div>
+                        <div class="form-group col-sm-2 flex-column d-flex"> 
+                            <button class="btn btn-danger" onclick="adLetter(@Model.Id,'@Model.LoanScheme');">Loan Application</button>
+                        </div>
+                    </div>
+
+    @if ((bool)ViewBag.IsAbleToControl)
+    {
+        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex"> 
+                            <button class="btn btn-success" onclick="sanction('@_protector.Decode(Model.Id.ToString())')">Control</button>  
+                        </div>
+                      <div class="form-group col-sm-3 flex-column d-flex"> 
+                            <button class="btn btn-danger" onclick="returnp('@_protector.Decode(Model.Id.ToString())')">Return</button>  
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex"> 
+                            <a class="btn btn-primary" href="/LoanFlow/PendingControl"  >Back To List</a>  
+                        </div>
+                      
+                    </div>
+    }
+
+          
+ 
+
+  
+
+</div>
+<div class="modal" id="applicantModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Applicant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="searchModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Search Applicant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+
+         function viewPresanction(a,b)
+    {
+        if(confirm("Are you sure ?"))
+        {
+              
+            window.location = '/Home/Document?docType=preSanction&AppID=' + a + '&loanType=' + b;
+        }
+        
+    }
+    
+    function sanction(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var count = $("#Control_Remarks").length;
+            if(count == 0)
+            {
+                    alert('No Control Remarks present , Cannot proceed   !');
+                    return;
+            }
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Control';
+        }
+        
+    }
+    function returnp(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var count = $("#Control_Return_Remarks").length;
+            if(count == 0)
+            {
+                    alert('No Control Return Remarks present , Cannot proceed  !');
+                    return;
+            }
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=ControlReturn';
+        }
+        
+    }
+    function forward(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Forward';
+        }
+        
+    }
+     function pNote(a,b)
+       {
+            
+           //http://10.80.1.123:2000/docGenerate/processNotePer?appID=4
+           window.location = '/Home/Document?docType=processNote&AppID=' + a + '&LoanType='+b+'&docId=4';
+       }
+       function arrLetter(a,b)
+       {
+           window.location = '/Home/Document?docType=getDoc&AppID=' + a + '&LoanType='+b+'&docId=1';
+       }
+       function agLetter(a,b)
+       {
+           window.location = '/Home/Document?docType=getDoc&AppID=' + a + '&LoanType='+b+'&docId=2';
+       }
+       function gLetter(a,b)
+       {
+           window.location = '/Home/Document?docType=getDoc&AppID=' + a + '&LoanType='+b+'&docId=3';
+       }
+       function scoreCard(a,b)
+       {
+           window.location = '/Home/Document?docType=scoreCard&AppID=' + a + '&LoanType='+b+'&docId=3';
+       }
+       function adLetter(a,b)
+       {
+          window.location = '/Home/Document?docType=loanForm&AppID=' + a + '&LoanType='+b+'&docId=4';
+       }
+   
+       
+    
+    
+  $('#applicantModal').on('show.bs.modal', function (e) {
+    $(this).find('.modal-body').load(e.relatedTarget.href);
+  });
+   $('#searchModal').on('show.bs.modal', function (e) {
+    $(this).find('.modal-body').load(e.relatedTarget.href);
+  });
+</script>
+}

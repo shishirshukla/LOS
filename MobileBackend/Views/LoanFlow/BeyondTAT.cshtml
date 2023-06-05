@@ -1,0 +1,110 @@
+﻿@model List<Application>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<AppReport> reps = (List<AppReport>)ViewBag.Report;
+}
+
+<div class="container">
+
+  
+
+ 
+    
+   
+
+    <h3>Applications Pending Beyond TAT</h3>
+
+    <table class="table table-bordered table-sm" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    App. No
+                </th>
+                <th>
+                    App. Date
+                </th>
+                <th>
+                    Name
+                </th>
+               
+                <th>
+                    Scheme
+                </th>
+                
+                <th>
+                    Owner
+                </th>
+                <th>
+                    Status
+                </th>
+                 <th>
+                    Branch
+                </th>
+                <th>
+                    AMH
+                </th>
+                <th></th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            @foreach(var x in Model)
+            {
+                if (x.LoanScheme == "PL" || x.LoanScheme == "PL-Ag" || x.LoanScheme == "PL-SECL" || x.LoanScheme == "Car")
+                {
+                    if (x.ApplicationDate.AddDays(2) < DateTime.Today)
+                    {
+                        <tr>
+                            <td>@x.Id</td>
+                            <td>@x.ApplicationDate.ToShortDateString()</td>
+                            <td>@x.ApplicantShortName</td>
+                   
+                            <td>@x.LoanScheme</td>
+                   
+                            <td>@x.Owner</td>
+                            <td>@x.Status</td>
+                            <td>@x.Branch.BranchName (@x.BranchId)</td>
+                            <td>@x.Branch.AMHCode</td>
+                            <td><a href="/LoanFlow/Application?Id=@x.Id">Details</a></td>
+                        </tr>
+                    }
+                }
+                else 
+                {
+                    if (x.ApplicationDate.AddDays(7) < DateTime.Today)
+                    {
+                        <tr>
+                            <td>@x.Id</td>
+                            <td>@x.ApplicationDate.ToShortDateString()</td>
+                            <td>@x.ApplicantShortName</td>
+                   
+                            <td>@x.LoanScheme</td>
+                   
+                            <td>@x.Owner</td>
+                            <td>@x.Status</td>
+                            <td>@x.Branch.BranchName (@x.BranchId)</td>
+                            <td>@x.Branch.AMHCode</td>
+                            <td><a href="/LoanFlow/Application?Id=@x.Id">Details</a></td>
+                        </tr>
+                    }
+                }
+                
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css"/>
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+                    $('#myTable').DataTable();
+        } );
+    </script>
+    
+}

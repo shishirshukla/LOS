@@ -1,0 +1,135 @@
+{
+  "RequestInfo": {
+    "SolutionSetName": "GO_CHHATTISGARH_GRAMINBANK_AGSS",
+    "ExecuteLatestVersion": "true"
+  },
+  "Fields": {
+    "Applicants": {
+	
+      "Applicant": 
+	 
+        {
+			
+          "ApplicantFirstName": "LATHA",
+          "ApplicantMiddleName": "",
+          "ApplicantLastName": "ANU MUKESH",
+          "DateOfBirth": "27121986",
+           "Gender": "Male",
+          "EmailAddress": "",
+           "Identifiers": {
+          "Identifier": [                       
+          ]
+        },
+          "Telephones": {
+            "Telephone": {
+              "TelephoneNumber": "66059563",
+              "TelephoneType": "01",
+              "TelephoneCountryCode": ""            
+            }
+          },
+		  "Addresses": {
+		  "Address": {
+		  "AddressType": "01",
+		  "AddressLine1": "8 161 B PAYIKATTUVILAI CITY RMANI STA",
+		   "AddressLine2": "TAMIL NADU PIN NO 629151 XXX",
+		    "AddressLine3": "",
+			"AddressLine4": "",
+			"AddressLine5": "",
+			"City": "GHANSOLI",
+			"PinCode": "400701",
+			"ResidenceType": "02",
+			"StateCode": "27"
+			}
+			},
+          "Services": {
+            "Service": 
+              
+              {
+            "Id": "CORE",
+            "Operations": {
+              "Operation": [
+                {
+                  "Name": "ConsumerCIR",
+                  "Params": {
+                    "Param": [
+                      {
+                        "Name": "CibilBureauFlag",
+                        "Value": "false"
+                      },
+                      {
+                        "Name": "Amount",
+                        "Value": "10000"
+                      },
+                      {
+                        "Name": "Purpose",
+                        "Value": "10"
+                      },
+                      {
+                        "Name": "ScoreType",
+                        "Value": "08"
+                      },
+                      {
+                        "Name": "MemberCode",
+                        "Value": "BR04608888_CIRC2CNPE"
+                      },
+                      {
+                        "Name": "Password",
+                        "Value": "Hx6$Qd6@Nu3$Me"
+                      },
+                      {
+                        "Name": "FormattedReport",
+                        "Value": "true"
+                      },
+                      {
+                        "Name": "GSTStateCode",
+                        "Value": "07"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Name": "IDV",
+                  "Params": {
+                    "Param": [
+                      {
+                        "Name": "IDVerificationFlag",
+                        "Value": "false"
+                      },
+                      {
+                        "Name": "ConsumerConsentForUIDAIAuthentication",
+                        "Value": "Y"
+                      },
+                      {
+                        "Name": "GSTStateCode",
+                        "Value": "27"
+                      }
+                    ]
+                  }
+                }
+               
+               
+              ]
+            }
+          }
+            
+          }
+        }
+	  
+    },
+    "ApplicationData": {
+	 "GSTStateCode": "27",
+      "Services": {
+	  
+        "Service": 
+		 
+           {
+            "Id": "CORE",
+            "Skip": "N",
+            "Consent": "true",
+            "EnableSimulation": "False"
+          }
+		
+      }
+    }
+  }
+}

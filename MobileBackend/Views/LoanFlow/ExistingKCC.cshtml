@@ -1,0 +1,301 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //Layout = null;
+}
+
+<b>@ViewBag.Message</b>
+
+
+<form method="post" action="/LoanFlow/AddApplicant" enctype="multipart/form-data" autocomplete="off">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+     <div class="row justify-content-between text-left border border-dark" style="padding-top: 15px;margin-bottom:10px;">
+      <div class="form-group col-sm-6 flex-column d-flex">
+            <label>KCC A/C Number</label>
+     </div>
+    <div class="form-group col-sm-3 flex-column d-flex">
+         <input type="text" name="cif" id="cif"/>
+    </div>
+    <div class="form-group col-sm-3 flex-column d-flex">
+         <button type="button" onclick="fetchCIF();" id="btnCIF" class="btn btn-primary">Fetch Details</button>
+    </div>
+     
+     </div>
+    <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-2 flex-column d-flex">
+    <label>Beneficiary Name</label>
+    <label id="benName">Beneficiary Name</label>
+    
+  </div>
+  
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >Aadhaar Number</label>
+    <input type="text" class="form-control-sm" required name="Applicant_First_Name" id="Applicant_First_Name" placeholder="Adhaar" readonly>
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >CIF Name</label>
+    <input type="text" class="form-control-sm" name="Applicant_Middle_Name" id="Applicant_Middle_Name" placeholder="CIF Name" readonly>
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label >Mobile Number</label>
+    <input type="text" class="form-control-sm" name="Applicant_Last_Name" id="Applicant_Last_Name" placeholder="Mobile Number" readonly>
+  </div>
+  </div>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label>Dob</label>
+    <input type="text" class="form-control-sm" name="Dob" id="Dob" placeholder="Date of Birth" readonly>
+    
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label>Social Category</label>
+    <input type="text" class="form-control-sm" readonly name="Dob" id="scat" placeholder="" >
+    <label>SC (1) ,  ST(2) , GE (3) , OBC(4)</label>
+    
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label>Farmer Category</label>
+    <input type="text" class="form-control-sm" readonly name="Dob" id="fcat" placeholder="" >
+    <label>OWNER (1) ,  SHARECROPPER(2) , TENANT (3)  </label>
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label>Farmer Type</label>
+    <input type="text" class="form-control-sm" readonly name="Dob" id="ftype" placeholder="">
+    <label>SMALL (1) ,  OTHER(2) , MARGINAL (3) </label>
+  </div>
+  
+
+  </div>
+  <div class="row justify-content-between text-left">
+      <div class="form-group col-sm-3 flex-column d-flex">
+          <label>Residential Village</label>
+   
+    <label id="resvil"></label>
+          </div>
+    
+  </div>
+  <div class="row justify-content-between text-left">
+   <div class="form-group col-sm-3 flex-column d-flex">
+    <label>District</label>
+    <input type="hidden" id="selAc" value=""/>
+     <select class="form-control distDD" id="ddFB-0" data-id="0">
+                           <option value="0">--Select--</option>
+                           <option value='904' >Balod</option>
+                            <option value='905' >Baloda Bazar</option>
+                        <option value='906' >Balrampur</option>
+                        <option value='414' >Bastar</option>
+                        <option value='907' >Bemetara</option>
+                        <option value='417' >Bijapur</option>
+                        <option value='406' >Bilaspur</option>
+                        <option value='416' >Dakshin Bastar Dantewada</option>
+                        <option value='416' >Dantewada</option>
+                        <option value='412' >Dhamtari</option>
+                        <option value='409' >Durg</option>
+                        <option value='645' >Gariyaband</option>
+                        <option value='908' >Gariyaband</option>
+                        <option value='990' >Gaurella Pendra Marwahi</option>
+                        <option value='990' >Gorella-Pendra-Marwahi</option>
+                        <option value='405' >Janjgir - Champa</option>
+                        <option value='405' >Janjgir-Champa</option>
+                        <option value='402' >Jashpur</option>
+                        <option value='407' >Kabeerdham</option>
+                        <option value='407' >Kabirdham</option>
+                        <option value='413' >Kanker</option>
+                        <option value='909' >Kondagaon</option>
+                        <option value='404' >Korba</option>
+                        <option value='400' >Korea</option>
+                        <option value='400' >Koriya</option>
+                        <option value='411' >Mahasamund</option>
+                        <option value='910' >Mungeli</option>
+                        <option value='415' >Narayanpur</option>
+                        <option value='403' >Raigarh</option>
+                        <option value='410' >Raipur</option>
+                        <option value='408' >Rajnandgaon</option>
+                        <option value='911' >Sukma</option>
+                        <option value='912' >Surajpur</option>
+                        <option value='401' >Surguja</option>
+                        <option value='413' >Uttar Bastar Kanker</option>
+
+                       </select>
+    
+  </div>
+  <div class="form-group col-sm-3 flex-column d-flex">
+    <label>Tehsil</label>
+    <select class="form-control tehFB" id="tehFB-0" data-id="0">
+
+                       </select>
+    </div>
+    <div class="form-group col-sm-3 flex-column d-flex">
+    <label>Village</label>
+    <select class="form-control villFB" id="villFB-0" data-id="0">
+         <option value="0">------</option>
+                       </select>
+    </div>
+    <div class="form-group col-sm-3 flex-column d-flex" style="justify-content:flex-end;">
+       
+         <button type="button" class="btn btn-primary btn-sm" onclick="saveRes()">Save Village</button> 
+    </div>
+
+  </div>
+  <div id="crp" class="row justify-content-between text-left">
+
+  </div>
+ 
+ 
+
+ @* <div class="row justify-content-between text-left">
+    <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Upload All KYC</label>
+     <input type="file"  name="KYCDocument" class="form-control-sm"/>
+  </div>
+  </div>
+  *@
+  
+  @*<button type="button" onclick="updateKCC();" class="btn btn-primary">Update Details</button>*@
+    <a href="#" id="kharifBtn" class="btn btn-primary btn-sm">
+                        Add Kharif Crop</a>    
+                        <a href="#" id="rabiBtn" class="btn btn-primary btn-sm">
+                        Add Rabi Crop</a>
+                        <a href="#" id="summerBtn" class="btn btn-primary btn-sm">
+                        Add Summer Crop</a>
+                         
+                         <a href="#" id="delBtn" class="btn btn-primary btn-sm" onclick="delAll();">
+                       Delete All Crops</a>
+                       <a href="#" id="splitBtn" class="btn btn-primary btn-sm" onclick="splitLand();">
+                       Split Land</a>
+</form>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+     function delAll()
+    {
+        var a = $('#cif').val();
+        if(confirm("Are you sure ?"))
+        {
+              $.ajax({
+                url: "/LoanFlow/DeleteCrops?a=" + a,
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                success: function(data){
+                    alert(data);
+                }
+            });
+        }
+        
+    }
+
+
+    function updateKCC()
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var a = $('#cif').val();
+            window.location = '/LoanFlow/UpdateKCCLandAccount?Id=' + a ;
+        }
+    }
+
+     function splitLand()
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var a = $('#cif').val();
+            window.location = '/LoanFlow/SplitLandExisting?Id=' + a ;
+        }
+    }
+
+    function saveRes()
+    {
+        console.log('sac');
+        var id = $('#selAc').val();
+        var tt = $('#villFB-0').val();
+        if (tt != 0)
+        {
+            $.ajax({
+                url: "/LoanFlow/SaveResidence?ac=" + id + "&vill=" + tt ,
+              
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                success: function(data){
+                   alert('Saved');
+                }
+            });
+        }
+        
+    }
+
+    $(document).ready(function(){
+        $('.distDD').change(function(){
+            var id = $(this).attr('data-id');
+            var tt = $(this).val();
+            console.log(id);
+            $.ajax({
+                url: "/LoanFlow/GetFBTehsil?dd=" + tt,
+                data: {dd:tt},
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                success: function(data){
+                    $('#tehFB-'+id).html(data);
+                }
+            });
+
+        });
+        
+    
+     $('.tehFB').change(function(){
+            var id = $(this).attr('data-id');
+            var tt = $(this).val();
+            var tehsil = $('#ddFB-'+ id).val();
+            console.log(tehsil);
+            $.ajax({
+                url: "/LoanFlow/GetFBVillage?dd=" + tehsil + "&teh=" + tt ,
+                data: {'dd':tt , 'teh':tehsil},
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                success: function(data){
+                    $('#villFB-'+id).html(data);
+                }
+            });
+
+        });
+    });
+    
+
+    function fetchCIF()
+    {
+        $('#btnCIF').text('Fetching...');
+        var a = $('#cif').val();
+         $.ajax({   
+                url: "/LoanFlow/GetKCCInfo?Id="+a,   
+                type: "GET" 
+            }).done(function (data) {
+                     $('#selAc').val(a);
+                     $('#benName').text(data.beneficiaryName);
+                     $('#Applicant_First_Name').val(data.aadhaarNumber);
+                     $('#Applicant_Middle_Name').val(data.beneficiaryPassbookName);
+                     $('#Applicant_Last_Name').val(data.mobile);
+                     $('#Dob').val(data.dob);
+                     $('#scat').val(data.socialCategory);
+                     $('#fcat').val(data.farmerCategory);
+                     $('#ftype').val(data.farmerType);
+                     $('#kharifBtn').attr('href','/LoanFlow/AddCropExisting?Id='+a+'&season=Kharif');
+                     $('#rabiBtn').attr('href','/LoanFlow/AddCropExisting?Id='+a+'&season=Rabi');
+                     $('#summerBtn').attr('href','/LoanFlow/AddCropExisting?Id='+a+'&season=Summer');
+                     $('#resvil').text(data.residential_vill);
+                     $.ajax({   
+                            url: "/LoanFlow/GetExistingCrop?Id="+a,   
+                            type: "GET" 
+                     }).done(function (d){
+                        $('#crp').html(d);
+                     });
+                     $('#btnCIF').text('Fetch Details');
+            }); 
+    }
+</script>
+}

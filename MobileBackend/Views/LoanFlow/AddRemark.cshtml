@@ -1,0 +1,87 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemark" >
+
+         <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Type</label>
+    <select class="form-control-sm" name="TypeOfRemark" id="TypeOfRemark">
+        <option value="-----">---- Select ---</option>
+      @if (!(bool)ViewBag.IsControl)
+      {
+                    <option data-id="0"  value="Branch Recomendation">Branch Recomendation</option>
+                    <option data-id="repType" value="Mode of Repayment">Preferred Mode of Repayment </option>  
+                    <option data-id="0"  value="PL Agri Remark">Remark for PL Agri land </option>    
+                    <option data-id="0"  value="Documents">Obtained Documents </option>  
+                    
+                    @*<option value="CreditScore">Remark on Credit Score </option>    *@
+                     <option data-id="0"  value="ReturnRemarks">Remark for Returning </option>    
+                      <option data-id="0"  value="RejectRemarks">Remark for Rejecting </option>   
+                       <option data-id="House"> Pucca House </option> 
+      }
+
+        @if((bool)ViewBag.IsSanction)
+        {
+             <option value="Deviation-ROI">Deviation (ROI) </option>
+              <option value="Deviation">Deviation   </option>
+                    <option value="Repayment">Remark on Repayment </option>    
+                    <option value="CheckOff">Remark on Check Off Facility </option>
+                    <option value="ProductCode">CBS Product Code</option>
+                    
+                    <option value="Processing Officer Remark">Processing Officer Remark </option>    
+                    <option value="BranchInstruction">Instruction To Branch </option>  
+                    <option value="Sanction Remarks">Sanction Remarks </option>    
+        }
+        @if((bool)ViewBag.IsControl)
+        {
+                    <option value="Control Remarks">Control Remarks </option>
+                    <option value="Control Return Remarks">Control Return Remarks </option>
+        }
+                
+        
+       
+    </select>
+  </div>
+  <div class="form-group col-sm-8 flex-column d-flex">
+    <label >Value</label>
+   
+   <textarea rows="3" class="form-control hide1 hide2" required name="Statment"  placeholder="Remarks"></textarea>
+
+     <select id="House" class="hide1" name="" style="display:none">
+       <option>Mortgage Free / Mortgaged in our bank with regular repayment</option>
+       <option>Property Mortgaged with Regular Repayment</option>
+       <option>Parental Property</option>
+      
+   </select>
+
+    <select id="repType" class="hide1" name="" style="display:none">
+       <option>NA</option>
+       <option>NACH /ECS with other bank</option>
+       <option>SI /ECS with Our Bank/SBI Account</option>
+       <option>PDC</option>
+       <option>Salary Account with us and Check Off Facility</option>
+   </select>
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>

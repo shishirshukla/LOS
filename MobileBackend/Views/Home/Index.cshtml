@@ -1,0 +1,254 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    var z = (List<Application>)ViewBag.PendingApps;
+    var y = (List<Log>)ViewBag.RecentActivity;
+     List<AppReport> reps = (List<AppReport>)ViewBag.Report1;
+       List<AppReport> reps1 = (List<AppReport>)ViewBag.Report;
+}
+
+<div class="container">
+     <div class="text-center">
+    <h3 class="display-7">Welcome @ViewBag.UserInfo</h3>
+    
+</div>
+    <div class="row">
+        <div class="col bg-primary card" style="color:white;min-height:150px;">
+            <b class="display-6">Pending Applications</b>
+            <b class="display-3">@ViewBag.Applications</b>
+        </div>
+         <div class="col bg-danger  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Pre Sanction Done</b>
+              <b class="display-3">@ViewBag.ApplicationsNI</b>
+        </div>
+         <div class="col bg-warning  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Forwarded</b>
+              <b class="display-3">@ViewBag.ApplicationsF</b>
+        </div>
+         <div class="col bg-success  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Sanctioned</b>
+              <b class="display-3">@ViewBag.ApplicationsS</b>
+        </div>
+
+    </div>
+    <div class="text-center">
+        <h3 class="display-7">Status of Control</h3>
+        </div>
+    
+
+    <div class="row" style="margin-top:5px;">
+        <div class="col bg-secondary card" style="color:white;min-height:150px;">
+            <b class="display-6">Pending For Control</b>
+            <b class="display-3">@ViewBag.PendingControl</b>
+        </div>
+         <div class="col bg-dark  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Send To Control</b>
+              <b class="display-3">@ViewBag.SendToControl</b>
+        </div>
+         <div class="col bg-info  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Controlled</b>
+              <b class="display-3">@ViewBag.Controlled</b>
+        </div>
+          <div class="col bg-danger  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Returned</b>
+              <b class="display-3">@ViewBag.ControlReturn</b>
+        </div>
+         
+
+    </div>
+  
+    @if (ViewBag.BranchType == "Branch")
+            {
+                <div class="row" style="margin-top:15px;">
+    <div class="col card border border-success" style="margin-right:15px;">
+        <b class="display-8">Applications Pending at Branch</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Name</th>
+                    <th>Application Date</th>
+                    <th>Loan Scheme</th>
+                    
+                </tr>
+            </thead>
+            
+            @foreach(var item in z)
+            {
+                <tr>
+                    <td>@item.Branch.BranchName</td>
+                    <td>@item.ApplicantShortName</td>
+                    <td>@item.ApplicationDate.ToString("dd-MMM-yy")</td>
+                    <td>@item.LoanScheme</td>
+                    
+                </tr>
+                    
+                }
+         </table>
+    </div>
+    <div class="col card border border-success">
+        <b class="display-8">Recent Activity</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                  
+                </tr>
+            </thead>
+            
+            @foreach(var item in y)
+            {
+                <tr>
+                    <td>@item.Timestamp.ToString("dd-MMM-yy HH:MM:s")</td>
+                    <td>@item.Action</td>
+                 
+                </tr>
+                    
+                }
+         </table>
+    </div>
+</div>
+            }
+            else if (ViewBag.BranchType == "AMH")
+            {
+                <div class="row" style="margin-top:15px;">
+    <div class="col card border border-success" style="margin-right:15px;">
+        <b class="display-8">Applications Pending at Branch</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Name</th>
+                    <th>Application Date</th>
+                    <th>Loan Scheme</th>
+                    
+                </tr>
+            </thead>
+            
+            @foreach(var item in z)
+            {
+                <tr>
+                    <td>@item.Branch.BranchName</td>
+                    <td>@item.ApplicantShortName</td>
+                    <td>@item.ApplicationDate.ToString("dd-MMM-yy")</td>
+                    <td>@item.LoanScheme</td>
+                    
+                </tr>
+                    
+                }
+         </table>
+    </div>
+    <div class="col card border border-success">
+        <b class="display-8">Recent Activity</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                  
+                </tr>
+            </thead>
+            
+            @foreach(var item in y)
+            {
+                <tr>
+                    <td>@item.Timestamp.ToString("dd-MMM-yy HH:MM:s")</td>
+                    <td>@item.Action</td>
+                 
+                </tr>
+                    
+                }
+         </table>
+    </div>
+</div>
+            }
+            else if (ViewBag.BranchType == "HO")
+            {
+                <br/>
+                <hr/>
+               <section id="tabs" class="project-tab" style="padding-top:5px;margin-top: 0px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav>
+                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">RO wise</a>
+                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">AMH wise</a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Branch wise</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                 <table class="table table-bordered table-sm  table-stripped" >
+        <thead>
+            <tr>
+            <th>Region</th>
+            <th>Pending At Branch</th>
+            <th>Pending at AMH/RO</th>
+            <th>Sanctioned</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in reps)
+    {
+        <tr>
+            <td>@x.AMHCode</td>
+            <td>@x.Pending</td>
+            <td>@x.Forwarded</td>
+            <td>@x.Sanctioned</td>
+        </tr>
+    }
+        </tbody>
+
+         
+
+    </table>
+    
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <table class="table table-bordered table-sm  table-stripped" >
+        <thead>
+            <tr>
+            <th>AMHCode</th>
+            <th>Pending At Branch</th>
+            <th>Pending at AMH/RO</th>
+            <th>Sanctioned</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in reps1)
+    {
+        <tr>
+            <td>@x.AMHCode</td>
+            <td>@x.Pending</td>
+            <td>@x.Forwarded</td>
+            <td>@x.Sanctioned</td>
+        </tr>
+    }
+        </tbody>
+
+         
+
+    </table>
+                            </div>
+                            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+            }
+            else
+            {
+                
+            }
+
+
+
+
+
+</div>

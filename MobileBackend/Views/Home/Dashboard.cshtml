@@ -1,0 +1,549 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    var z = (List<Application>)ViewBag.PendingApps;
+    var y = (List<Log>)ViewBag.RecentActivity;
+    List<AppReport> reps = (List<AppReport>)ViewBag.Report1;
+    List<AppReport> reps1 = (List<AppReport>)ViewBag.Report;
+    List<SchemeReport> reps11 = (List<SchemeReport>)ViewBag.Report11;
+    List<AppReport> repsbr = (List<AppReport>)ViewBag.ReportBr;
+    List<ChartReport> chart = (List<ChartReport>)ViewBag.Report111;
+    List<ChartReport> chart1 = (List<ChartReport>)ViewBag.Report1111;
+    var User = (ApplicationUser)ViewBag.UserDetail;
+    var Branch = (MobileBackend.Models.Branch)ViewBag.BrInfo;
+    
+        var labels = String.Join(",", chart.Select(a => a.date.ToShortDateString()).ToList());
+        var pl = String.Join(",", chart.Select(a => a.pl).ToList());
+        var kcc = String.Join(",", chart.Select(a => a.kcc).ToList());
+        var car = String.Join(",", chart.Select(a => a.car).ToList());
+        var hl = String.Join(",", chart.Select(a => a.hl).ToList());
+        var other = String.Join(",", chart.Select(a => a.other).ToList());
+
+        var labels1 = String.Join(",", chart1.Select(a => a.date.ToShortDateString()).ToList());
+        var pl1 = String.Join(",", chart1.Select(a => a.pl).ToList());
+        var kcc1 = String.Join(",", chart1.Select(a => a.kcc).ToList());
+        var car1 = String.Join(",", chart1.Select(a => a.car).ToList());
+        var hl1 = String.Join(",", chart1.Select(a => a.hl).ToList());
+        var other1 = String.Join(",", chart1.Select(a => a.other).ToList());
+    
+
+    
+
+    
+}
+
+<div class="container">
+     
+<div class="row">
+    <div class="col-9">
+       
+        <div class="row">
+        <div class="col bg-primary card" style="color:white;min-height:100px;">
+            <b class="display-6">Pending </b>
+            <b class="display-4"><a style="color:white;" href="/LoanFlow/ListApplication">@ViewBag.Applications</a></b>
+        </div>
+         <div class="col bg-danger  card" style="margin-left:5px;color:white;min-height:100px;">
+              <b class="display-6">Pre Sanction Done</b>
+              <b class="display-4"><a  style="color:white;" href="/LoanFlow/ListApplication?search=PreSanction">@ViewBag.ApplicationsNI</a></b>
+        </div>
+         <div class="col bg-warning  card" style="margin-left:5px;color:white;min-height:100px;">
+              <b class="display-6">Forwarded</b>
+              <b class="display-4"><a style="color:white;" href="/LoanFlow/ListApplication?search=Forwarded">@ViewBag.ApplicationsF</a></b>
+        </div>
+         <div class="col bg-success  card" style="margin-left:5px;color:white;min-height:100px;">
+              <b class="display-6">Sanctioned</b>
+              <b class="display-4"><a style="color:white;" href="/LoanFlow/ListApplicationSanction">@ViewBag.ApplicationsS</a></b>
+        </div>
+
+    </div>
+     <div class="text-center">
+        <h4 class="display-7">Status of Control</h4>
+        </div>
+    
+
+    <div class="row" style="margin-top:5px;">
+        <div class="col bg-secondary card" style="color:white;min-height:100px;">
+            <b class="display-6">Pending </b>
+            <b class="display-4">@ViewBag.PendingControl</b>
+        </div>
+         <div class="col bg-dark  card" style="margin-left:5px;color:white;min-height:100px;">
+              <b class="display-6">Send To Control</b>
+              <b class="display-4">@ViewBag.SendToControl</b>
+        </div>
+         <div class="col bg-info  card" style="margin-left:5px;color:white;min-height:100px;">
+              <b class="display-6">Controlled</b>
+              <b class="display-4">@ViewBag.Controlled</b>
+        </div>
+          <div class="col bg-danger  card" style="margin-left:5px;color:white;min-height:100px;">
+              <b class="display-6">Returned</b>
+              <b class="display-4">@ViewBag.ControlReturn</b>
+        </div>
+         
+
+    </div>
+            @if (Branch.BrType == "HO" || Branch.BrType == "RO")
+            {
+                <div class="row" style="margin-top:15px;"> 
+                    <div class="col-6" id="chartApp">
+                        <canvas id="myChart"  height="350"></canvas>
+                    </div>
+                <div class="col-6">
+                    <canvas id="myChart1"  height="350"></canvas>        </div>
+                </div>
+            }
+
+    
+     @if (ViewBag.BranchType == "Branch")
+            {
+                <div class="row" style="margin-top:15px;">
+    <div class="col card border border-success" style="margin-right:15px;">
+        <b class="display-8">Applications Pending at Branch</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Name</th>
+                    <th>Application Date</th>
+                    <th>Loan Scheme</th>
+                    
+                </tr>
+            </thead>
+            
+            @foreach(var item in z)
+            {
+                <tr>
+                    <td>@item.Branch.BranchName</td>
+                    <td>@item.ApplicantShortName</td>
+                    <td>@item.ApplicationDate.ToString("dd-MMM-yy")</td>
+                    <td>@item.LoanScheme</td>
+                    
+                </tr>
+                    
+                }
+         </table>
+    </div>
+    <div class="col card border border-success">
+        <b class="display-8">Recent Activity</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                  
+                </tr>
+            </thead>
+            
+            @foreach(var item in y)
+            {
+                <tr>
+                    <td>@item.Timestamp.ToString("dd-MMM-yy HH:MM:s")</td>
+                    <td>@item.Action</td>
+                 
+                </tr>
+                    
+                }
+         </table>
+    </div>
+</div>
+            }
+            else if (ViewBag.BranchType == "AMH")
+            {
+                <div class="row" style="margin-top:15px;">
+    <div class="col card border border-success" style="margin-right:15px;">
+        <b class="display-8">Applications Pending at Branch</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Name</th>
+                    <th>Application Date</th>
+                    <th>Loan Scheme</th>
+                    
+                </tr>
+            </thead>
+            
+            @foreach(var item in z)
+            {
+                <tr>
+                    <td>@item.Branch.BranchName</td>
+                    <td>@item.ApplicantShortName</td>
+                    <td>@item.ApplicationDate.ToString("dd-MMM-yy")</td>
+                    <td>@item.LoanScheme</td>
+                    
+                </tr>
+                    
+                }
+         </table>
+    </div>
+    <div class="col card border border-success">
+        <b class="display-8">Recent Activity</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                  
+                </tr>
+            </thead>
+            
+            @foreach(var item in y)
+            {
+                <tr>
+                    <td>@item.Timestamp.ToString("dd-MMM-yy HH:MM:s")</td>
+                    <td>@item.Action</td>
+                 
+                </tr>
+                    
+                }
+         </table>
+    </div>
+</div>
+            }
+            else if (ViewBag.BranchType == "HO" || ViewBag.BranchType == "RO")
+            {
+                <br/>
+                <hr/>
+               <section id="tabs" class="project-tab" style="margin-top: 0px;padding:5px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav>
+                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home2" role="tab" aria-controls="nav-home" aria-selected="true">Product wise</a>
+                                <a class="nav-item nav-link" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="false">RO wise</a>
+
+                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">AMH wise</a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Branch wise</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home2" role="tabpanel" aria-labelledby="nav-home-tab">
+                                 <table class="table table-bordered table-sm  table-stripped" >
+        <thead>
+            <tr>
+            <th>Scheme</th>
+            <th>Pending At Branch</th>
+            <th>Pre Sanction Done</th>
+            <th>Pending at AMH/RO</th>
+            <th>Sanctioned</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in reps11)
+    {
+        <tr>
+            <td>@x.LoanScheme</td>
+            <td>@x.Pending</td>
+            <td>@x.Pre_Sanction_done</td>
+            <td>@x.Forwarded</td>
+            <td>@x.Sanctioned</td>
+        </tr>
+    }
+        </tbody>
+
+         
+
+    </table>
+    
+                            </div>
+                            <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                 <table class="table table-bordered table-sm  table-stripped" >
+        <thead>
+            <tr>
+            <th>Region</th>
+            <th>Pending At Branch</th>
+            <th>Pending at AMH/RO</th>
+            <th>Sanctioned</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in reps)
+    {
+        <tr>
+            <td>@x.AMHCode</td>
+            <td>@x.Pending</td>
+            <td>@x.Forwarded</td>
+            <td>@x.Sanctioned</td>
+        </tr>
+    }
+        </tbody>
+
+         
+
+    </table>
+    
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <table class="table table-bordered table-sm  table-stripped" >
+        <thead>
+            <tr>
+            <th>AMHCode</th>
+            <th>Pending At Branch</th>
+            <th>Pending at AMH/RO</th>
+            <th>Sanctioned</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in reps1)
+    {
+        <tr>
+            <td>@x.AMHCode</td>
+            <td>@x.Pending</td>
+            <td>@x.Forwarded</td>
+            <td>@x.Sanctioned</td>
+        </tr>
+    }
+        </tbody>
+
+         
+
+    </table>
+                            </div>
+                            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                  <table class="table table-bordered table-sm  table-stripped" >
+        <thead>
+            <tr>
+            <th>Branch</th>
+            <th>Pending At Branch</th>
+            <th>Pending at AMH/RO</th>
+            <th>Sanctioned</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in repsbr)
+    {
+        <tr>
+            <td>@x.AMHCode</td>
+            <td>@x.Pending</td>
+            <td>@x.Forwarded</td>
+            <td>@x.Sanctioned</td>
+        </tr>
+    }
+        </tbody>
+
+         
+
+    </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+            }
+            else
+            {
+                
+            }
+
+
+    </div>
+    <div class="col-3">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8" style="padding-right: 5px;padding-left: 5px;">
+                        <h4 class="mb-0">
+                            <a href="/LoanFlow/Inbox">Inbox</a>
+                        </h4>
+                        <b class="text-sm text-muted mb-0">@User.EmployeeName</b>
+                        <span class="text-success">●</span>
+                        <small>@User.Designation (@Branch.BrType)</small>
+                    </div>
+                    <div class="col-auto">
+                        <h4>@ViewBag.AppCount</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8" style="padding-right: 5px;padding-left: 5px;">
+                        <h4 class="mb-0">
+                            <a href="/Mobile/LeadDashboard">Leads</a>
+                        </h4>
+                        <b class="text-sm text-muted mb-0">Sourced Leads</b>
+                       
+                    </div>
+                    <div class="col-auto">
+                        <h4>@ViewBag.LeadCount</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+
+            <div class="card-body">
+                <form method="post" action="/LoanFlow/GoToApplication">
+                    <div class="row align-items-center">
+                    <div class="col-8" style="padding-right: 5px;padding-left: 5px;">
+                        <b class="mb-0">
+                            Goto Application
+                        </b>
+                        <input type="number" name="appid" class="form-control-sm" />
+                       <button type="submit" class="btn btn-sm btn-primary" style="margin-top:5px;">Fetch</button>
+                    </div>
+                    
+                </div>
+                </form>
+                
+            </div>
+        </div>
+        <div class="card">
+
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-11" style="padding-right: 5px;padding-left: 5px;">
+                        <div class="list-group list-group-flush">
+                            <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="MandateExisting">Non LMS Mandate List</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="AddMandateExisting">eMandate Add (Non LMS)</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ListApplication">Pending Proposals</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ListApplication" asp-route-search="LMS">Pending Proposals (LMS)</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ListApplicationSanction">Sanctioned Proposals</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ListReturnApplication" >Returned Proposals</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="MapAccounts" >Map Accounts</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ControlReturn" >Ready For Control </a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="PendingControl">Pending Control</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="Controlled">Controlled List</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ReturnedControl">Not Controlled</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="UserManagment">User Managment</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="BeyondTAT">TAT Report</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ExistingKCC">KCC ISS</a>
+                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="MapLand">KCC Village Mapper</a>
+                              
+</div>
+                    </div>
+                     
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+   </div>
+   
+  
+   
+
+
+
+
+@section Scripts
+{
+    <script src="/lib/chart.min.js"></script>
+    <script type="text/javascript">
+            $(document).ready(function(){
+        const ctx = document.getElementById('myChart');
+        const ctx1 = document.getElementById('myChart1');
+       
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    
+    data: {
+        labels: "@labels".split(','),
+        datasets: [
+            {
+      label: 'PL',
+      data: "@pl".split(','),
+      backgroundColor: 'rgba(255, 99, 132, 0.8)',
+    },
+    {
+      label: 'KCC',
+      data: "@kcc".split(','),
+      backgroundColor: 'rgba(255, 159, 64, 0.8)',
+    },
+    {
+      label: 'HL',
+      data: "@hl".split(','),
+      backgroundColor: 'rgba(255, 205, 86, 0.8)',
+    },
+    {
+      label: 'Car',
+      data: "@car".split(','),
+      backgroundColor: 'rgba(54, 162, 235, 0.8)',
+    },{
+      label: 'Other',
+      data: "@other".split(','),
+      backgroundColor: 'rgba(153, 102, 255, 0.8)',
+    }
+        ]
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                position: 'bottom',
+                text: 'Daily Application Registration'
+            }},
+        maintainAspectRatio: false,
+        scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    }
+    }
+});
+
+
+
+const myChart1 = new Chart(ctx1, {
+    type: 'bar',
+    
+    data: {
+        labels: "@labels1".split(','),
+        datasets: [
+            {
+      label: 'PL',
+      data: "@pl1".split(','),
+      backgroundColor: 'rgba(255, 99, 132, 0.8)',
+    },
+    {
+      label: 'KCC',
+      data: "@kcc1".split(','),
+      backgroundColor: 'rgba(255, 159, 64, 0.8)',
+    },
+    {
+      label: 'HL',
+      data: "@hl1".split(','),
+      backgroundColor: 'rgba(255, 205, 86, 0.8)',
+    },
+    {
+      label: 'Car',
+      data: "@car1".split(','),
+      backgroundColor: 'rgba(54, 162, 235, 0.8)',
+    },{
+      label: 'Other',
+      data: "@other1".split(','),
+      backgroundColor: 'rgba(153, 102, 255, 0.8)',
+    }
+        ]
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                position: 'bottom',
+                text: 'Daily Sanction'
+            }},
+        maintainAspectRatio: false,
+        scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    }
+    }
+});
+
+    });
+    </script>
+    
+}

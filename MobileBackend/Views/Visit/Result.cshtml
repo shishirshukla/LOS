@@ -1,0 +1,24 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_layout2.cshtml";
+}
+
+@if (ViewBag.Result == "OK")
+{
+    <div style="margin-top:15px;margin-left:15px;" class="d-flex justify-content-center"><i class="bi bi-check-circle-fill" style="font-size: 8rem; color: cornflowerblue;"></i>
+    <a href="http://home/" class="btn btn-primary-sm">
+        Go To Home
+    </a>    
+    </div>
+}
+else
+{
+    <b>@ViewBag.Message</b>
+    <div style="margin-top:15px;margin-left:15px;" class="d-flex justify-content-center"><i class="bi bi-x-circle-fill" style="font-size: 8rem; color: red;"></i>
+    <a href="http://home/" class="btn btn-primary-sm">
+        Go To Home
+    </a>    
+    </div>
+}

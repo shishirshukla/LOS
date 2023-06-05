@@ -1,0 +1,97 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="container-fluid px-1 py-5 mx-auto">
+    <div class="row d-flex justify-content-center">
+        <b>@ViewBag.Message</b>
+        <div class="col-11 text-center">
+            <h3>Add Application</h3>
+            
+            <div class="card">
+                
+                <form class="form-card" method="post" action="/LoanFlow/AddApplication">
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">Applicant Short Name<span class="text-danger"> *</span></label> <input class="form-control" type="text" id="ApplicantShortName" name="ApplicantShortName" placeholder="Name of Individual / Entity" required /> </div>
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">Applicant Type<span class="text-danger"> *</span></label> 
+                            <select class="form-control" name="TypeOfApplicant">
+                                <option class="PER">Individual</option>
+                                <option class="Firm">Prop. Firm</option>
+                                <option class="Partnership">Partnership Firm</option>
+                                <option class="SHG">SHG</option>
+                                <option class="JLG">JLG</option>
+                                <option class="Company">Company</option>
+                                <option class="Trust">Trust</option>
+                        </select> </div>
+                       
+                    </div>
+                    <div class="row justify-content-between text-left">
+                         <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">Loan Scheme<span class="text-danger"> *</span></label> 
+                            <select class="form-control" name="LoanScheme">
+                                <option value="PL">Personal Loan</option>
+                                <option value="PL-Ag">Personal Loan Agri</option>
+                                <option value="PL-SECL">Personal Loan SECL</option>
+                                <option value="PL-Express">Personal Loan Express</option>
+                                <option value="Car">Car Loan</option>
+                                <option value="HL">Home Loan</option>
+                                <option value="LAP">Loan Against Property</option>
+                                <option value="Topup">Home Top Up</option>
+                                <option value="Sme">SME</option>
+                                <option value="PMEGP">PMEGP</option>
+                                <option value="KCC">KCC</option>
+                                <option value="KCC-20">KCC (With 20% Additional)</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Gold-Agri">Gold (Agri)</option>
+                                <option value="KCC-AH">KCC Animal Husbandry</option>
+                                <option value="KCC-Fish">KCC Fisheries</option>
+                                <option value="NRLM">NRLM</option>
+                                <option value="NULM">NULM</option>
+                                <option value="TPL">Transport</option>
+                                <option value="Svanidhi">PM Svanidhi</option>
+                                <option value="Edu">Education Loan</option>
+                                <option value="ATL">Agri Term Loan</option>
+                                <option value="SME-GSS">Govt. Sponsored SME</option>
+                                <option value="MMYSRY">MMYSRY</option>
+                                <option value="DL">Demand Loan</option>
+                                <option value="OD-Dep">OD Against Liquid Security</option>
+                                <option value="2Wheeler">Two Wheeler</option>
+                                <option value="2Wheeler-Agri">Two Wheeler (Agri)</option>
+                                <option value="2Wheeler-Mudra">Two Wheeler (MUDRA)</option>
+                                <option value="KisanCar">Kisan Car</option>
+                                <option value="MUDRA-Simplified">MUDRA-Simplified</option>
+                                <option value="MUDRA-Transport">MUDRA-Transport</option>
+                                 <option value="CRGB-Realty">CRGB-Realty</option>
+ 
+                                
+                        </select> </div>
+                        <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-1">Purpose<span class="text-danger"> *</span></label> <input type="text" id="mob" name="Purpose" placeholder="" > </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+                         <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">Sponsoring Agency<span class="text-danger"> *</span></label> 
+                            <select class="form-control" name="SponsoringAgency">
+                                <option class="No">Non Sponsored</option>
+                                <option class="KVIC">KVIC</option>
+                                <option class="KVIB">KVIB</option>
+                                <option class="DIC">DIC</option>
+                                <option class="TribalDept">Tribal Department</option>
+                                <option class="Antyoday">Antyoday</option>
+                                
+                        </select> </div>
+                        <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-1">Subsidy Amt<span class="text-danger"> *</span></label> <input type="text" id="mob" name="SubsidyAmt" placeholder="" > </div>
+                    </div>
+                     
+                    <div class="row justify-content-between text-left" style="padding-right:15px;">
+                         <div class="form-group col-sm-5 flex-column d-flex"> <label class="form-control-label px-1">Applied Amt<span class="text-danger"> *</span></label> <input class="form-control" type="number" id="AppliedAmt" name="AppliedAmt" placeholder="" min="1" > </div>
+                         <div class="form-group col-sm-5 flex-column d-flex"> <label class="form-control-label px-1">Applied Date<span class="text-danger"> *</span></label> <input class="form-control" type="date" id="AppDate" name="ApplicationDate" placeholder=""  value="@DateTime.Today.ToString("yyyy-MM-dd")" max="@DateTime.Today.ToString("yyyy-MM-dd")" /> </div>
+                        <div class="form-group col-sm-2"><label class="form-control-label px-1"></label> <button type="submit" class="btn-block btn-primary">Save</button> </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+﻿@model List<KeyValue>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<option value="--">Select</option>
+@foreach(var k in Model)
+{
+    <option value="@k.code">@k.value</option>
+}

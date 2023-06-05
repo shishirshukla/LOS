@@ -1,0 +1,149 @@
+﻿@inject CustomIDataProtection _protector
+@model List<KCCLandDetail>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //Layout = null;
+    int sno = 1;
+}
+
+
+
+<form id="frm1" method="post" action="/LoanFlow/SaveKCCLand" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" id="ApplicationId"/>
+     
+    
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Village</th>
+                <th>Khasra No</th>
+                <th>Total Area (Hect)</th>
+                <th>Irrigated (Hect)</th>
+                <th>Unirrigated (Hect)</th>
+                <th>Non Agri (Hect)</th>
+                <th>Source of Irrigation</th>
+            </tr>
+        </thead>
+        <tbody id="landTbl">
+            @foreach (var item in Model)
+           {
+               <tr >
+                   <td>@sno <input type="hidden" id="id-@sno" value="@item.Id"/></td>
+
+                   <td>@item.Village</td>
+                   <td>@item.KhasraNo</td>
+                   <td> <input type="text" readonly value="@item.TotalArea" id="rk-@sno" /> </td>
+                   <td><input type="text"  value="0" id="irri-@sno" /></td>
+                   <td><input type="text"  value="@item.TotalArea" id="unirri-@sno" /></td>
+                   <td><input type="text"  value="0" id="padti-@sno" /></td>
+                   <td> 
+                       <select id="src-@sno"> 
+                           <option>Unirrigated</option>
+                           <option>Canal</option>
+                           <option>River</option>
+                           <option>Tubewell / Pump</option>
+                           <option>Lift Irrigation</option>
+                           <option>Other</option>
+                            
+                   </select>
+                   </td>
+               </tr>
+               sno++;
+           }
+        </tbody>
+    </table>
+  
+  
+  
+  <button type="button" class="btn btn-primary" onclick="saveAllData()">Save</button> 
+  <a href="/LoanFlow/Application/@_protector.Decode((ViewBag.ApplicationId).ToString())">Back to Application</a>
+</form>
+
+
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+       
+      <div class="modal-body">
+        <img src="/images/loading-6.gif" class="img-fluid"/>
+      </div>
+       
+    </div>
+  </div>
+</div>
+@section scripts
+{
+<script type="text/javascript">
+    
+    function validateRow(a)
+    {
+        var totalRakba = parseFloat($('#rk-'+ a).val());
+        var irrigated = parseFloat($('#irri-'+ a).val());
+        var unirrigated = parseFloat($('#unirri-'+ a).val());
+        var padti = parseFloat($('#padti-'+ a).val());
+        //console.log((irrigated + unirrigated).toFixed(4));
+        if(totalRakba >= (irrigated + unirrigated + padti).toFixed(4))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function saveAllData()
+    {
+        $('#landTbl tr').each(function(i,e){
+            i = i+1;
+            if(validateRow(i)){
+                $(e).removeClass('table-info');
+                $(e).removeClass('table-danger');
+                $(e).addClass('table-info');
+            }
+            else
+            {
+                $(e).removeClass('table-info');
+                $(e).removeClass('table-danger');
+                 $(e).addClass('table-danger');
+            }
+        });
+        if($('#landTbl .table-danger').length > 0)
+        {
+            alert('Please verify red colored rows.');
+            return;
+        }
+        $('#landTbl tr').each(function(a,e){
+            a = a+1;
+            var totalRakba = parseFloat($('#rk-'+ a).text());
+            var irrigated = parseFloat($('#irri-'+ a).val());
+            var unirrigated = parseFloat($('#unirri-'+ a).val());
+            var padti = parseFloat($('#padti-'+ a).val());
+            var idD =  $('#id-'+ a).val();
+            var source =  $('#src-'+a).find(":selected").text().trim();
+            var formData = new FormData(document.getElementById("frm1"));
+            formData.append('ApplicationId', $('#ApplicationId').val());
+            formData.append('Id',idD);
+            formData.append('IrrigatedArea',irrigated);
+            formData.append('UnIrrigatedArea',unirrigated);
+            formData.append('NonAgriArea',padti);
+            formData.append('SourceofIrrigation', source);
+            //console.log(did1);
+            $.ajax({
+                url: "/LoanFlow/UpdateKCCLand",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data){
+                    $(e).removeClass('table-info');
+                    $(e).addClass('table-success');
+                }
+            });
+        });
+        
+    }
+
+   
+</script>
+}

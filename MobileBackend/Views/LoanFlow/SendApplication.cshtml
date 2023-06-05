@@ -1,0 +1,86 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form method="post" action="/LoanFlow/SendApplication" enctype="multipart/form-data" onsubmit="checkSubmit(event)">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+     
+   
+   <div class="row justify-content-between text-left">
+ 
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Forward to Branch</label>
+  <select id="brListRemark" class="form-control-sm" name="BranchId">
+            <option value="-----">Select</option>
+        @foreach (var item in (List<Branch>)ViewBag.BranchList)
+        {
+            <option value="@item.Id">@item.BranchName (@item.BrType)</option>
+        }
+      
+    </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Select Staff</label>
+  <select id="staffList" class="form-control-sm" name="UserName">
+        
+      
+    </select>
+
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+       <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Purpose of Sending Application</label>
+  <select  class="form-control-sm" name="TypeOfRemark">
+
+                @if (ViewBag.ViewType == "Action")
+                {
+                    <option>Approve Deviation</option>
+                    <option>Reject Deviation</option>
+                }
+                else if (ViewBag.ViewType == "Return")
+                {
+                    <option>Return</option>
+                    
+                }
+                else
+                {
+                    <option>For Processing</option> 
+      <option>For Appraisal</option>
+      <option>For Sanction</option>
+      <option>For Deviation (Int Rate)</option>
+      <option>For Deviation (Scheme)</option>    
+                }
+                
+      
+       
+       
+    </select>
+
+  </div>
+        <div class="form-group col-sm-8 flex-column d-flex">
+    <label >Recomendation / Remarks</label>
+     <textarea name="Statment" class="form-control" required>
+
+     </textarea>
+  </div>
+ 
+  
+ 
+  
+ 
+  </div>
+   
+  
+    <button type="submit" class="btn btn-primary">Submit</button>
+ 
+  
+  
+</form>
+
+<script type="text/javascript">
+        
+</script>

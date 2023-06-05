@@ -1,0 +1,258 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model BranchPerformance
+@{
+    Layout = "_Layout2.cshtml";
+    var dp = (List<string>)ViewBag.DataPoints;
+
+}
+
+<div class ="container">
+    @using (Html.BeginForm())
+    {
+        <table class="table table-responsive-sm">
+        <tr>
+            <td>Select Top Level :</td>
+            <td><select class="form-control" name="Region" id="Region">
+                <option value="HO">Head Office</option>
+                <option value="NW1">Network 1</option>
+                <option value="Durg">Durg</option>
+                <option value="Dhamtari">Dhamtari</option>
+                <option value="Raipur">Raipur</option>
+                <option value="Jagdalpur">Jagdalpur</option>
+                <option value="Rajnandgaon">Rajnandgaon</option>
+                <option value="NW2">Network 2</option>
+                <option value="Ambikapur">Ambikapur</option>
+                <option value="Baikunthpur">Baikunthpur</option>
+                <option value="Bilaspur">Bilaspur</option>
+                <option value="Korba">Korba</option>
+                <option value="Raigarh">Raigarh</option>
+                
+            </select></td>
+        </tr>
+         <tr>
+            <td>Branch Name :</td>
+            <td>
+                <select class="form-control" name="Branch" id="Branch">
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="text-align-center" ><button type="submit" class="btn btn-primary">Search</button></td>
+           
+        </tr>
+        </table>
+    }
+    
+        
+    
+     <b>Deposit Level</b><br/>
+    <div class="row">
+        <div class="col" style="max-height:300px;height:300px;">
+             
+              <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+    <b>Advances Level</b><br/>
+    <div class="row">
+        <div class="col" style="max-height:300px;height:300px;">
+              
+              <canvas id="advChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+      <b>Advances Bifurcation</b><br/>
+    <div class="row">
+        <div class="col" style="max-height:300px;height:300px;">
+            
+              <canvas id="advChart1" width="400" height="400"></canvas>
+        </div>
+    </div>
+     <b>NPA Level</b><br/>
+    <div class="row">
+        <div class="col" style="max-height:300px;height:300px;">
+             
+              <canvas id="npa" width="400" height="400"></canvas>
+        </div>
+    </div>
+  
+</div>
+
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script>
+        $('#Region').change(function() {
+            $.get('/Visit/GetBranches?x=' + $(this).val(),function(data, status){
+                console.log(data);
+                $("#Branch").html(data);
+            });
+        });
+    </script>   
+    
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const ctxA = document.getElementById('advChart').getContext('2d');
+        const ctxAd = document.getElementById('advChart1').getContext('2d');
+        const ctxNPA = document.getElementById('npa').getContext('2d');
+        
+        Chart.register(ChartDataLabels);
+        Chart.defaults.set('plugins.datalabels', {
+                anchor: 'end',
+                align:'top',
+                offset: 5
+        });
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: ['@dp[0]', '@dp[1]', '@dp[2]', '@dp[3]', '@dp[4]'],
+            datasets: [{
+                label: 'Deposits in Lakhs',
+                data: [2532.67,2681.19,2850.38,3022.42,3131.60],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+                },
+                {
+                type: 'line',
+                label: 'CASA',
+                data: [1532.67,1681.19,1850.38,2022.42,2131.60],
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)'
+            }]
+            },
+            options: {
+                datalabels :{
+                    anchor:'end'
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                 y: {
+                     beginAtZero: true
+                    }
+                }
+            }
+        });
+          
+          const myChart1 = new Chart(ctxA, {
+            type: 'bar',
+            data: {
+            labels: ['@dp[0]', '@dp[1]', '@dp[2]', '@dp[3]', '@dp[4]'],
+            datasets: [{
+                label: 'Advances in Lakhs',
+                data: [1067.69,1307.22,1442.81,1444.92,1450.86],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+                }]
+            },
+            options: {
+                datalabels :{
+                    anchor:'end'
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                 y: {
+                     beginAtZero: true
+                    }
+                }
+            }
+        });
+          const myChart2 = new Chart(ctxAd, {
+            type: 'pie',
+            data: {
+            labels: ['SME', 'P-Seg', 'Agri', 'SHG'],
+            datasets: [{
+                label: 'Advances Bifurcation',
+                data: [2532.67,2681.19,2850.38,3022.42],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ]
+                }]
+            },
+            options: {
+                datalabels :{
+                    anchor:'end'
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                 y: {
+                     beginAtZero: true
+                    }
+                }
+            }
+        });
+        const myChart3 = new Chart(ctxNPA, {
+            type: 'bar',
+            data: {
+            labels: ['@dp[0]', '@dp[1]', '@dp[2]', '@dp[3]', '@dp[4]'],
+            datasets: [{
+                label: 'NPA in Lakhs',
+                data: [10.86,2.97,3.85,4.72,15.99],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+                }]
+            },
+            options: {
+                datalabels :{
+                    anchor:'end'
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                 y: {
+                     beginAtZero: true
+                    }
+                }
+            }
+        });
+
+</script>
+}

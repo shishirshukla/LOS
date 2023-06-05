@@ -1,0 +1,82 @@
+﻿@model ApplicationUser
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+     Layout = "_Layout2.cshtml";
+}
+
+<b style="margin-top:15px;margin-left:15px;">Presanction Visit : Initiate</b>
+
+@using (Html.BeginForm())
+{
+    <div style="margin-top: 10px; margin-left: 5px; margin-right: 50px;" class="row">
+        <div class="col-sm-12 col-md-6">
+            Employee Id
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <input type="text" name="UserId" value="@Model.UserName" class="form-control" readonly />
+        </div>
+        <div class="col-sm-12 col-md-6">
+            Employee Name
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <input type="text" name="UserId" value="@Model.EmployeeName" class="form-control" readonly />
+        </div>
+         <div class="col-sm-12 col-md-6">
+           Designation
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <input type="text" name="UserId" value="@Model.Designation" class="form-control" readonly />
+        </div>
+    
+        <div class="col-sm-12 col-md-6">
+            Application Number
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <select  name="ApplicationId"  class="form-control"  >
+                    @foreach (var x in (List<Application>)ViewBag.Applications)
+                {
+                    <option value="@x.Id">@x.ApplicantShortName</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+            Visit Type
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <select name="Status" class="form-control">
+                <option value="Preinspection-WorkPlace">WorkPlace Inspection</option>
+                <option value="Preinspection-Residence">Residence Inspection</option>
+                <option value="Preinspection-Security">Security Inspection</option>
+
+            </select>
+        </div>
+   
+        <div class="col-sm-12 col-md-6">
+            Visit Date
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <input type="date" name="VisitDate"  class="form-control"  />
+            <input type="hidden" name="token" value="@ViewBag.Token" />
+            <input type="hidden" name="ClosureOfficialId" value="@ViewBag.Location_lat" />
+            
+        </div>
+    
+        <div class="col-sm-12 col-md-6" style="margin-top:10px;">
+            <button type="submit" class="btn btn-primary">Create Visit</button>
+        </div>
+
+    </div>
+}
+<div style="margin-left:15px;margin-top:10px;" class="embed-responsive embed-responsive-1by1">
+    @if (ViewBag.Location_lat.ToString().Contains("local") == false  )
+    {
+        <iframe class="embed-responsive-item" style="width:90%"  src="https://maps.google.com?q=@ViewBag.Location_lat&output=svembed">   </iframe>
+ 
+    }
+    
+
+
+</div>

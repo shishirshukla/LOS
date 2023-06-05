@@ -1,0 +1,101 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout2.cshtml";
+    var x = new List<CSPVisit>();
+    int sno = 1;
+    if ((bool)ViewBag.PostBack)
+    {
+        x = (List<CSPVisit>)ViewBag.Data;
+    }
+}
+
+<div class="container">
+    @using (Html.BeginForm())
+    {
+         <div class="row border border-secondary " style="margin-top:10px">
+        <div class="col align-middle" style="display: flex;vertical-align:middle;align-items: center;">
+            Select Region 
+        </div>
+        <div class="col">
+            <select class="form-control" name="region">
+                <option value="Ambikapur">Ambikapur</option>
+                <option value="Baikunthpur">Baikunthpur</option>
+                <option value="Bilaspur">Bilaspur</option>
+                <option value="Dhamtari">Dhamtari</option>
+                <option value="Durg">Durg</option>
+                <option value="Jagdalpur">Jagdalpur</option>
+                <option value="Korba">Korba</option>
+                <option value="Raipur">Raipur</option>
+                <option value="Raigarh">Raigarh</option>
+                <option value="Rajanandgaon">Rajanandgaon</option>
+                
+            </select>
+        </div>
+        <div class="col" style="display: flex;vertical-align:middle;align-items: center;">
+             Start Date
+        </div>
+        <div class="col">
+            <input type="date" name="fromDate" class="form-control"/>
+        </div>
+        <div class="col" style="display: flex;vertical-align:middle;align-items: center;">
+            End Date
+        </div>
+        <div class="col">
+            <input type="date" name="toDate" class="form-control"/>
+        </div>
+        <div class="col" style="display: flex;vertical-align:middle;align-items: center;">
+            <button type="submit" class="btn btn-sm btn-primary">Search</button>
+            </div>
+        </div>
+    }
+
+    @if ((bool)ViewBag.PostBack)
+    {
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>
+                        BC Code 
+                    </th>
+                    <th>
+                        BC Name 
+                    </th>
+                    <th>
+                        BC Agency 
+                    </th>
+                    <th>
+                        Branch Name 
+                    </th>
+                    <th>
+                        Visiting Employee
+                    </th>
+                    <th>
+                        Visit Date 
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var m in x)
+                {
+                    <tr>
+                        <td>@sno</td>
+                        <td>@m.CSPId</td>
+                        <td>@m.Csp.CSPName</td>
+                        <td>@m.Csp.CorporateAgency</td>
+                        <td>@m.Csp.BranchMaster.BranchName</td>
+                        <td>@m.EmployeeMaster.EmployeeName</td>
+                        <td>@m.VisitDate.ToShortDateString()</td>
+                        <td><a href="/Visit/ReportCSP/@m.Id" >View Report</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+    
+</div>

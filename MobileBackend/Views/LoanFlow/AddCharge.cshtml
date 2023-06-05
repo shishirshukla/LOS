@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form method="post" action="/LoanFlow/AddCharge" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Type</label>
+    <select class="form-control-sm" name="Details">
+        <option value="Processing Charges">Processing Charges</option>
+        <option value="Upfront">Upfront Fees </option>
+       <option value="Mortgage">Mortgage Charges </option>
+       <option value="Doc">Document Charges </option>
+      <option value="Inspection">Inspection Charges </option>
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Frequency</label>
+   <select class="form-control-sm" name="Frequency">
+        <option value="Once">Once</option>
+        <option value="Yearly">Yearly </option>
+       <option value="Half Yearly">Half Yearly </option>
+       <option value="Quarterly">Quarterly </option>
+      <option value="Monthly">Monthly </option>
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Amount</label>
+   <input type="number" class="form-control-sm" required name="TotalAmount"  placeholder="Total Amount">
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Percentage (Only for Docs)</label><input type="text" class="form-control-sm" required name="Percentage"  placeholder="Percentage">
+
+  </div>
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+  </div>
+  
+  
+  
+</form>

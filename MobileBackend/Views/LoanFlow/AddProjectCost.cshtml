@@ -1,0 +1,102 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<form method="post" action="/LoanFlow/AddProjectCost" enctype="multipart/form-data" onsubmit="checkSubmit(event)">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.Applied" id="AppliedAmt"/>
+   <input type="hidden" value="@ViewBag.Loan" id="AppliedAlready"/>
+   <input type="hidden" value="@ViewBag.Cost" id="Cost"/>
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Description</label>
+    <select class="form-control-sm" name="Description" id="PjDesc">
+        <option value="KCC" data-margin="0" data-max="5000000">KCC </option>
+        <option value="KCC-Addl" data-margin="0" data-max="500000">KCC Additional Component </option>
+        <option value="Personal Loan" data-margin="0">Personal Loan</option>
+         <option value="Personal Loan:Insurance" data-margin="0" data-max="50000">Personal Loan:Insurance </option>
+        <option value="New Car Loan : Ex Showroom Price" data-margin="10">New Car Loan : Ex Showroom Price</option>
+        <option value="New Car Loan : RTO Cost" data-margin="10">New Car Loan : RTO Cost </option>
+       <option value="New Car Loan : Insurance Cost" data-margin="10">New Car Loan : Insurance Cost </option>
+       <option value="New Car Loan : Accessories" data-margin="10" data-max="25000">New Car Loan : Accessories </option>
+       <option value="Home Loan : Cost of Plot" data-margin="20">Home Loan : Cost of Plot</option>
+        <option value="Home Loan : Cost of Construction" data-margin="20" data-max="20000000">Home Loan : Cost of Construction </option>
+       <option value="Home Loan : Cost of Flat / Unit" data-margin="20" data-max="20000000"> Home Loan : Cost of Flat / Unit </option>
+       <option value="Home Loan: Cost of Interior" data-margin="20" data-max="2000000">Home Loan: Cost of Interior </option>
+      <option value="Home Loan: Closure of Loan" data-margin="20" data-max="2000000">Home Loan: Closure of Loan </option>
+       <option value="Home Loan: Repair & Renovation" data-margin="20" data-max="600000">Home Loan: Repair & Renovation </option>
+       <option value="Home Loan:Insurance" data-margin="0" data-max="600000">Home Loan:Insurance </option>
+       <option value="Working Capital" data-margin="20" data-max="1200000">Working Capital : Mudra </option>
+       <option value="Term Loan" data-margin="20" data-max="600000">Term Loan : Mudra </option>
+        <option value="Transport Loan : Ex Showroom Price" data-margin="20">Transport Loan: Ex Showroom Price</option>
+        <option value="Transport : RTO Cost" data-margin="20">Transport Loan : RTO Cost </option>
+       <option value="Transport : Insurance Cost" data-margin="20">Transport Loan : Insurance Cost </option>
+       
+
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Eligible For Bank Finance</label>
+  <select class="form-control-sm" name="EligibleForLoan">
+        <option value="Yes">Yes</option>
+        <option value="No">No </option>
+      
+      
+    </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Cost</label>
+   <input type="number" class="form-control-sm" required id="PjCost" name="Cost"  placeholder="Cost">
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Eligible Amount</label>
+   <input type="number" class="form-control-sm" required id="PjEligAmt" name="AppliedAmount"  placeholder="Applied Amount">
+
+  </div>
+  
+ 
+  
+ 
+  </div>
+   
+  
+    <button type="submit" class="btn btn-primary">Submit</button>
+ 
+  
+  
+</form>
+
+<script type="text/javascript">
+        function checkSubmit(event){
+            //var applied = @ViewBag.Applied;
+            var cost = @ViewBag.Cost;
+            //var loan = @ViewBag.Loan;
+            var new_app = $('#PjCost').val();
+            var b = $('#PjDesc').find(":selected").val();
+            console.log('In check');
+            if('@ViewBag.Scheme' == 'HL' && b == 'Home Loan: Cost of Interior')
+            {
+                console.log('In If');
+                 if(new_app > (cost * .10))
+                {
+                    alert('Interior Amount Greater than 10% of Cost, cannot proceed');
+                    event.preventDefault();
+                    return false;
+                }
+            }
+            return true;
+           
+        }
+    
+        $('#PjCost').keyup(function() {
+                 var conceptName = (100 - parseInt($('#PjDesc').find(":selected").attr('data-margin'))) / 100;
+                 var cost = parseInt($('#PjCost').val());
+                 $('#PjEligAmt').val(conceptName * cost);
+
+        });
+</script>

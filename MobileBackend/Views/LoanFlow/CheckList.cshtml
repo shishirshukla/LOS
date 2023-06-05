@@ -1,0 +1,400 @@
+﻿@model Application
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    int slno = 1;
+   
+   
+   
+}
+
+  
+
+   
+        <div class="border border-dark">
+            <b>Check List for @Model.LoanScheme</b>
+            <br/>
+            <table id="assetTable" class="table table-bordered table-sm ">
+                <thead>
+                    <tr>
+                        <th>Type of Document</th>
+                        <th>Availability</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td>पहचान प्रमाण पत्र - (पैन कार्ड / आधार कार्ड )</td>
+                    <td style="font-size:large">▢</td>
+                    <td>...........................</td>
+                </tr>
+                <tr>
+                    <td>पते का प्रमाण पत्र - (आधार कार्ड / वोटर कार्ड )</td>
+                    <td style="font-size:large">▢</td>
+                    <td>...........................</td>
+                </tr>
+                @if (Model.Applicants.Where(a => a.TypeofApplicant != "Guarantor" &&  a.Occupation.Contains("Job")).Count() > 0)
+                {
+                    if (Model.LoanScheme != "KCC" )
+                    {
+                    if (!(Model.LoanScheme.Contains("Transport")))
+                    {
+                         <tr>
+                        <td>3 माह की वेतन पर्ची  </td>
+                        <td style="font-size:large">▢</td>
+                        <td>...........................</td>
+                    </tr>
+                    <tr>
+                        <td>Annexure 'E'' &amp; Annexure 'F' (If applicable) </td>
+                        <td style="font-size:large">▢</td>
+                        <td>...........................</td>
+                    </tr>    
+                    }
+                   
+                    }
+                
+                    @if (Model.LoanScheme != "PL" && Model.LoanScheme != "KCC" && !Model.LoanScheme.Contains("Transport"))
+                    {
+                     <tr>
+                        <td>2 वर्षों का Form 16  </td>
+                        <td style="font-size:large">▢</td>
+                        <td>...........................</td>
+                    </tr>
+                
+                    <tr>
+                        <td>Joining Letter</td>
+                        <td style="font-size:large">▢</td>
+                        <td>...........................</td>
+                    </tr>
+                    }
+                }
+                 @if (Model.Applicants.Where(a => a.Occupation == "Professional" || a.Occupation == "Self Employed" || a.Occupation == "Businessman" && Model.LoanScheme != "KCC" ).Count() > 0)
+                {
+                    <tr>
+                        <td>3 वर्षों  का  ITR  </td>
+                        <td style="font-size:large">▢</td>
+                        <td>...........................</td>
+                    </tr>
+                     <tr>
+                        <td>Business KYC </td>
+                        <td style="font-size:large">▢</td>
+                        <td>...........................</td>
+                    </tr>
+                    
+                }
+                @if (Model.LoanScheme == "Car" || Model.LoanScheme.Contains("Transport"))
+                {
+                    <tr>
+                            <td>Quotation</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Driving License (Copy)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                }
+                  @if (  Model.LoanScheme.Contains("Transport"))
+                {
+                    <tr>
+                            <td>Udyam Aadhaar / Akanksha</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        
+                }
+            @if (Model.LoanScheme == "KCC")
+            {
+                <tr>
+                            <td>Rinn Pustika (Copy)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Copy of B1 / P2 </td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Copy of Receipts</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+            }
+            @if (Model.LoanScheme == "HL")
+                {
+                @if (Model.Remarks.Where(a => a.TypeOfRemark == "Purpose of HL").First().Statment == "Construction of House")
+                {
+                    <tr>
+                            <td>Copy of Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Copy of Previous Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Copy of Approved Plan</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Copy of B(1) / Khasra</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Proof of Diversion</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        <tr>
+                            <td>Estimate of Construction</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                }
+                @if (Model.Remarks.Where(a => a.TypeOfRemark == "Purpose of HL").First().Statment == "Purchase of Plot & Construction")
+                {
+                    <tr>
+                            <td>Copy of Owner's Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                         <tr>
+                            <td>Copy of Previous Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Agreement</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                       
+                        <tr>
+                            <td>Copy of B(1) / Khasra</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Proof of Diversion</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        <tr>
+                            <td>Estimate of Construction</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                         <tr>
+                            <td>NOC for Sale/Purchase/Mortgage (If Applicable)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                }
+                @if (Model.Remarks.Where(a => a.TypeOfRemark == "Purpose of HL").First().Statment == "Purchase of House /Bunglow")
+                {
+                    <tr>
+                            <td>Copy of Owner's Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                         <tr>
+                            <td>Copy of Previous Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Agreement</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                       
+                        <tr>
+                            <td>Copy of B(1) / Khasra</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Proof of Diversion</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        <tr>
+                            <td>Estimate of Construction</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                         <tr>
+                            <td>NOC for Sale/Purchase/Mortgage (If Applicable)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                }
+                @if (Model.Remarks.Where(a => a.TypeOfRemark == "Purpose of HL").First().Statment == "Purchase of Flat")
+                {
+                    <tr>
+                            <td>Copy of Owner's Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                         <tr>
+                            <td>Copy of Previous Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Agreement</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                       
+                        
+                        <tr>
+                            <td>Copy of Approved Plan</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        
+                         <tr>
+                            <td>NOC for Sale/Purchase/Mortgage (If Applicable)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                }
+                 @if (Model.Remarks.Where(a => a.TypeOfRemark == "Purpose of HL").First().Statment == "Repair / Renovation")
+                {
+                    <tr>
+                            <td>Copy of Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                         <tr>
+                            <td>Copy of Previous Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Estimate</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Copy of B(1) / Khasra</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Proof of Diversion</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        
+                        <tr>
+                            <td>Copy of Approved Plan</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        
+                         <tr>
+                            <td>NOC for Sale/Purchase/Mortgage (If Applicable)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                }
+                @if (Model.Remarks.Where(a => a.TypeOfRemark == "Purpose of HL").First().Statment == "Takeover")
+                {
+                    <tr>
+                            <td>Copy of Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                         <tr>
+                            <td>Copy of Previous Title Deed</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Estimate (If applicable)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Copy of B(1) / Khasra</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        <tr>
+                            <td>Proof of Diversion</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        
+                        <tr>
+                            <td>Copy of Approved Plan</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        <tr>
+                            <td>Account Statement</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Account Closure Certificate</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+                        <tr>
+                            <td>HL TO -1</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>   
+
+                        
+                         <tr>
+                            <td>NOC for Sale/Purchase/Mortgage (If Applicable)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                }
+
+        }
+
+                <tr>
+                            <td>...........................</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        
+                <tr>
+                            <td>...........................</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        
+                <tr>
+                            <td>...........................</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+                        
+                <tr>
+                            <td>...........................</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+               
+                
+
+                        </tbody>
+            </table>
+        </div>
+            

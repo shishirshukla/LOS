@@ -1,0 +1,112 @@
+﻿@model List<Application>
+@inject CustomIDataProtection _protector
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<string> ls = new List<string>();
+    ls.Add("PL");
+    ls.Add("Car");
+    ls.Add("HL");
+    ls.Add("PL-Ag");
+    ls.Add("Express");
+    ls.Add("PL-Express");
+    ls.Add("PL-SECL");
+    ls.Add("KCC");
+   ls.Add("KCC-20");
+    ls.Add("MUDRA-Simplified");
+    ls.Add("MUDRA-Transport");
+}
+
+<div class="container">
+     <div class="alert alert-danger" role="alert" style="margin-top:5px;">
+             @ViewBag.Message
+    </div>
+    <table class="table table-bordered table-sm" id="myTable">
+        <thead>
+            <tr>
+               
+               
+                <th>Branch </th>
+                 <th>AMH Code</th>
+                <th>
+                    Name
+                </th>
+               
+                <th>
+                    Scheme
+                </th>
+              
+               
+                
+                <th>
+                    Sanctioned By
+                </th>
+                 <th>
+                    Designation
+                </th>
+                <th>
+                    Send to Control Date
+                </th>
+                <th></th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            @foreach(var x in Model)
+            {
+                <tr>
+                  
+                    <td>@x.Branch.BranchName (@x.BranchId)</td>
+                    <td>@x.Branch.AMHCode</td>
+                    <td>@x.ApplicantShortName</td>
+                 
+                    <td>@x.LoanScheme</td>
+                   
+                   
+                    <td>@x.SanctioningUserId</td>
+                    <td>@x.SanctioningLevel</td>
+                    <td>@x.SendToControlDate.Value.ToShortDateString()</td>
+                    <td>
+                         @if (!ls.Contains(x.LoanScheme))
+                        { 
+                           <a href="/LoanFlow/ControlDetails?Id=@_protector.Decode(x.Id.ToString())">Details</a>
+
+                        }
+                        else
+                        {
+                            <a href="/LoanFlow/Control?Id=@_protector.Decode(x.Id.ToString())">Details</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css"/>
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <script src="~/js/datatable-button.js" asp-append-version="true"></script>
+    <script src="~/js/html5btn.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+          $(document).ready( function () {
+                    $('#myTable').DataTable({dom: 'Bfrtip',buttons: ['csv', 'pdf']});
+        } );
+    function sendToControl(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+           
+           window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=SendToControl';
+             
+            
+        }
+       
+    }
+ 
+ 
+</script>
+}

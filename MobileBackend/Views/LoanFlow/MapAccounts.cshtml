@@ -1,0 +1,94 @@
+﻿@model List<Application>
+@inject CustomIDataProtection _protector
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container">
+     <div class="alert alert-danger" role="alert" style="margin-top:5px;">
+             @ViewBag.Message
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Application No
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Applicant Type
+                </th>
+                <th>
+                    Scheme
+                </th>
+               
+                
+                <th>
+                    Sanctioned By
+                </th>
+                <th>
+                    TL Account Number
+                </th>
+                <th>
+                    CC Account Number
+                </th>
+                <th>
+                    
+                </th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            @foreach(var x in Model)
+            {
+                <tr>
+                    <td><a href="/LoanFlow/Application/@x.Id">@x.Id</a></td>
+                    <td>@x.ApplicantShortName</td>
+                    <td>@x.TypeOfApplicant</td>
+                    <td>@x.LoanScheme</td>
+                   
+                    <td>@x.SanctionedLevel</td>
+                    <td>
+                         <input type="text" class="form-control form-control-sm" id="tl-@x.Id" value="0"/>
+                    </td>
+                    <td> 
+                         <input type="text" class="form-control form-control-sm" id="cc-@x.Id" value="0"/>
+                    </td>
+                    <td>
+                        <button class=" btn btn-primary btn-sm" onclick="mapac(@x.Id);">Map</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+    function mapac(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+           var tlac = $('#tl-' + a).val();
+           var ccac = $('#cc-' + a).val();
+           if  (tlac == '0' && ccac == '0')
+           {
+               alert('Both accounts cannot be Zero');
+               return;
+           }
+           window.location = '/LoanFlow/MapAccount?Id=' + a + '&Cc='+ccac + '&Tl=' + tlac;
+             
+            
+        }
+       
+    }
+ 
+ 
+</script>
+}

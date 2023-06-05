@@ -1,0 +1,175 @@
+﻿@model LeadCollection
+@{
+    ViewData["Title"] = "Lead Dashboard";
+}
+@{
+    var kccSourced = Model.KCCLead.Where(a => a.LeadStatus == "Sourced").Count();
+    var kccCC = Model.KCCLead.Where(a => a.LeadStatus == "Contact With Customer").Count();
+    var kccDoc = Model.KCCLead.Where(a => a.LeadStatus == " Documents Obtained").Count();
+    var kccApp = Model.KCCLead.Where(a => a.LeadStatus == "Converted To Application").Count();
+
+    var tplSourced = Model.TPLLeads.Where(a => a.LeadStatus == "Sourced").Count();
+    var tplCC = Model.TPLLeads.Where(a => a.LeadStatus == "Contact With Customer").Count();
+    var tplDoc = Model.TPLLeads.Where(a => a.LeadStatus == " Documents Obtained").Count();
+    var tplApp = Model.TPLLeads.Where(a => a.LeadStatus == "Converted To Application").Count();
+
+    var goldSourced = Model.GoldLoanLeads.Where(a => a.LeadStatus == "Sourced").Count();
+    var goldCC = Model.GoldLoanLeads.Where(a => a.LeadStatus == "Contact With Customer").Count();
+    var goldDoc = Model.GoldLoanLeads.Where(a => a.LeadStatus == " Documents Obtained").Count();
+    var goldApp = Model.GoldLoanLeads.Where(a => a.LeadStatus == "Converted To Application").Count();
+
+}
+
+<div class="container">
+     <div class="text-center">
+    <h3 class="display-7">Welcome @ViewBag.UserInfo</h3>
+    
+</div>
+    <div class="row">
+        <div class="col bg-primary card" style="color:white;min-height:150px;">
+            <b class="display-6">Sourced</b>
+            <b class="display-3">@(kccSourced + tplSourced + goldSourced)</b>
+        </div>
+         <div class="col bg-danger  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Customer Contacted</b>
+              <b class="display-3">@(kccCC + tplCC + goldCC)</b>
+        </div>
+         <div class="col bg-warning  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Document Obtained</b>
+              <b class="display-3">@(kccDoc + tplDoc + goldDoc)</b>
+        </div>
+         <div class="col bg-success  card" style="margin-left:5px;color:white;min-height:150px;">
+              <b class="display-6">Converted to Application</b>
+              <b class="display-3">@(kccApp+ tplApp + goldApp)</b>
+        </div>
+
+    </div>
+   
+  
+ 
+   
+   
+
+         <section id="tabs" class="project-tab" style="padding-top:5px;margin-top: 0px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav>
+                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">KCC Leads</a>
+                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">TPL Leads</a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Gold Leads</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                               <b class="display-8">KCC Leads</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Sourcing Unit</th>
+                    <th>Sourced By</th>
+                    <th>Applicant Name</th>
+                     <th>Lead Amount</th>
+                     <th>Lead Status</th>
+                     <th>Lead Date</th>
+                     <th></th>
+                </tr>
+            </thead>
+            
+            @foreach(var item in Model.KCCLead)
+            {
+                <tr>
+                    <td>@item.Branch.BranchName</td>
+                    <td>@item.SourcingAgency</td>
+                    <td>@item.SourcedBy</td>
+                    <td>@item.ApplicantName</td>
+                     <td>@item.AppliedAmt</td>
+                      <td>@item.LeadStatus</td>
+                      <td>@item.LeadDate</td>
+                      <td><a href= "/Mobile/ViewLead?Id=@item.Id&LeadType=KCC">View</a></td>
+                </tr>
+                    
+                }
+         </table>
+    
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <b class="display-8">TPL Leads</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Sourcing Unit</th>
+                    <th>Sourced By</th>
+                    <th>Applicant Name</th>
+                     <th>Lead Amount</th>
+                     <th>Lead Status</th>
+                     <th>Lead Date</th>
+                     <th></th>
+                </tr>
+            </thead>
+            
+            @foreach(var item in Model.TPLLeads)
+            {
+                <tr>
+                    <td>@item.Branch.BranchName</td>
+                    <td>@item.SourcingAgency</td>
+                    <td>@item.SourcedBy</td>
+                    <td>@item.ApplicantName</td>
+                     <td>@item.AppliedAmt</td>
+                      <td>@item.LeadStatus</td>
+                      <td>@item.LeadDate</td>
+                      <td><a href= "/Mobile/ViewLead?Id=@item.Id&LeadType=TPL">View</a></td>
+                </tr>
+                    
+                }
+         </table>
+                            </div>
+                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                <b class="display-8">Gold Leads</b>
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Sourcing Unit</th>
+                    <th>Sourced By</th>
+                    <th>Applicant Name</th>
+                     <th>Lead Amount</th>
+                     <th>Lead Status</th>
+                     <th>Lead Date</th>
+                     <th></th>
+                </tr>
+            </thead>
+            
+            @foreach(var item in Model.GoldLoanLeads)
+            {
+                <tr>
+                    <td>@item.Branch.BranchName</td>
+                    <td>@item.SourcingAgency</td>
+                    <td>@item.SourcedBy</td>
+                    <td>@item.ApplicantName</td>
+                     <td>@item.AppliedAmt</td>
+                      <td>@item.LeadStatus</td>
+                      <td>@item.LeadDate</td>
+                      <td><a href= "/Mobile/ViewLead?Id=@item.Id&LeadType=Gold">View</a></td>
+                </tr>
+                    
+                }
+         </table>
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+</div>

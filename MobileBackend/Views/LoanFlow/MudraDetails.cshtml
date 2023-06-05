@@ -1,0 +1,216 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+   // Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddMUDRA" id="frm1">
+
+   <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+
+<table class="table table-sm">
+    <thead>
+        
+        <tr>
+            <td style="width: 40%">Particulars</td>
+            <td style="width: 15%">Prev Year (Existing Unit)</td>
+            <td style="width: 15%">Current Year (Existing Unit)</td>
+            <td style="width: 15%">Estimate 1st Year</td>
+            <td style="width: 15%">Estimate 2nd Year</td>
+        </tr>
+    </thead>
+    <tbody id="tblMudra">
+        <tr>
+            <td colspan="5">
+                <b>Income Expense Details (Amt in Lakhs)</b>
+            </td>
+        </tr>
+        <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Sales (Avg)"/>
+                <input type="hidden" value="PL" name="ParamType"/>    
+            </td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+        <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Raw Materials)"/>
+            <input type="hidden" value="PL" name="ParamType"/>    
+            </td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+        <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Wages/Salary)"/><input type="hidden" value="PL" name="ParamType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+        <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Drawings)"/><input type="hidden" value="PL" name="ParamType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+          <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Other Expenses)"/><input type="hidden" value="PL" name="ParamType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+         <tr>
+            <td colspan="5">
+                <b>Balance Sheet</b>
+            </td>
+        </tr>
+        <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Owner's Equity / Net Worth"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+         
+         <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Current Liabilities"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+         <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Term Liabilities"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+        <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Current Assets"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+         
+    </tbody>
+</table>
+
+  
+   <div class="row justify-content-between text-left">
+  
+ @*<div class="form-group col-sm-4 flex-column d-flex">
+    <button type="button" class="btn btn-warning"  onclick="calculate();">Calculate</button>
+  </div>*@
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="button" onclick="saveAllData()" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+
+         function saveAllData()
+    {
+        
+         
+         $('#tblMudra tr').each(function(i,e){
+            var a = $(this).attr('id');
+            var count = $(this).children().length;
+            if(count > 2)
+            {
+                var parameter = $($(e).children()[0]).find('input').first().val();
+                 var parametert = $($(e).children()[1]).find('input').first().val();
+                var prevYear = parseFloat($($(e).children()[1]).find('input').first().val());
+                var currYear = parseFloat($($(e).children()[2]).find('input').first().val());
+                var est1 = parseFloat($($(e).children()[3]).find('input').first().val());
+                var est2 = parseFloat($($(e).children()[4]).find('input').first().val());
+                console.log(parameter);
+                var formData = new FormData(document.getElementById("frm1"));
+                formData.append('ApplicationId', $('#ApplicationId').val());
+                formData.append('Parameter',parameter);
+                formData.append('PrevYear',prevYear);
+                formData.append('CurrentYear',currYear);
+                formData.append('Estimate1',est1);
+                formData.append('Estimate2',est2);
+                 formData.append('ParameterType',parametert);
+                  
+                $.ajax({
+                    url: "/LoanFlow/AddMUDRA",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function(data){
+                        $(e).removeClass('table-info');
+                        $(e).addClass('table-success');
+                    }
+                });
+              }
+            
+          
+        
+            
+            
+        });
+       
+    }
+
+        function calculate()
+        {
+            var recieptTrip = $('#ReceiptPerTrip').val();
+            var tripperday = $('#TripsPerDay').val();
+            var workingDay = $('#WorkingDaysInMonth').val();
+            var perDay = recieptTrip * tripperday * workingDay * 12;
+            $('#yearlyReceipt').val(perDay);
+            var usePerTrip = $('#UsePerTrip').val();
+           //  console.log('Use : ' + usePerTrip);
+            var kmRun = tripperday * workingDay * usePerTrip * 12;
+            
+            var mileage = $('#Mileage').val();
+           // console.log( 'Mileage : ' + mileage);
+            var tirePeriod = $('#TireReplacementPeriod').val();
+            var tireCost =  $('#TireReplacementCost').val();
+            var serviceCost = $('#ServiceCost').val();
+            var fuelCost = $('#FuelCost').val();
+            var otherCost = $('#OtherCost').val();
+            var DriverCost = $('#DriverCost').val();
+            var InsuranceCost = $('#Insurance').val();
+            var Taxes = $('#Taxes').val();
+            var tireChange =  kmRun / tirePeriod;
+            tireCost = tireCost * tireChange;
+            serviceCost = serviceCost * (kmRun / 1000);
+            otherCost = otherCost * (kmRun / 1000);
+            fuelCost = (kmRun / mileage) * fuelCost;
+            var totalExpense = parseFloat(tireCost) + parseFloat(serviceCost) + parseFloat(otherCost) + parseFloat(fuelCost) + parseFloat(DriverCost) + parseFloat(InsuranceCost) + parseFloat(Taxes);
+            console.log(tireCost + "|" + serviceCost + "|" + otherCost +  "|" + fuelCost +  "|" + DriverCost +  "|" + InsuranceCost + "|" + Taxes);
+            console.log('KM : ' + kmRun);
+            $('#yearlyExpenditure').val(totalExpense);
+        }
+
+        $('#Tractor').change(function(){
+            var x = $('#Tractor').find(":selected").val();
+            $('.refunit').text(x);
+        });
+    
+    
+    </script>
+
+}
+

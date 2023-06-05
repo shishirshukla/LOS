@@ -1,0 +1,148 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemark" >
+
+         <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Other Details</label>
+    <select class="form-control-sm " name="TypeOfRemark" id="SecondaryRemark">
+      <option data-id="0"  >--</option>
+                    <option data-id="pHL" >Purpose of HL</option>
+                    <option data-id="0" >Proposed HL Address</option>
+                    <option data-id="0">Name of Seller / Builder</option>
+                    <option data-id="proType"> Type of Property</option>    
+                    <option data-id="locType">Classification of Purpose</option> 
+                    <option data-id="location">Location of Property</option> 
+                    <option data-id="0" >Current Stage of Construction</option>    
+                    <option data-id="0">Plot Area</option> 
+                    <option data-id="0">Carpet Area </option>    
+                    <option data-id="0">Builtup Area </option>    
+                    <option data-id="repType">Repayment During Moratorium </option> 
+                     <option data-id="LTV">LTV</option>
+       <option data-id="0">LTV Remarks</option>
+       <option data-id="resiType">Residence Type</option>
+       <option data-id="yearsResidence">Years Residing in Current Place / City</option>
+       <option data-id="bankRel">Bank Relationship</option>
+       <option data-id="stabilityIncome">Stability of Income</option>
+      <option data-id="0" >Additional Charge On Property</option>  
+                
+        
+       
+    </select>
+  </div>
+  <div class="form-group col-sm-8 flex-column d-flex">
+    <label >Value</label>
+
+
+     <select id="resiType" class="hide1" name="" style="display:none">
+       <option>Rented</option>
+       <option>Company Lease / Parental</option>
+       <option>Owned</option>
+       
+      
+   </select>
+
+    <select id="yearsResidence" class="hide1" name="" style="display:none">
+       <option>Less Than 2 Years</option>
+       <option>2 Years and above but less than 3 years</option>
+       <option>3 years and above</option>
+       
+      
+   </select>
+
+     <select id="bankRel" class="hide1" name="" style="display:none">
+       <option>Less Than 2 Years</option>
+       <option>2 Years and above but less than 3 years</option>
+       <option>3 years and above</option>
+       
+      
+   </select>
+
+    <select id="stabilityIncome" class="hide1" name="" style="display:none">
+       <option>Income has been steadily increasing over last 3 years</option>
+       <option>Income has been almost the same over last 3 years</option>
+       <option>Income has been unstable over last 3 years</option>
+       <option>Income has been steadily decreasing over last 3 years</option>
+       
+      
+   </select>
+   
+   <textarea rows="3" class="form-control hide1 hide2" name="Statment"  placeholder="Remarks"></textarea>
+   <select id="pHL" class="hide1" name="" style="display:none">
+       <option>Construction of House</option>
+       <option>Purchase of Plot & Construction</option>
+       <option>Purchase of House /Bunglow</option>
+       <option>Purchase of Flat</option>
+       <option>Repair / Renovation</option>
+       <option>Takeover</option>
+      
+   </select>
+   <select id="proType" class="hide1" name="" style="display:none">
+       <option>Flat</option>
+       <option>Land & Building</option>
+        
+   </select>
+
+   <select id="locType" class="hide1" name="" style="display:none">
+       <option>New /Resale - Ready Possession</option>
+       <option>Takeover</option>
+       <option>Purchase of Plot OR/AND Construction - RERA/Govt. Approved Colony</option>
+       <option>Purchase of Plot OR/AND Construction - Other</option>
+       <option>Other</option>
+        
+   </select>
+
+   <select id="location" class="hide1" name="" style="display:none">
+       <option>Property in RERA Approved Colony</option>
+       <option>Property in Corporation/Municipal Area</option>
+       <option>Property in Nagar Panchayat Area</option>
+       <option>Property in Other Area</option>
+       
+        
+   </select>
+     <select id="repType" class="hide1" name="" style="display:none">
+       <option>Interest Repayment</option>
+       <option>No Repayment</option>
+        
+   </select>
+   <select id="LTV" class="hide1" name="" style="display:none">
+       <option>70 %</option>
+       <option>75 %</option>
+       <option>80 %</option>
+       <option>85 %</option>
+       <option>90 %</option>
+        
+   </select>
+
+
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>

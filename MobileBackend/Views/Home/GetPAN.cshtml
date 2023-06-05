@@ -1,0 +1,114 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+	Layout = "../Shared/_BaseImport.cshtml";
+	var certificate = (MobileBackend.Models.PAN.Certificate)ViewBag.Certificate;
+}
+
+
+@if(ViewBag.IsPostback == "Yes")
+{
+	 <div class="card">
+      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+        <i class="checkmark">✓</i>
+      </div>
+        <h1>Success</h1> 
+        @if (ViewBag.Error == "OK")
+			{
+				
+
+					<p>
+						<b>PAN No issued to : </b> @certificate.IssuedTo.Person.Name
+					</p>
+
+				
+			}
+			else if (ViewBag.Error != "")
+			{
+				
+
+					<p>
+						 @ViewBag.Error
+					</p>
+
+				
+			}
+	</div>
+}
+else
+{
+	<div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				
+				
+				
+					<form method="post" action="/Home/GetPAN">
+						<div class="input-group mb-3 d-flex justify-content-center">
+							<b  style="margin-top:30px;color:white;">
+								PAN Verification
+							</b>
+							
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							<input type="text" name="fullname" class="form-control input_user" value="" required placeholder="Name As Per PAN Card"/>
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input type="text" name="panno" class="form-control input_user" value="" required placeholder="PAN No"/>
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<select name="gender" class="form-control input_user">
+								<option>Male</option>
+								<option>Female</option>
+							</select>
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input type="date" name="dob" class="form-control input_user" value="" required placeholder="Date of Birth" />
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input type="text" name="mobile" class="form-control input_user" value="" required placeholder="Mobile No."/>
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input type="email" name="email" class="form-control input_user" value="" required placeholder="Email ID (If no available use branch's)"/>
+						</div>
+						
+							<div class="d-flex justify-content-center mt-3 login_container">
+				 				<button type="submit" name="button" class="btn login_btn">Search</button>
+							</div>
+					</form>
+				
+				<div class="mt-4">
+					
+					
+					<div class="d-flex justify-content-center links">
+						<b>Every enquiry is logged , please take consent before enquiry </b>
+					</div>
+
+				</div>
+			
+
+			</div>
+		</div>
+	</div>
+}
+
+	

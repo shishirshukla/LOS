@@ -1,0 +1,50 @@
+﻿@model List<Application>
+@inject CustomIDataProtection _protector
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+     List<string> ls = new List<string>();
+    ls.Add("PL");
+    ls.Add("Car");
+    ls.Add("HL");
+    ls.Add("PL-Ag");
+    ls.Add("Express");
+    ls.Add("PL-Express");
+    ls.Add("PL-SECL");
+    ls.Add("KCC");
+    ls.Add("KCC-20");
+    ls.Add("MUDRA-Transport");
+}
+
+  @foreach(var x in Model)
+ {
+                <tr>
+                    <td>@x.Id</td>
+                     <td>@x.ApplicationDate.ToShortDateString()</td>
+                      <td>@x.SanctionedDate.Value.ToShortDateString()</td>
+                         <td>@x.LoanApplications.Sum(a=> a.SanctionedAmount)</td>
+                    <td>@x.ApplicantShortName</td>
+                   
+                    <td>@x.LoanScheme</td>
+                   
+                    <td>@x.Owner</td>
+                    <td>@x.Status</td>
+                    <td>@x.Branch.BranchName (@x.BranchId)</td>
+                    <td>@x.Branch.AMHCode</td>
+                    <td>
+                        
+                        @if (!ls.Contains(x.LoanScheme))
+                        { 
+                           <a href="/LoanFlow/AddControlDetails?Id=@_protector.Decode(x.Id.ToString())" onclick="showModal();">Details</a>
+
+                        }
+                        else
+                        {
+                            <a href="/LoanFlow/Application?Id=@_protector.Decode(x.Id.ToString())" onclick="showModal();">Details</a>
+                        }
+                    </td>
+
+                </tr>
+}

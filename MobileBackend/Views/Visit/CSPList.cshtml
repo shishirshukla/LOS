@@ -1,0 +1,32 @@
+﻿@model ApplicationUser
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout2.cshtml";
+}
+
+
+<table class="table table-responsive-sm table-bordered">
+    <tr>
+        <td>User Id :</td>
+        <td>@Model.Id</td>
+    </tr>
+    <tr>
+        <td>Designation :</td>
+        <td>@Model.Designation</td>
+    </tr>
+    <tr>
+        <td>Branch Code</td>
+        <td>@Model.BranchId</td>
+    </tr>
+    <tr>
+        <td>Role :</td>
+        <td>@Model.Role</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <a href="/Visit/ViewList?token=@ViewBag.token&lat=@ViewBag.lat&loc_long=@ViewBag.loc_long" class="btn btn-primary btn-sm">Select CSP For Visit</a>
+        </td>
+    </tr>
+</table>

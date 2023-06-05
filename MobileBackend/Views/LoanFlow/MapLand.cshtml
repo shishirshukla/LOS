@@ -1,0 +1,224 @@
+﻿@inject CustomIDataProtection _protector
+@model List<VillageMaster>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //Layout = null;
+    int sno = 1;
+}
+
+
+<b>Bhuiyan & Fasal Bima Village Mapping</b>
+<form id="frm1" method="post" action="/LoanFlow/SaveKCCLand" enctype="multipart/form-data">
+    <input type="hidden" value="@ViewBag.ApplicationId" id="ApplicationId"/>
+     
+    
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>District</th>
+                <th>Tehsil</th>
+                <th>Village</th>
+                <th>Fasal Bima (District)</th>
+                <th>Fasal Bima (Tehsil)</th>
+                <th>Fasal Bima (Village)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="landTbl">
+            @foreach (var item in Model)
+            {
+                @if (!(item is  null))
+                {
+                    <tr >
+                   <td>@sno </td>
+
+                   <td id="ddN-@sno"> <input type="hidden" id="dd-@sno" value="@item.DistrictCode" /> @item.District</td>
+                   <td id="tehN-@sno">  <input type="hidden" id="teh-@sno" value="@item.TehsilCode" /> @item.Tehsil</td>
+                   <td id="vilN-@sno"> <input type="hidden" id="vil-@sno" value="@item.VillageCode" /> @item.Village</td>
+                   <td>
+                       <select class="form-control distDD" id="ddFB-@sno" data-id="@sno">
+                           <option value="0">--Select--</option>
+                           <option value='904' >Balod</option>
+                            <option value='905' >Baloda Bazar</option>
+                        <option value='906' >Balrampur</option>
+                        <option value='414' >Bastar</option>
+                        <option value='907' >Bemetara</option>
+                        <option value='417' >Bijapur</option>
+                        <option value='406' >Bilaspur</option>
+                        <option value='416' >Dakshin Bastar Dantewada</option>
+                        <option value='416' >Dantewada</option>
+                        <option value='412' >Dhamtari</option>
+                        <option value='409' >Durg</option>
+                        <option value='645' >Gariyaband</option>
+                        <option value='908' >Gariyaband</option>
+                        <option value='990' >Gaurella Pendra Marwahi</option>
+                        <option value='990' >Gorella-Pendra-Marwahi</option>
+                        <option value='405' >Janjgir - Champa</option>
+                        <option value='405' >Janjgir-Champa</option>
+                        <option value='402' >Jashpur</option>
+                        <option value='407' >Kabeerdham</option>
+                        <option value='407' >Kabirdham</option>
+                        <option value='413' >Kanker</option>
+                        <option value='909' >Kondagaon</option>
+                        <option value='404' >Korba</option>
+                        <option value='400' >Korea</option>
+                        <option value='400' >Koriya</option>
+                        <option value='411' >Mahasamund</option>
+                        <option value='910' >Mungeli</option>
+                        <option value='415' >Narayanpur</option>
+                        <option value='403' >Raigarh</option>
+                        <option value='410' >Raipur</option>
+                        <option value='408' >Rajnandgaon</option>
+                        <option value='911' >Sukma</option>
+                        <option value='912' >Surajpur</option>
+                        <option value='401' >Surguja</option>
+                        <option value='413' >Uttar Bastar Kanker</option>
+
+                       </select>
+                   </td>
+                   <td>
+                        <select class="form-control tehFB" id="tehFB-@sno" data-id="@sno">
+
+                       </select>
+                   </td>
+                   <td>
+                        <select class="form-control" id="villFB-@sno" data-id="@sno">
+                            <option value="0">------</option>
+                       </select>
+                   </td>
+                   <td></td>
+                   
+               </tr>
+               sno++;
+                }
+                
+           }
+        </tbody>
+    </table>
+  
+  
+  
+  <button type="button" class="btn btn-primary" onclick="saveAllData()">Save</button> 
+ 
+</form>
+
+
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+       
+      <div class="modal-body">
+        <img src="/images/loading-6.gif" class="img-fluid"/>
+      </div>
+       
+    </div>
+  </div>
+</div>
+@section scripts
+{
+<script type="text/javascript">
+    
+    function validateRow(a)
+    {
+        var totalRakba = parseFloat($('#rk-'+ a).val());
+        var irrigated = parseFloat($('#irri-'+ a).val());
+        var unirrigated = parseFloat($('#unirri-'+ a).val());
+        var padti = parseFloat($('#padti-'+ a).val());
+        //console.log((irrigated + unirrigated).toFixed(4));
+        if(totalRakba >= (irrigated + unirrigated + padti).toFixed(4))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    $(document).ready(function(){
+        $('.distDD').change(function(){
+            var id = $(this).attr('data-id');
+            var tt = $(this).val();
+            console.log(id);
+            $.ajax({
+                url: "/LoanFlow/GetFBTehsil?dd=" + tt,
+                data: {dd:tt},
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                success: function(data){
+                    $('#tehFB-'+id).html(data);
+                }
+            });
+
+        });
+        
+    
+     $('.tehFB').change(function(){
+            var id = $(this).attr('data-id');
+            var tt = $(this).val();
+            var tehsil = $('#ddFB-'+ id).val();
+            console.log(tehsil);
+            $.ajax({
+                url: "/LoanFlow/GetFBVillage?dd=" + tehsil + "&teh=" + tt ,
+                data: {'dd':tt , 'teh':tehsil},
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                success: function(data){
+                    $('#villFB-'+id).html(data);
+                }
+            });
+
+        });
+    });
+
+    function saveAllData()
+    {
+        
+        $('#landTbl tr').each(function(a,e){
+            a = a+1;
+            if($('#villFB-'+a).val() != '0')
+            {
+                var dist = $('#ddN-'+a).text().trim();
+            var distCode = $('#dd-'+a).val();
+            var teh = $('#tehN-'+a).text().trim();
+            var tehCode = $('#teh-'+a).val();
+            var vill =  $('#vilN-'+a).text().trim();
+            var villCode =  $('#vil-'+a).val();
+            var distCodeFB = $('#ddFB-'+a).val();
+            var tehCodeFB =  $('#tehFB-'+ a).val();
+            var villCodeFB =  $('#villFB-'+a).val();
+            var formData = new FormData(document.getElementById("frm1"));
+            formData.append('District', dist);
+            formData.append('Tehsil',teh);
+            formData.append('Village',vill);
+            formData.append('DistrictCode',distCode);
+            formData.append('TehsilCode',tehCode);
+            formData.append('VillageCode', villCode);
+            formData.append('DistrictCodeFB',distCodeFB);
+            formData.append('TehsilCodeFB',tehCodeFB);
+            formData.append('VillageCodeFB', villCodeFB);
+            console.log(distCodeFB);
+            console.log(villCodeFB);
+
+            $.ajax({
+                url: "/LoanFlow/AddVillageMap",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data){
+                    $(e).removeClass('table-info');
+                    $(e).addClass('table-success');
+                }
+            });
+            }
+            
+        });
+        
+    }
+
+   
+</script>
+}

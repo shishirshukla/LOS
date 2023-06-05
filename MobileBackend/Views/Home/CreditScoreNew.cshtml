@@ -1,0 +1,154 @@
+﻿@using MobileBackend.Models
+@using System.Globalization;
+@using System.Xml.Serialization
+@using System.IO
+@inject CustomIDataProtection _protector
+
+@model MobileBackend.Models.Cibil3.Root
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "../Shared/_BaseImport2.cshtml";
+    CibilHelper cibilHelper = new CibilHelper();
+    MobileBackend.Models.CIBILResponseNew.CreditReport credit = new MobileBackend.Models.CIBILResponseNew.CreditReport();
+    XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(MobileBackend.Models.CIBILResponseNew.CreditReport));
+    using (TextReader reader = new StringReader(Model.Fields.Applicants.Applicant.Services.Service[0].Operations.Operation.Where(a => a.Name == "ConsumerCIR").FirstOrDefault().Data.Response.RawResponse.BureauResponseXml))
+                    {
+                        credit = (MobileBackend.Models.CIBILResponseNew.CreditReport)ser.Deserialize(reader);
+                    }
+}
+
+<div class="container" style="min-height:600px;">
+    <div class="row">
+        <div class="col-md-4 col-sm-12" >
+            <div id="preview-textfield" style="font-size: 43px;" >@ViewBag.Score</div>
+            <canvas id="container" style="height: 200px;">
+            </canvas>
+            
+        </div>
+
+        <div class="col-md-8 col-sm-12">
+            <p>Name : @Model.Fields.Applicants.Applicant.ApplicantFirstName  @Model.Fields.Applicants.Applicant.ApplicantMiddleName @Model.Fields.Applicants.Applicant.ApplicantLastName </p>
+            <p>Gender : @CibilHelper.GetGender(Model.Fields.Applicants.Applicant.Gender) , Date of Birth : @DateTime.ParseExact(Model.Fields.Applicants.Applicant.DateOfBirth,"ddMMyyyy",CultureInfo.CurrentCulture).ToShortDateString() </p>
+           <p>Score - @credit.ScoreSegment.Score Date - @credit.ScoreSegment.ScoreDate, Score Details - @credit.ScoreSegment.ReasonCode1</p>
+         
+
+        </div>
+        
+    </div>
+
+    
+        <div class="row">
+            <div class="col-12">
+                <b>Total Accounts</b> : @credit.Account.Count() <br/>
+                <b>Individual Accounts</b> : @credit.Account.Where(a=> a.AccountNonSummarySegmentFields.OwenershipIndicator == "1").Count() <br/>
+                <b>Joint Accounts</b> : @credit.Account.Where(a=> a.AccountNonSummarySegmentFields.OwenershipIndicator == "4").Count() <br/>
+                <b>Guarantor Accounts</b> : @credit.Account.Where(a=> a.AccountNonSummarySegmentFields.OwenershipIndicator == "3").Count()<br/>
+                <b>Closed Accounts</b> : @credit.Account.Where(a=> a.AccountNonSummarySegmentFields.CurrentBalance == "0").Count() <br/>
+                <b>Overdue Accounts</b> : @credit.Account.Where(a=> a.AccountNonSummarySegmentFields.AmountOverdue != null).Count() <br/>
+                <b>Writtenoff / Settled Accounts</b> :  @credit.Account.Where(a=> a.AccountNonSummarySegmentFields.CreditFacility == "02" || a.AccountNonSummarySegmentFields.CreditFacility == "03" || a.AccountNonSummarySegmentFields.CreditFacility == "04" || a.AccountNonSummarySegmentFields.CreditFacility == "05" || a.AccountNonSummarySegmentFields.CreditFacility == "06").Count() <br/>
+                <b>SMA Accounts</b> : @credit.Account.Where(a=>  CibilHelper.GetAccountClassification(a.AccountNonSummarySegmentFields.PaymentHistory1) == "SMA").Count() <br/>
+                <b>NPA Accounts</b> : @credit.Account.Where(a=> CibilHelper.GetAccountClassification(a.AccountNonSummarySegmentFields.PaymentHistory1) == "SUB" || CibilHelper.GetAccountClassification(a.AccountNonSummarySegmentFields.PaymentHistory1) == "DBT" || CibilHelper.GetAccountClassification(a.AccountNonSummarySegmentFields.PaymentHistory1) == "LSS").Count() <br/>
+                <b>Total Cuurent Balance</b> : @credit.Account.Sum(a=> int.Parse(a.AccountNonSummarySegmentFields.CurrentBalance)) <br/>
+                <b>Total Overdue</b> : @credit.Account.Sum(a=> int.Parse(a.AccountNonSummarySegmentFields.AmountOverdue ?? "0")) <br/>
+                <a href="/Home/UpdateEmi/@ViewBag.Id" class="btn btn-primary">Update EMIs</a> 
+                <a href="/Home/RawCibil/@ViewBag.Id" class="btn btn-primary">Raw Report</a>
+                <a href="/Home/IDVReport/@ViewBag.Id" class="btn btn-primary">ID Vision Report</a>
+                 <a href="/LoanFlow/Application/@_protector.Decode((ViewBag.ApplicationId).ToString())" class="btn btn-danger">Back to Application</a>
+            </div>
+          
+        </div>
+    
+
+
+    
+    
+
+    @foreach(var x in credit.Account)
+    {
+        try
+        {
+            <div style="margin-top:5px;" class="row border border-primary">
+            
+                <div class="col-4"><b>Member Short Name :</b> @x.AccountNonSummarySegmentFields.ReportingMemberShortName</div>
+                <div class="col-4"><b>Account Type :</b> @cibilHelper.GetAccountType(x.AccountNonSummarySegmentFields.AccountType)</div>
+                <div class="col-4"><b>Ownership :</b> @CibilHelper.GetOwnership(x.AccountNonSummarySegmentFields.OwenershipIndicator)</div>
+            
+           
+                <div class="col-4"><b>Date Opened :</b> @DateTime.ParseExact(x.AccountNonSummarySegmentFields.DateOpenedOrDisbursed,"ddMMyyyy",CultureInfo.CurrentCulture).ToShortDateString()</div>
+                <div class="col-4"><b>Date Reported :</b> @DateTime.ParseExact(x.AccountNonSummarySegmentFields.DateReportedAndCertified,"ddMMyyyy",CultureInfo.CurrentCulture).ToShortDateString()</div>
+                <div class="col-4"><b>Account Status</b> @CibilHelper.GetAccountClassification(x.AccountNonSummarySegmentFields.PaymentHistory1)</div>
+           
+            
+                <div class="col-4"><b>Limit / High Credit :</b> @x.AccountNonSummarySegmentFields.HighCreditOrSanctionedAmount , @x.AccountNonSummarySegmentFields.CreditLimit</div>
+                <div class="col-4"><b>Current Balance :</b> @x.AccountNonSummarySegmentFields.CurrentBalance</div>
+                <div class="col-4" style="color:red;"><b>Overdue :</b> @x.AccountNonSummarySegmentFields.AmountOverdue</div>
+           
+            
+            </div>
+        }
+        catch
+        {
+            
+        }
+
+    }
+
+
+
+    
+</div>
+
+<p>
+    @ViewBag.Request
+</p>
+
+<p>
+    @ViewBag.Response
+</p>
+
+@section scripts
+{
+    <script src="/js/gauge.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var opts = {
+  angle: 0.10, // The span of the gauge arc
+  lineWidth: 0.44, // The line thickness
+  radiusScale: 1, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0.055, // The thickness
+    color: '#000000' // Fill color
+  },
+  staticLabels: {
+  font: "10px sans-serif",  // Specifies font
+  labels: [300, 500, 650, 800, 900],  // Print labels at these values
+  color: "#000000",  // Optional: Label text color
+  fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+    },
+    staticZones: [
+   {strokeStyle: "#F03E3E", min: 300, max: 500}, // Red from 100 to 130
+   {strokeStyle: "#FFDD00", min: 500, max: 650}, // Yellow
+   {strokeStyle: "#00ff00", min: 650, max: 750}, // Green
+   {strokeStyle: "#30B32D", min: 750, max: 900}
+],
+  limitMax: true,     // If false, max value increases automatically if value > maxValue
+  limitMin: true,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: '#E0E0E0',  // to see which ones work best for you
+  generateGradient: true,
+  highDpiSupport: true,     // High resolution support
+  
+};
+var target = document.getElementById('container'); // your canvas element
+var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+gauge.maxValue = 900; // set max gauge value
+gauge.setMinValue(300);  // Prefer setter over gauge.minValue = 0
+gauge.animationSpeed = 48; // set animation speed (32 is default value)
+gauge.set(@CibilHelper.GetScore(ViewBag.Score)); // set actual value
+});
+    </script>
+}

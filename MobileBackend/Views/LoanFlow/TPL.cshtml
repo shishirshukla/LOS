@@ -1,0 +1,201 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+   // Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddTPL" >
+
+   <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+  <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Type of Vehichle</label>
+     <select class="form-control-sm" name="TypeOfVehichle" id="TypeOfVehichle">
+        <option value="3 Wheeler">3 Wheeler</option>
+        <option value="4 Wheeler">4 Wheeler</option>
+        <option value="Electric">Electric</option>
+    </select>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Manufacturer</label>
+    <select id="pHL" class="" name="Manufacturer" >
+       <option>Tata</option>
+       <option>Mahindra</option>
+       <option>Atul</option>
+       <option>SML Isuzu</option>
+       <option>Ashok Leyland</option>
+        <option>Maruti</option>
+        <option>Eicher</option>
+        <option>JCB</option>
+       <option>Kinetic</option>
+       <option>Ebulu</option>
+       <option>Lohia</option>
+       <option>Mayuri</option>
+       <option>Other</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Model</label>
+      <input type="text" name="Model"  class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Reference Unit</label>
+    <select id="Tractor" class="" name="ReferenceUnit" >
+       <option>----</option>
+       <option>KM</option>
+       
+       <option>Hrs</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Mileage Per Ltr / Full Charge (In <span class="refunit"></span>)</label>
+    <input type="number" name="Mileage" id="Mileage"  class="form-control"/>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+   <label >Trips Per Day</label>
+    <input type="number" name="TripsPerDay"  id="TripsPerDay" class="form-control"/>
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label ><span class="refunit"></span> Per Trip</label>
+    <input type="number" name="UsePerTrip" id="UsePerTrip" value="0"  class="form-control"/>
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Receipt Per Trip</label>
+      <input type="number" name="ReceiptPerTrip" id="ReceiptPerTrip" value="0"  class="form-control"/>
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Working Days In Month</label>
+    <input type="number" name="WorkingDaysInMonth" value="0" id="WorkingDaysInMonth" max="30" class="form-control"/>
+
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Cost (Fuel/Electricity) Per <span id="fuel">Litre</span>  </label>
+    <input type="number" name="FuelCost" id="FuelCost" value="0" class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Service Cost Per 1000 <span class="refunit"></span> </label>
+    <input type="number" name="ServiceCost" id="ServiceCost" value="0" class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Other Cost Per 1000 <span class="refunit"></span> </label>
+    <input type="number" name="OtherCost" id="OtherCost" value="0" class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Driver Cost Per Year </label>
+    <input type="number" name="DriverCost" id="DriverCost" value="0" class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Tire Life In <span class="refunit"></span>  </label>
+    <input type="number" name="TireReplacementPeriod" id="TireReplacementPeriod" value="0" class="form-control"/>
+   
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Tire Costs (Complete)  </label>
+    <input type="number" name="TireReplacementCost"  id="TireReplacementCost" value="0"  class="form-control"/>
+   
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Insurance  </label>
+    <input type="number" name="Insurance" id="Insurance" value="0"  class="form-control"/>
+   
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Taxes / Year </label>
+    <input type="number" name="Taxes" id="Taxes" value="0" class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Yearly Receipts  </label>
+    <input type="number" readonly id="yearlyReceipt" value="0" class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Yearly Expenditure  </label>
+    <input type="number" id="yearlyExpenditure" readonly value="0" class="form-control"/>
+   
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="button" class="btn btn-warning"  onclick="calculate();">Calculate</button>
+  </div>
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+@section scripts
+{
+    <script type="text/javascript">
+        function calculate()
+        {
+            var recieptTrip = $('#ReceiptPerTrip').val();
+            var tripperday = $('#TripsPerDay').val();
+            var workingDay = $('#WorkingDaysInMonth').val();
+            var perDay = recieptTrip * tripperday * workingDay * 12;
+            $('#yearlyReceipt').val(perDay);
+            var usePerTrip = $('#UsePerTrip').val();
+           //  console.log('Use : ' + usePerTrip);
+            var kmRun = tripperday * workingDay * usePerTrip * 12;
+            
+            var mileage = $('#Mileage').val();
+           // console.log( 'Mileage : ' + mileage);
+            var tirePeriod = $('#TireReplacementPeriod').val();
+            var tireCost =  $('#TireReplacementCost').val();
+            var serviceCost = $('#ServiceCost').val();
+            var fuelCost = $('#FuelCost').val();
+            var otherCost = $('#OtherCost').val();
+            var DriverCost = $('#DriverCost').val();
+            var InsuranceCost = $('#Insurance').val();
+            var Taxes = $('#Taxes').val();
+            var tireChange =  kmRun / tirePeriod;
+            tireCost = tireCost * tireChange;
+            serviceCost = serviceCost * (kmRun / 1000);
+            otherCost = otherCost * (kmRun / 1000);
+            fuelCost = (kmRun / mileage) * fuelCost;
+            var totalExpense = parseFloat(tireCost) + parseFloat(serviceCost) + parseFloat(otherCost) + parseFloat(fuelCost) + parseFloat(DriverCost) + parseFloat(InsuranceCost) + parseFloat(Taxes);
+            console.log(tireCost + "|" + serviceCost + "|" + otherCost +  "|" + fuelCost +  "|" + DriverCost +  "|" + InsuranceCost + "|" + Taxes);
+            console.log('KM : ' + kmRun);
+            $('#yearlyExpenditure').val(totalExpense);
+        }
+
+        $('#Tractor').change(function(){
+            var x = $('#Tractor').find(":selected").val();
+            $('.refunit').text(x);
+        });
+
+         $('#TypeOfVehichle').change(function(){
+            var x = $('#TypeOfVehichle').find(":selected").val();
+            if(x == 'Electric')
+            {
+                $('#fuel').text('Charge');
+            }
+            else
+            {
+                $('#fuel').text('Litre');
+            }
+        });
+    
+    
+    </script>
+
+}
+

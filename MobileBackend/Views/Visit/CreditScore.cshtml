@@ -1,0 +1,133 @@
+﻿@model ApplicationUser
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+     Layout = "_Layout2.cshtml";
+}
+
+<b style="margin-top:15px;margin-left:15px;">Cibil Score for Pending Applications</b>
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" name="token" value="@ViewBag.Token" />
+    <div style="margin-top: 10px; margin-left: 5px; margin-right: 50px;" class="row">
+        <div class="col-sm-12 col-md-6">
+            Employee Id
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <input type="text" name="UserId" value="@Model.UserName" class="form-control" readonly />
+        </div>
+        <div class="col-sm-12 col-md-6">
+            Employee Name
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <input type="text" name="UserId" value="@Model.EmployeeName" class="form-control" readonly />
+        </div>
+         <div class="col-sm-12 col-md-6">
+           Designation
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <input type="text" name="UserId" value="@Model.Designation" class="form-control" readonly />
+        </div>
+    
+        <div class="col-sm-12 col-md-6">
+            Application Number
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <select  name="ApplicationId"  class="form-control"  >
+                    @foreach (var x in (List<Application>)ViewBag.Applications)
+                {
+                    <option value="@x.Id">@x.ApplicantShortName</option>
+                }
+            </select>
+        </div>
+
+        @if ((bool)ViewBag.PostBack == true)
+        {
+            <div class="col-sm-12 col-md-6">
+            Applicants
+        </div>
+             <div class="col-sm-12 col-md-6">
+             
+            @foreach(var x in (List<Application>)ViewBag.Applications)
+            {
+                @if (x.Applicants != null)
+                {
+                        <table class="table table-responsive table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th>Applicant Name</th>
+                                <th>Cibil Score</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @{
+                            int count = 0;
+                            List<string> s = ViewBag.Scores;
+                            List<int> sw = ViewBag.Scoresa;
+                        }
+
+                       @foreach (var c in x.Applicants)
+                        {
+                            
+                             <tr>
+                                <td>@c.Applicant_First_Name @c.Applicant_Middle_Name @c.Applicant_Last_Name</td>
+                                <td>
+                                            @if (sw[count] != 0)
+                                            {
+                                                <a href="/Home/CreditScore/@sw[count]">@s[count]</a>
+                                            }
+                                            else
+                                            {
+                                                @s[count]
+                                            }
+
+                                </td>
+                                <td><a class="btn btn-sm btn-info" href="/Home/GetCibil?AppId=@c.Id">Generate</a></td>
+                            </tr>
+                             count++;
+                            
+                        }
+
+                        </tbody>
+                    </table>
+
+                    }
+            }
+            
+            </div>
+             <div class="col-sm-12 col-md-6" style="margin-top:10px;">
+            
+        </div>
+        }
+        else
+
+        {
+             <div class="col-sm-12 col-md-6" style="margin-top:10px;">
+            <button type="submit" class="btn btn-primary">View Applicants</button>
+        </div>
+        }
+
+        
+        
+
+       
+       
+    
+       
+
+    </div>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        function gotoScore()
+        {
+            var x = $('#AppId').find(":selected").val();
+            window.location = '/Home/GetCibil?AppId=' + x;
+        }
+    </script>
+}

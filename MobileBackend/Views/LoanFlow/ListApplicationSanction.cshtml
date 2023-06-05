@@ -1,0 +1,191 @@
+﻿@inject CustomIDataProtection _protector
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<string> ls = new List<string>();
+    ls.Add("PL");
+    ls.Add("Car");
+    ls.Add("HL");
+    ls.Add("PL-Ag");
+    ls.Add("Express");
+    ls.Add("PL-Express");
+    ls.Add("PL-SECL");
+    ls.Add("KCC");
+    ls.Add("KCC-20");
+    ls.Add("MUDRA-Transport");
+}
+
+<div class="container">
+    <table class="table table-bordered table-sm  small w-auto" id="myTable">
+        <thead>
+            <tr>
+                <th colspan="2">Start Date</th>
+                <th><input type="date" id="stDate" class="form-control-sm" /></th>
+                <th colspan="2">End Date</th>
+                <th><input type="date" id="endDate" class="form-control-sm"/></th>
+                <th>Type</th>
+                <th><select id="scheme" class="form-control-sm">
+                    <option>ALL</option>
+                    <option>PL</option>
+                    <option>HL</option>
+                    <option>Car</option>
+                    <option>KCC</option>
+                    <option>MUDRA-Transport</option>
+                    <option>Other</option>
+                </select></th>
+                <th colspan="3"><button class="btn btn-primary" onclick="getList();">Search</button></th>
+            </tr>
+            <tr>
+                <th>
+                    App. No
+                </th>
+                <th>
+                    App. Date
+                </th>
+                 <th>
+                    Sanction Date
+                </th>
+                 <th>
+                    Sanction Amt
+                </th>
+              
+                <th>
+                    Name
+                </th>
+               
+                <th>
+                    Scheme
+                </th>
+                
+                <th>
+                    Owner
+                </th>
+                <th>
+                    Status
+                </th>
+                 <th>
+                    Branch
+                </th>
+                <th>
+                    AMH
+                </th>
+                <th></th>
+            </tr>
+            
+        </thead>
+        <tbody id="tbl12">
+          
+        </tbody>
+    </table>
+
+</div>
+
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+       
+      <div class="modal-body">
+        <img src="/images/loading-6.gif" class="img-fluid"/>
+      </div>
+       
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css"/>
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <script src="~/js/datatable-button.js" asp-append-version="true"></script>
+    <script src="~/js/html5btn.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        function getList(){
+            showModal();
+            var stdate = $('#stDate').val();
+            var enddate = $('#endDate').val();
+            var scheme = $( "#scheme option:selected" ).text();
+
+
+             $.ajax({   
+                url: "/LoanFlow/SanctionList",   
+                type: "POST",   
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
+                data: {st: stdate,en : enddate,sch:scheme }   
+            }).done(function (data) {
+                   
+                    $("#myTable").dataTable().fnDestroy();
+                    $('#tbl12').html(data) ;
+                    $('#myTable').DataTable({dom: 'Bfrtip',buttons: ['csv', 'pdf']});
+                    $('#loadingModal').modal('hide');
+            });
+               
+        }
+        function showModal() {
+            $('#loadingModal').modal('show');
+        }
+
+        $(document).ready( function () {
+                    $('#myTable').DataTable({dom: 'Bfrtip',buttons: ['csv', 'pdf']});
+        } );
+        function reject(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Remarks not recorded , Cannot proceed !');
+                return;
+            }
+            else
+            {
+                count = $('#RejectRemarks').length;
+                if(count == 0)
+                {
+                    alert('Return Remarks not recorded , Cannot proceed  !');
+                    return;
+                }
+                
+            }
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Reject';
+        }
+        
+    }
+     function returnp(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Remarks not recorded , Cannot proceed !');
+                return;
+            }
+            else
+            {
+                count = $('#ReturnRemarks').length;
+                if(count == 0)
+                {
+                    alert('Return Remarks not recorded , Cannot proceed  !');
+                    return;
+                }
+                
+            }
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Return';
+        }
+        
+    }
+    function approveLoan(a) {
+        console.log(a);
+        if(confirm("Are you sure ?"))
+        {
+            
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Sanction';
+                    
+        }
+   
+  }
+    </script>
+    
+}

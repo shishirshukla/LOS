@@ -1,0 +1,204 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout2.cshtml";
+    var data = (List<PreValueStatement>)ViewBag.Data;
+    var dropDowns = (List<DropDownValues>)ViewBag.DropDowns;
+    var cnt = data.Count / 4;
+    cnt++;
+}
+
+
+
+<b style="margin-top:15px;margin-left:15px;">Visit Parameters</b>
+
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype="multipart/form-data"}))
+{
+
+    <input type="hidden" name="VisitId" value="@ViewBag.VisitId"/>
+     <input type="hidden" name="token" value="@ViewBag.Token"/>
+
+    
+            <ul class="nav nav-tabs" role="tablist">
+                @for(int i = 1; i <= cnt;i++)
+                {
+            if (i == 1)
+            {   <li class="nav-item">
+		                <a class="nav-link active" data-toggle="tab" href="#tabs-@i" role="tab">Step @i</a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+		                <a class="nav-link" data-toggle="tab" href="#tabs-@i" role="tab">Step @i</a>
+	                </li>
+            }
+
+                }
+                
+            </ul><!-- Tab panes -->
+
+            
+
+   <div class="tab-content">
+        @for(int i = 0; i < cnt;i++)
+       {
+            int secondCnt = 0;
+            if (i == 0)
+            {
+                <div class="tab-pane active" id="tabs-@(i+1)" role="tabpanel">
+                        @for(int j=secondCnt ; j < 4;j++)
+                        {
+                            var indx = (i * 4) + j;
+
+                        if (indx < data.Count)
+                        {
+                            var item = data[indx];
+                            <div style="margin-top: 10px; margin-left: 5px; margin-right: 50px;padding-bottom:10px;" class="row border border-primary" >
+                                <div class="col-sm-12 col-md-6">
+                                    <b>@item.Statement</b>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+
+                                    @if (item.InputType == "Text")
+                                    {
+                                        <input type="text" name="@item.Id" value="" class="form-control" />
+                                    }
+                                    else if (item.InputType == "Numeric")
+                                    {
+                                        <input type="number" min="0" name="@item.Id" value="" class="form-control" />
+                                    }
+                                    else if (item.InputType == "YesNo")
+                                    {
+                                        <select name="@item.Id" class="form-control">
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    }
+                                    else if (item.InputType == "Other")
+                                    {
+                                        <select name="@item.Id" class="form-control">
+                                            @foreach (var x in dropDowns.Where(a => a.TypeOfValue == item.Statement))
+                                            {
+                                                <option value="@x.Value">@x.Value</option>
+                                            }
+                                        </select>
+                                    }
+                                    else if (item.InputType == "File")
+                                    {
+                                        <input type="file"   name="@item.Id" accept="image/*" capture="camera" value="" class="form-control" />
+                                    }
+
+
+                                </div>
+
+                            </div>
+                        }
+                       
+
+                            secondCnt++;
+                        }   
+                        
+                         <button type="button" class="btn btn-primary btnNext" style="margin-top:15px;" onclick="nextTab();" >Next</button>
+                         
+                </div>     
+            }
+            else
+            {
+                  <div class="tab-pane" id="tabs-@(i+1)" role="tabpanel">
+                        @for(int j=secondCnt ; j < 4;j++)
+                        {
+                            var indx = (i * 4) + j;
+
+                        if (indx < data.Count)
+                        {
+                            var item = data[indx];
+                            <div style="margin-top: 10px; margin-left: 5px; margin-right: 50px;padding-bottom:10px;" class="row border border-primary" >
+                                <div class="col-sm-12 col-md-6">
+                                    <b>@item.Statement</b>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+
+                                    @if (item.InputType == "Text")
+                                    {
+                                        <input type="text" name="@item.Id" value="" class="form-control" />
+                                    }
+                                    else if (item.InputType == "Numeric")
+                                    {
+                                        <input type="number" min="0" name="@item.Id" value="" class="form-control" />
+                                    }
+                                    else if (item.InputType == "YesNo")
+                                    {
+                                        <select name="@item.Id" class="form-control">
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    }
+                                    else if (item.InputType == "Other")
+                                    {
+                                        <select name="@item.Id" class="form-control">
+                                            @foreach (var x in dropDowns.Where(a => a.TypeOfValue == item.Statement))
+                                            {
+                                                <option value="@x.Value">@x.Value</option>
+                                            }
+                                        </select>
+                                    }
+                                    else if (item.InputType == "File")
+                                    {
+                                        <input type="file"   name="@item.Id" accept="image/*" capture="camera" value="" class="form-control" />
+                                    }
+
+
+                                </div>
+
+                            </div>
+                        }
+                        else if (indx == data.Count)
+                        {
+                            <div class="col-sm-12 col-md-6" style="margin-top:10px;padding-left:15px;">
+                                <button type="submit" id="saveBtn" class="btn btn-primary" onclick="ch()">Save</button>
+                            </div>
+                        }
+                       
+
+                            secondCnt++;
+                        }  
+                        <button type="button" class="btn btn-primary btnNext" style="margin-top:15px;" onclick="nextTab();" >Next</button>
+                </div>     
+                
+            }
+
+       }
+   </div>
+                   
+	    
+ }
+	
+
+           
+   
+
+
+
+
+           
+
+  
+    
+    @section scripts
+    {
+        <script type="text/javascript">
+            function nextTab()
+            {
+                $('.nav-tabs > .nav-item > .active').parent().next().children().click();
+                
+            }
+             
+            function ch(){
+                $('#saveBtn').text('Saving');
+            }
+        </script>
+    }

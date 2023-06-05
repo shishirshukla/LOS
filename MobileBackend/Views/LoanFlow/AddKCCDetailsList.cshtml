@@ -1,0 +1,136 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemarkList" >
+
+         <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Nominee Name for PAIS</label>
+    <input type="text" name="Nominee Name for PAIS"  class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Source of Irrigation</label>
+    <select id="pHL" class="" name="Source of Irrigation" >
+       <option>Tubewell</option>
+       <option>Canal / River</option>
+       <option>Bore / Well</option>
+       <option>Rainfed</option>
+       <option>Drip Irrigation</option>
+       <option>Other</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Family Background</label>
+     <select id="FB" class="" name="Family Background" >
+       <option>One or More Member is in Govt Service</option>
+       <option>Well Respected / Known in area</option>
+       <option>Position Holder in Panchayat/Board/Municipal etc</option>
+       <option>Other</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Tractor</label>
+    <select id="Tractor" class="" name="Tractor" >
+       <option>Loan Free</option>
+       <option>Our Existing borrower a/c with satisfactory 3yrs or more with repayment of no irregularity</option>
+       
+       <option>Other</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Pucca House</label>
+    <select id="House" class="" name="Pucca House" >
+       <option>Mortgage Free</option>
+       <option>Property Mortgaged with Regular Repayment</option>
+       
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Loan History</label>
+    <select id="Loan" class="" name="Loan History" >
+       <option>More than 5 years satisfactory Account with any reputed bank</option>
+       <option>3 to 5 years satisfactory Account with any reputed bank</option>
+       <option>Below 3 years satisfactory Account with any reputed bank</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Cropping Pattern</label>
+    <select id="proType" class="" name="Cropping Pattern" >
+       <option>Single Crop</option>
+       <option>Dual Crop</option>
+       <option>Multiple Crop</option>
+       <option>Long Term Crop</option>  
+   </select>
+  </div>
+   <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Type of Farming Practice</label>
+     <select id="repType" class="" name="Type of Farming Practice" >
+       <option>Traditional Farmer</option>
+       <option>Progressive Farmer</option>
+       <option>Advanced Farmer</option>
+        <option>Contract Farming</option>
+   </select>
+  </div>
+   <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Tieups / Buyback Arrangment</label>
+    <select id="LTV" class="" name="Tieups / Buyback Arrangment" >
+       <option>Yes</option>
+       <option>No</option>
+        
+   </select>
+
+  </div>
+   
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Rinn Pustika No.</label>
+    <input type="text" name="Rinn Pustika No."  class="form-control"/>
+   
+   
+
+  
+
+   
+
+    
+    
+
+   
+    
+   
+
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>

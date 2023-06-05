@@ -1,0 +1,42 @@
+﻿@model ApplicationUser
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_layout2.cshtml";
+    List<Csp> csps = (List<Csp>)ViewBag.CSPs;
+}
+
+<table class="table table-responsive-sm table-bordered">
+    <tr>
+        <td>User Id :</td>
+        <td>@Model.Id</td>
+    </tr>
+    
+    <tr>
+        <td>Branch Code</td>
+        <td>@Model.BranchId</td>
+    </tr>
+  
+</table>
+
+@foreach(var x in csps)
+{
+    <div class="row border border-secondary" style="padding:10px;">
+        <div class="col-4">
+            CSP Name
+        </div>
+        <div class="col-7">
+            @x.CSPName (@x.UserId)
+        </div>
+        <div class="col-4">
+            Location 
+        </div>
+        <div class="col-7">
+            @x.Address (@x.CorporateAgency)
+        </div>
+        <div class="col-7">
+            <a class="btn btn-secondary btn-sm" href="/Visit/AddNew?token=@ViewBag.token&BCId=@x.UserId&lat=@ViewBag.lat&loc_long=@ViewBag.loc_long">Start Visit</a>
+        </div>
+    </div>
+}

@@ -1,0 +1,235 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemarkList" >
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+
+
+
+   <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Purpose of HL</label>
+                                <select id="pHL"   name="Purpose of HL"  >
+                                       <option>Construction of House</option>
+                                       <option>Purchase of Plot & Construction</option>
+                                       <option>Purchase of House /Bunglow</option>
+                                       <option>Purchase of Flat</option>
+                                       <option>Repair / Renovation</option>
+                                       <option>Takeover</option>
+                                </select>
+                        </div>
+
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Proposed HL Address </label>
+                                <input class="form-control" type="text" required name="Proposed HL Address"   /> 
+                        </div>
+
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Name of Seller / Builder</label>
+                                <input class="form-control" type="text"  name="Name of Seller / Builder"   /> 
+                        </div>
+
+                         
+                       
+    </div>
+
+    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Type of Property</label>
+                                <select id="proType"  name="Type of Property" >
+       <option>Flat</option>
+       <option>Land & Building</option>
+        
+   </select>
+                        </div>
+
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Classification of Purpose </label>
+                                <select id="locType"  name="Classification of Purpose" >
+       <option>New /Resale - Ready Possession</option>
+       <option>Takeover</option>
+       <option>Purchase of Plot OR/AND Construction - RERA/Govt. Approved Colony</option>
+       <option>Purchase of Plot OR/AND Construction - Other</option>
+       <option>Other</option>
+        
+   </select>
+                        </div>
+
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Location of Property</label>
+                                 <select id="location"  name="Location of Property" >
+       <option>Property in RERA Approved Colony</option>
+       <option>Property in Corporation/Municipal Area</option>
+       <option>Property in Nagar Panchayat Area</option>
+       <option>Property in Other Area</option>
+       
+        
+   </select>
+                        </div>
+
+                         
+                       
+    </div>
+
+    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Current Stage of Construction</label>
+                                 <input class="form-control" type="text" required name="Current Stage of Construction"   /> 
+                        </div>
+
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Plot Area </label>
+                                <input class="form-control" type="text" required name="Plot Area"   /> 
+                        </div>
+
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Carpet Area</label>
+                                <input class="form-control" type="text" required  name="Carpet Area"   /> 
+                        </div>
+
+                         
+                       
+    </div>
+
+    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Builtup Area</label>
+                                 <input class="form-control" type="text" required name="Builtup Area"   /> 
+                        </div>
+
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                LTV</label>
+                                 <select id="LTV"  name="LTV" >
+                                   <option>70 %</option>
+                                   <option>75 %</option>
+                                   <option>80 %</option>
+                                   <option>85 %</option>
+                                   <option>90 %</option>
+        
+                                </select>
+
+                        </div>
+
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                LTV Remarks</label>
+                                <input class="form-control" type="text" required  name="LTV Remarks"   /> 
+                        </div>
+
+                         
+                       
+    </div>
+
+
+     <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Repayment During Moratorium</label>
+                                  <select id="repType"  name="Repayment During Moratorium" >
+                                                    <option>Interest Repayment</option>
+                                                    <option>No Repayment</option>
+        
+                                 </select>
+                        </div>
+
+                         <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Residence Type</label>
+                                 <select  name="Residence Type" >
+                                      <option>Rented</option>
+                                       <option>Company Lease / Parental</option>
+                                       <option>Owned</option>
+                                </select>
+
+                        </div>
+
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Years Residing in Current Place / City</label>
+                                 <select id="yearsResidence"  name="Years Residing in Current Place / City" >
+                                    <option>Less Than 2 Years</option>
+                                    <option>2 Years and above but less than 3 years</option>
+                                     <option>3 years and above</option>
+       
+      
+   </select>
+                                
+                        </div>
+
+                         
+                       
+    </div>
+
+     <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                               Bank Relationship</label>
+                                  <select id="bankRel"  name="Bank Relationship" >
+       <option>Less Than 2 Years</option>
+       <option>2 Years and above but less than 3 years</option>
+       <option>3 years and above</option>
+       
+      
+   </select>
+                        </div>
+
+                          
+
+                        <div class="form-group col-sm-4 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Stability of Income</label>
+                                 <select id="stabilityIncome"  name=" Stability of Income" >
+       <option>Income has been steadily increasing over last 3 years</option>
+       <option>Income has been almost the same over last 3 years</option>
+       <option>Income has been unstable over last 3 years</option>
+       <option>Income has been steadily decreasing over last 3 years</option>
+       
+      
+   </select>
+                                
+                        </div>
+
+                         
+                       
+    </div>
+
+
+
+   
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>

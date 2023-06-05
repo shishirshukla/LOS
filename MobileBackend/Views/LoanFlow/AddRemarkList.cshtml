@@ -1,0 +1,155 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemarkList" >
+
+   <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+    <input type="hidden" value="No" name="SpecialRemark"/>
+
+    @if (!(bool)ViewBag.IsControl)
+    {
+        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Branch Recomendation<span class="text-danger"> *</span></label>
+                                <textarea class="form-control" type="text" name="Branch Recomendation" rows="3"  required ></textarea> 
+                        </div>
+
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Obtained Documents<span class="text-danger"> *</span></label>
+                                <textarea class="form-control" rows="3" type="text" name="Documents"  required > </textarea>
+                        </div>
+
+                         
+                       
+    </div>
+
+     <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                PL Agri Remark</label>
+                                <input class="form-control" type="text" name="PL Agri Remark"  /> 
+                        </div>
+
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Mode of Repayment<span class="text-danger"> *</span></label>
+                                <select id="repType"  name="Mode of Repayment" >
+                                    <option value="">Select</option>
+                                    <option>NA</option>
+                                    <option>NACH /ECS with other bank</option>
+                                    <option>SI /ECS with Our Bank/SBI Account</option>
+                                    <option>PDC</option>
+                                    <option>Salary Account with us and Check Off Facility</option>
+                                 </select>
+                        </div>
+
+                         
+                       
+    </div>
+
+    <div class="row justify-content-between text-left">
+                         
+
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Pucca House <span class="text-danger"> *</span></label>
+                                <select  name="Pucca House"  >
+        <option value="">Select</option>
+                                       <option>Mortgage Free / Mortgaged in our bank with regular repayment</option>
+                                        <option>Property Mortgaged with Regular Repayment</option>
+                                        <option>Parental Property</option>
+                                 </select>
+                        </div>
+
+                         
+                       
+    </div>
+
+   
+        
+    }
+
+    @if ((bool)ViewBag.IsSanction)
+    {
+        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Remark on Repayment <span class="text-danger"> *</span></label>
+                                <input class="form-control" type="text" name="Repayment"  required /> 
+                        </div>
+
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                CheckOff <span class="text-danger"> *</span></label>
+                                <input class="form-control" type="text" name="CheckOff"  required /> 
+                        </div>
+
+                         
+                       
+        </div>
+        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                CBS ProductCode <span class="text-danger"> *</span></label>
+                                <input class="form-control" type="text" name="ProductCode"  required /> 
+                        </div>
+
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Processing Officer Remark <span class="text-danger"> *</span></label>
+                                <textarea rows="3" class="form-control" type="text" name="Processing Officer Remark"  required ></textarea> 
+                        </div>
+
+                         
+                       
+        </div>
+         <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                 Instruction to Branch<span class="text-danger"> *</span></label>
+                                <textarea rows="3" class="form-control" type="text" name="BranchInstruction"  required ></textarea> 
+                        </div>
+
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Sanction Remarks <span class="text-danger"> *</span></label>
+                                <textarea rows="3" class="form-control" type="text" name="Sanction Remarks"  required ></textarea> 
+                        </div>
+
+                         
+                       
+        </div>
+    }
+
+    @if ((bool)ViewBag.IsControl)
+    {
+        
+        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex"> 
+                            <label class="form-control-label px-1">
+                                Control Remarks <span class="text-danger"> *</span></label>
+                                <textarea class="form-control" type="text" name="Control Remarks"  required rows="3" ></textarea> 
+                        </div>
+
+                         
+                         
+                       
+        </div>
+
+
+    }
+
+   
+   <button type="submit">Save</button>
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>

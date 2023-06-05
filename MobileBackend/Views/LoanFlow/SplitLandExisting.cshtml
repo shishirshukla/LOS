@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //Layout = null;
+}
+<form method="post" action="/LoanFlow/SplitLandExisting" enctype="multipart/form-data" onsubmit="checkSubmit(event)">
+    <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+    
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Select Khasra No </label>
+    <select class="form-control-sm" name="landId" id="PjDesc">
+        @foreach (var item in (List<KCCExistingLand>)ViewBag.Applied)
+       {
+           <option data-irri="@item.IrrigatedArea" data-unirri="@item.UnIrrigatedArea" data-padti="@item.NonAgriArea" value="@item.Id">@item.KhasraNo (@item.OwnerName)</option>
+       }
+    </select>
+  </div>
+   
+  </div>
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Total Area </label>
+   <input type="text" class="form-control-sm" required id="padtiTxt" name="padti"  placeholder="Padti">
+
+  </div>
+  
+ 
+  
+ 
+  </div>
+   
+  
+    <button type="submit" class="btn btn-primary">Submit</button>
+ 
+  
+  
+</form>
+
+<script type="text/javascript">
+         
+    
+        $('#PjDesc').change(function() {
+                  var o = $('#PjDesc').find(":selected");
+                  
+                  $('#padtiTxt').val($(o).attr('data-padti'));
+        });
+</script>

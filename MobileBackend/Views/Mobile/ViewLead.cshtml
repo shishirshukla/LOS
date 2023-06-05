@@ -1,0 +1,251 @@
+﻿@model Leads
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container-fluid px-1 py-5 mx-auto">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 text-center">
+            <h3>Lead Details</h3>
+            
+            <div class="card">
+                
+                <form class="form-card" method="post" action="#">
+                     <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Sourced By</label> 
+                            <input class="form-control" type="text" value="@Model.SourcingAgency" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">User</label> 
+                            <input class="form-control" type="text" value="@Model.SourcedBy " readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Lead Status</label> 
+                            <input class="form-control" type="text" value="@Model.LeadStatus" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Source Date</label> 
+                            <input class="form-control" type="text" value="@Model.LeadDate" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Applicant Name</label> 
+                            <input class="form-control" type="text" value="@Model.ApplicantName" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Mobile Number</label> 
+                            <input class="form-control" type="text" value="@Model.MobileNumber" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Applied Amt</label> 
+                            <input class="form-control" type="text" value="@Model.AppliedAmt" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Loan Scheme</label> 
+                            <input class="form-control" type="text" value="@ViewBag.LeadType" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Primary Bank</label> 
+                            <input class="form-control" type="text" value="@Model.PrimaryBank" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Branch</label> 
+                            <input class="form-control" type="text" value="@Model.Branch.BranchName" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Date of Birth</label> 
+                            <input class="form-control" type="text" value="@Model.DOB" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Existing Customer</label> 
+                            <input class="form-control" type="text" value="@Model.ExistingCustomer" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+                     <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">PAN</label> 
+                            <input class="form-control" type="text" value="@Model.PANNo" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Adhaar</label> 
+                            <input class="form-control" type="text" value="@Model.AadhaarNo" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Election Id</label> 
+                            <input class="form-control" type="text" value="@Model.ElectionId" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">PIN Code</label> 
+                            <input class="form-control" type="text" value="@Model.PinCode" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Other Income</label> 
+                            <input class="form-control" type="text" value="@Model.OtherIncomeSource" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Earning Member</label> 
+                            <input class="form-control" type="text" value="@Model.OtherEarningMember" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Details of Earning Member</label> 
+                            <input class="form-control" type="text" value="@Model.DetailsofEarningMember" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Address</label> 
+                            <input class="form-control" type="text" value="@Model.AddressLine1" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+                    @if (ViewBag.LeadType == "KCC")
+                    {
+                        var temp = (KCCLeads)Model;
+                        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">District</label> 
+                            <input class="form-control" type="text" value="@temp.District" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Tehsil</label> 
+                            <input class="form-control" type="text" value="@temp.Tehsil" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">RI</label> 
+                            <input class="form-control" type="text" value="@temp.RI" readonly="readonly"  /> 
+                        </div>
+                        
+                       
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Village</label> 
+                            <input class="form-control" type="text" value="@temp.Village" readonly="readonly"  /> 
+                        </div>
+                         <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Khasra</label> 
+                            <input class="form-control" type="text" value="@temp.KhasraNo" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Source of Irrigation</label> 
+                            <input class="form-control" type="text" value="@temp.IrrigationSource" readonly="readonly"  /> 
+                        </div>
+                    </div>
+                    }
+                    @if (ViewBag.LeadType == "TPL")
+                    {
+                        var temp = (TPLLeads)Model;
+                        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Type of Vehichle</label> 
+                            <input class="form-control" type="text" value="@temp.TypeOfVehichle" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Make</label> 
+                            <input class="form-control" type="text" value="@temp.Make" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Past Experience</label> 
+                            <input class="form-control" type="text" value="@temp.PastExperience" readonly="readonly"  /> 
+                        </div>
+                        
+                       
+                    </div>
+                   
+                    }
+                    @if (ViewBag.LeadType == "Gold")
+                    {
+                        var temp = (GoldLoanLeads)Model;
+                        <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-1">Any Other Loan</label> 
+                            <input class="form-control" type="text" value="@temp.AnyOtherLoan" readonly="readonly"  /> 
+                        </div>
+                         
+                        
+                       
+                    </div>
+                   
+                    }
+                    <div class="row justify-content-between text-left" style="padding-bottom:5px;">
+                        <div class="form-group col-sm-2 flex-column d-flex">
+                           <img src="data:image/png;base64,@Model.UploadPhoto" class="image" /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <img src="data:image/png;base64,@Model.UploadPAN" class="image" />
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <img src="data:image/png;base64,@Model.UploadAadhaar" class="image" />
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                           <img src="data:image/png;base64,@Model.UploadElectionId" class="image" />
+                        </div>
+                       
+                    </div>
+                    <a href="/Mobile/TakeAction?LeadType=@ViewBag.LeadType&Id=@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Update Status</a>   
+                  
+                    </form>
+           </div>
+           </div>
+           </div>
+           </div>
+           
+           <div class="container">
+                 @foreach (var item in Model.Comments)
+                   {
+                       <div class="card"  style="padding-bottom:5px;">
+                                <div class="card-body">
+                                 <h5 class="card-title">@item.UserId</h5>
+                                 <div class="row">
+                                     <h6 class="card-subtitle mb-2 col-10">@item.EntryType</h6>
+                                     <h6 class="card-subtitle mb-2 text-muted col-2">@item.ActionDate.ToString("dd-MM-yyyy")</h6>
+                                 </div>
+                                 
+                                 
+
+                                 <p class="card-text">@item.Remark</p>
+                                 
+                                </div>
+                        </div>
+                   }
+           </div>
+
+           <div class="modal" id="applicantModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="appModal">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+<script type="text/javascript">
+    $('#applicantModal').on('show.bs.modal', function (e) {
+    $(this).find('.modal-body').load(e.relatedTarget.href);
+  });
+</script>
+  
+}

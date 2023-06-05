@@ -1,0 +1,50 @@
+﻿@model List<Applicant>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    int slno = 1;
+}
+
+<table class="table table-bordered table-sm">
+     <thead>
+           
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Date of Birth
+                </th>
+                <th>
+                    Adhaar
+                </th>
+                <th>
+                    PAN
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in Model)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Salutation @x.Applicant_First_Name @x.Applicant_Middle_Name @x.Applicant_Last_Name @x.Relationship @x.Guardian_Name</td>
+                    <td>@x.TypeofApplicant</td>
+                    <td>@x.Date_Of_Birth</td>
+                    <td>@x.Adhaar_No</td><td>@x.PAN_No</td>
+                    <td> <button type="button" class="btn btn-sm btn-warning" onclick="copyApp(@x.Id,@ViewBag.ApplicantId)" >Copy</button></td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+</table>

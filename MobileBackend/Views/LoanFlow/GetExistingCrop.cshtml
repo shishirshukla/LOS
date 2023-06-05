@@ -1,0 +1,35 @@
+﻿@model List<KCCCropDetailExisting>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<b>Crop Details</b>
+
+<table class="table table-bordered table-sm">
+    <thead>
+        <tr>
+            <td>Season</td>
+            <td>Khasra</td>
+            <td>Crop</td>
+            <td>Unirrigated Area</td>
+            <td>Irrigated Area</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+       {
+           <tr>
+                 <td>@item.Season</td>
+                 <td>@item.CropInsurance</td>
+                 <td>@item.Crop</td>
+                 <td>@item.UnIrrigatedArea</td>
+                 <td>@item.IrrigatedArea</td>
+           </tr>
+         
+       }
+    </tbody>
+
+</table>

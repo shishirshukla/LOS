@@ -1,0 +1,500 @@
+﻿@model Application
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    int slno = 1;
+    float kharifElig = 0;
+    float rabiElig = 0;
+    float summerElig = 0;
+    double cropcomponent = 0;
+    float cropinsu = 0;
+    decimal totalarea = 0;
+    decimal irriarea = 0;
+    decimal unirriarea = 0;
+    decimal nonagri = 0;
+    float irriarea1 = 0;
+    float unirriarea1 = 0;
+    double kharifCC = 0;
+    double rabiCC = 0;
+    double summerCC = 0;
+    double finalElig = 0;
+    decimal additionalComponent = (decimal)ViewBag.KCCAddl ;
+    decimal applKCC = (decimal)ViewBag.KCCAppl;
+    decimal yearlyLimit = 0;
+}
+
+
+
+
+<div class="border border-dark">
+    <b>KCC Calculation & Eligibility</b>
+    <br/>
+    <table class="table table-bordered table-sm border-dark">
+        <thead>
+            <tr>
+                <th colspan="8">Details of Land</th>
+                <th colspan="3">Land Area in Hect</th>
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>Owner</th>
+                <th>Distirct</th>
+                <th>Village</th>
+                <th>Khasra No</th>
+                <th>Area</th>
+                <th>Irrigated Area</th>
+                <th>UnIrrigated Area</th>
+                <th>Non Agri Area</th>
+                <th>Source of Irrigation</th>
+                <th>Bank Charge</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+                @foreach (var item in (List<KCCLandDetail>)ViewBag.LandInfo)
+            {
+                totalarea = totalarea + item.TotalArea;
+                irriarea = irriarea + item.IrrigatedArea;
+                unirriarea = unirriarea + item.UnIrrigatedArea;
+                nonagri = nonagri + item.NonAgriArea;
+                <tr>
+                    <td>@slno</td>
+                    <td>@item.OwnerName (@item.DharanAdhikar)</td>
+                    <td>@item.District</td>
+                    <td>@item.Village</td>
+                    <td>@item.KhasraNo</td>
+                    <td>@item.TotalArea</td>
+                    <td>@item.IrrigatedArea</td>
+                    <td>@item.UnIrrigatedArea</td>
+                    <td>@item.NonAgriArea</td>
+                    <td>@item.SourceofIrrigation</td>
+                    <td>@item.Charge</td>
+                </tr>
+                slno++;
+               }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5"> Total</td>
+                    <td>@totalarea</td>
+                    <td>@irriarea</td>
+                    <td>@unirriarea</td>
+                    <td>@nonagri</td>
+                </tr>
+            </tfoot>
+        </table>
+        <br/>
+
+        
+    <table class="table table-bordered table-sm border-dark">
+        <thead>
+            <tr>
+                <th colspan="7">Proposed Crops</th>
+                <th colspan="2">Land Area in Hect</th>
+                
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>District</th>
+                <th>Village</th>
+                <th>Khasra No</th>
+               
+                
+                <th>Kharif</th>
+                <th>Rabi</th>
+                <th>Summer</th>
+
+                <th>Irrigated Area</th>
+                <th>UnIrrigated Area</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+                @foreach (var item in (List<CropDetail>)ViewBag.CropInfo)
+            {
+                irriarea1 = irriarea1 + item.irrigateda;
+                unirriarea1 = unirriarea1 + item.unirrigateda;
+                <tr>
+                    <td>@slno</td>
+                     <td>@item.District</td>
+                     <td>@item.Village</td>
+                     <td>@item.Khasra</td>
+                    
+                     <td>@item.Kharif</td>
+                     <td>@item.Rabi</td>
+                     <td>@item.Summer</td>
+
+                      <td>@item.irrigateda</td>
+                     <td>@item.unirrigateda</td>
+
+                    
+                </tr>
+                slno++;
+               }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7">Total</td>
+                <td>@Math.Round(irriarea1,4)</td>
+                <td>@Math.Round(unirriarea1,4)</td>
+                </tr>
+                
+            </tfoot>
+        </table>
+        <br/>
+
+    @if (((List<KCCElig>)ViewBag.Kharif).Count > 0)
+    {
+          <table class="table table-bordered table-sm border-dark">
+        <thead>
+            <tr>
+                <th colspan="4">Kharif Eligibility</th>
+                <th colspan="2">Land Area in Hect</th>
+                <th colspan="2">Scale of Finance</th>
+                <th colspan="2">Eligibility</th>
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>District</th>
+                <th>Crop</th>
+                <th>Crop Insurance</th>
+               
+                <th>Irrigated Area</th>
+                <th>UnIrrigated Area</th>
+                 <th>Irrigated </th>
+                <th>UnIrrigated </th>
+                
+                <th>Irrigated Amt </th>
+                <th>UnIrrigated Amt</th>
+                <th>Total Amt</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+                irriarea1 = 0;
+                unirriarea1 = 0;
+                
+            }
+                @foreach (var item in (List<KCCElig>)ViewBag.Kharif)
+               {
+                   <tr>
+                    <td>@slno</td>
+                     <td>@item.District</td>
+                     <td>@item.Crop</td>
+                     <td>@item.cropins</td>
+
+                     <td>@item.irrigateda</td>
+                     <td>@item.unirrigateda</td>
+                     
+                     <td>@item.sofirri</td>
+                     <td>@item.sofunirri</td>
+
+                     <td>@item.irrigated</td>
+                     <td>@item.unirrigated</td>
+                     
+                        <td>@{
+                                float crop = 0;
+                                if (item.cropins != null)
+                                {
+                                    crop = (item.irrigated + item.unirrigated) * float.Parse(item.cropins.Replace('%', ' ').Trim()) / 100;
+                                    cropinsu = cropinsu + crop;
+                                    kharifCC  = kharifCC + (item.irrigated + item.unirrigated);
+                                    cropcomponent = cropcomponent + (item.irrigated + item.unirrigated);
+                                    crop = crop + (item.irrigated + item.unirrigated);
+                                    kharifElig = kharifElig + crop;
+                                    irriarea1 = irriarea1 + item.irrigateda;
+                                    unirriarea1 = unirriarea1 + item.unirrigateda;
+                                }
+                                
+                            }
+                            @crop</td>
+                </tr>
+                slno++;
+               }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">Total </td>
+                    <td>@irriarea1</td>
+                    <td>@unirriarea1</td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" class="text-center"><b>@kharifCC</b></td>
+                    <td><b>@kharifElig</b></td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+
+     @if (((List<KCCElig>)ViewBag.Rabi).Count > 0)
+    {
+          <table class="table table-bordered table-sm border-dark">
+        <thead>
+            <tr>
+                <th colspan="4">Rabi Eligibility</th>
+                <th colspan="2">Land Area in Hect</th>
+                <th colspan="2">Scale of Finance</th>
+                <th colspan="2">Eligibility</th>
+            </tr>
+            <tr>
+              <th>S.No.</th>
+                <th>District</th>
+                <th>Crop</th>
+                <th>Crop Insurance</th>
+               
+                <th>Irrigated Area</th>
+                <th>UnIrrigated Area</th>
+                 <th>Irrigated </th>
+                <th>UnIrrigated </th>
+                
+                <th>Irrigated Amt </th>
+                <th>UnIrrigated Amt</th>
+                <th>Total Amt</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+                irriarea1 = 0;
+                unirriarea1 = 0;
+                
+            }
+                @foreach (var item in (List<KCCElig>)ViewBag.Rabi)
+               {
+                   <tr>
+                    <td>@slno</td>
+                     <td>@item.District</td>
+                     <td>@item.Crop</td>
+                     <td>@item.cropins</td>
+
+                     <td>@item.irrigateda</td>
+                     <td>@item.unirrigateda</td>
+                     
+                     <td>@item.sofirri</td>
+                     <td>@item.sofunirri</td>
+
+                     <td>@item.irrigated</td>
+                     <td>@item.unirrigated</td>
+                        <td>@{
+                                float crop = 0;
+                                if (item.cropins != null)
+                                {
+                                    crop = (item.irrigated + item.unirrigated) * float.Parse(item.cropins.Replace('%', ' ').Trim()) / 100;
+                                    cropinsu = cropinsu + crop;
+                                    rabiCC = rabiCC + (item.irrigated + item.unirrigated);
+                                    cropcomponent = cropcomponent + (item.irrigated + item.unirrigated);
+                                    crop = crop + (item.irrigated + item.unirrigated);
+                                    rabiElig = rabiElig + crop;
+                                    irriarea1 = irriarea1 + item.irrigateda;
+                                    unirriarea1 = unirriarea1 + item.unirrigateda;
+                                }
+                                 
+                            }
+                            @crop</td>
+                </tr>
+                slno++;
+               }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">Total </td>
+                    <td>@irriarea1</td>
+                    <td>@unirriarea1</td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" class="text-center"><b>@rabiCC</b></td>
+                    <td><b>@rabiElig</b></td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+
+      @if (((List<KCCElig>)ViewBag.Summer).Count > 0)
+    {
+          <table class="table table-bordered table-sm border-dark">
+        <thead>
+            <tr>
+                <th colspan="4">Summer Crops Eligibility</th>
+                 <th colspan="2">Land Area in Hect</th>
+                <th colspan="2">Scale of Finance</th>
+                <th colspan="2">Eligibility</th>
+            </tr>
+            <tr>
+               <th>S.No.</th>
+                <th>District</th>
+                <th>Crop</th>
+                <th>Crop Insurance</th>
+               
+                <th>Irrigated Area</th>
+                <th>UnIrrigated Area</th>
+                 <th>Irrigated </th>
+                <th>UnIrrigated </th>
+                
+                <th>Irrigated Amt </th>
+                <th>UnIrrigated Amt</th>
+                <th>Total Amt</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+                irriarea1 = 0;
+                unirriarea1 = 0;
+            }
+                @foreach (var item in (List<KCCElig>)ViewBag.Summer)
+               {
+                   <tr>
+                    <td>@slno</td>
+                     <td>@item.District</td>
+                     <td>@item.Crop</td>
+                     <td>@item.cropins</td>
+
+                     <td>@item.irrigateda</td>
+                     <td>@item.unirrigateda</td>
+                     
+                     <td>@item.sofirri</td>
+                     <td>@item.sofunirri</td>
+
+                     <td>@item.irrigated</td>
+                     <td>@item.unirrigated</td>
+                        <td>@{
+                                var crop = 0;
+                                if (item.cropins != null)
+                                {
+                                crop = (item.irrigated + item.unirrigated) * int.Parse(item.cropins.Replace('%', ' ').Trim()) / 100;
+                                cropinsu = cropinsu + crop;
+                                summerCC = summerCC + (item.irrigated + item.unirrigated);
+                                cropcomponent = cropcomponent + (item.irrigated + item.unirrigated);
+                                crop = crop + (item.irrigated + item.unirrigated);
+                                summerElig = summerElig + crop;
+                                 irriarea1 = irriarea1 + item.irrigateda;
+                                unirriarea1 = unirriarea1 + item.unirrigateda;
+                                }
+
+                                
+                            }
+                            @crop</td>
+                </tr>
+                slno++;
+               }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">Total </td>
+                    <td>@irriarea1</td>
+                    <td>@unirriarea1</td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" class="text-center"><b>@summerCC</b></td>
+                    <td><b>@summerElig</b></td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+    <table class="table table-bordered table-sm border-dark">
+        <tr>
+            <td>KCC Limit Calculation</td>
+        </tr>
+        <tr>
+            <td>Year</td>  
+            <td>Crop Component  </td>
+            <td>10% Farm Maintenance & Post Harvest  </td>
+            <td>20% Consumption </td>
+            <td>Crop Insurance </td>
+            
+            @if (Model.LoanScheme == "KCC-20")
+            {
+                <td>Additional Finance 20%</td>
+            }
+            <td>Other Insurance </td>
+            
+            <td>Total Limit</td>
+            <td>As Per Application</td>
+        </tr>
+        @for (var i = 1; i < 6; i++)
+       {
+           <tr>
+               
+               <td>@i Year</td>  
+            <td>@cropcomponent  </td>
+            <td> @Math.Round((cropcomponent * .1),2)  </td>
+            <td> @Math.Round((cropcomponent * .2),2) </td>
+            <td> @(cropinsu) </td>
+            
+                @if (Model.LoanScheme == "KCC-20")
+                    { <td>
+                       <b>@Math.Round((cropcomponent * .2), 2)</b>
+                        </td>
+                    }
+                
+             <td>
+                 @additionalComponent
+             </td>  
+            <td>
+                    @if (Model.LoanScheme == "KCC-20")
+                    {
+                        yearlyLimit = (decimal)Math.Round((cropcomponent + (cropcomponent * .5) + cropinsu + (double)additionalComponent), 2);
+                        if (i == 5)
+                        {
+                            
+                            finalElig = Math.Round((cropcomponent + (cropcomponent * .5) + cropinsu + (double)additionalComponent), 2);
+                            <b>
+                                @Math.Round((cropcomponent + (cropcomponent * .5) + cropinsu + (double) additionalComponent), 2)    
+                            </b>
+                        }
+                        else
+                        {
+                            <b>@Math.Round((cropcomponent + (cropcomponent * .5) + cropinsu + (double)additionalComponent), 2)    </b>
+                        }
+
+                    }
+                    else
+                    {
+                        yearlyLimit = (decimal)Math.Round((cropcomponent + (cropcomponent * .3) + cropinsu + (double)additionalComponent), 2);
+                        if (i == 5)
+                        {
+                            finalElig = Math.Round((cropcomponent + (cropcomponent * .3) + cropinsu + (double)additionalComponent), 2);
+
+                             <b >@Math.Round((cropcomponent + (cropcomponent * .3) + cropinsu + (double)additionalComponent), 2)    </b>
+                        }
+                        else
+                        {
+                            <b>@Math.Round((cropcomponent + (cropcomponent * .3) + cropinsu + (double)additionalComponent), 2)</b>
+                        }
+
+                        
+                    }
+
+                </td>
+            @{
+                    cropcomponent = Math.Round(cropcomponent * 1.1,0) ;
+               }
+               <td>
+                   @Math.Round(Math.Min(yearlyLimit,(applKCC + additionalComponent)),0)
+               </td>
+           </tr>
+       }
+        
+       <tr>
+           <td>Eligibility</td>
+           <td id="eliAmt">
+               
+              @Math.Round(Math.Min((decimal)finalElig,(applKCC + additionalComponent)),0)
+           </td>
+       </tr>
+    </table>
+
+       
+        </div>
+            

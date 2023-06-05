@@ -1,0 +1,101 @@
+﻿@model List<Application>
+@inject CustomIDataProtection _protector
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<string> ls = new List<string>();
+    ls.Add("PL");
+    ls.Add("Car");
+    ls.Add("HL");
+    ls.Add("PL-Ag");
+    ls.Add("Express");
+    ls.Add("PL-Express");
+    ls.Add("PL-SECL");
+    ls.Add("KCC");
+}
+
+<div class="container">
+     <div class="alert alert-danger" role="alert" style="margin-top:5px;">
+             @ViewBag.Message
+    </div>
+    <table class="table table-bordered table-sm" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    Application No
+                </th>
+                <th>
+                    Branch 
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Applicant Type
+                </th>
+                <th>
+                    Scheme
+                </th>
+                <th>
+                    Purpose
+                </th>
+                <th>
+                    Sanction Date
+                </th>
+                
+                <th>
+                    Sanctioned By
+                </th>
+                <th>Control Date</th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            @foreach(var x in Model)
+            {
+                <tr>
+                    <td><a href="/LoanFlow/Application/@_protector.Decode(x.Id.ToString())">@x.Id</a></td>
+                    <td>@x.Branch.BranchName (@x.Branch.Id)</td>
+                    <td>@x.ApplicantShortName</td>
+                    
+                    <td>@x.TypeOfApplicant</td>
+                    <td>@x.LoanScheme</td>
+                    <td>@x.Purpose</td>
+                 <td>@x.SanctionedDate.Value.ToString("dd-MM-yyyy")</td>
+                    <td>@x.SanctionedLevel</td>
+                    <td>
+                         @x.ControlledDate.Value.ToString("dd-MM-yyyy") 
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section scripts
+{
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <script src="~/js/datatable-button.js" asp-append-version="true"></script>
+    <script src="~/js/html5btn.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+                    $('#myTable').DataTable({dom: 'Bfrtip',buttons: ['csv', 'pdf']});
+        } );
+    function sendToControl(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+           
+           window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=SendToControl';
+             
+            
+        }
+       
+    }
+ 
+ 
+</script>
+}

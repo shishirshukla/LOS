@@ -1,0 +1,252 @@
+﻿@model Application
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    decimal kmRun = Model.TPLDetails.TripsPerDay * Model.TPLDetails.UsePerTrip * Model.TPLDetails.WorkingDaysInMonth * 12;
+    var tireExpense = (kmRun / Model.TPLDetails.TireReplacementPeriod) * Model.TPLDetails.TireReplacementCost;
+    var fuelExpense = (kmRun / Model.TPLDetails.Mileage) * Model.TPLDetails.FuelCost;
+    var serviceCost = (kmRun / 1000) * Model.TPLDetails.ServiceCost;
+    var otherCost = (kmRun / 1000) * Model.TPLDetails.OtherCost;
+    var yearlyIncome = Model.TPLDetails.TripsPerDay * Model.TPLDetails.WorkingDaysInMonth * 12 * Model.TPLDetails.ReceiptPerTrip;
+    var yearlyExpense = tireExpense + fuelExpense + serviceCost + otherCost + Model.TPLDetails.Insurance + Model.TPLDetails.DriverCost + Model.TPLDetails.Taxes;
+    List<Payment> ll = ViewBag.RepaySchedule;
+    var dscr = Math.Round((((yearlyIncome - yearlyExpense) + (12 * Model.Applicants.Sum(a => a.AddlIncome))) / (decimal)(12 * Math.Round((ll.First().Interest + ll.First().Principal), 0))), 2);
+}
+
+
+
+
+<div class="border border-dark">
+    <b>Transport Loan Details</b>
+    <br/>
+    <table class="table table-bordered table-sm">
+        <tr>
+            <td class="font-weight-bold">Manufacturer</td>
+            <td>@Model.TPLDetails.Manufacturer</td>
+            <td class="font-weight-bold">Model</td>
+            <td>@Model.TPLDetails.Model</td>
+            <td class="font-weight-bold">Type of Vehichle</td>
+            <td>@Model.TPLDetails.TypeOfVehichle</td>
+            
+        </tr>
+        <tr>
+            
+            <td class="font-weight-bold">
+                 @if (Model.TPLDetails.TypeOfVehichle == "Electric")
+                {
+                     <span>Mileage Per Full Charge (In @Model.TPLDetails.ReferenceUnit)</span>
+                }
+                else
+                {
+                     <span>Mileage Per Ltr (In @Model.TPLDetails.ReferenceUnit)</span>
+                }
+                
+               
+                
+            
+            </td>
+            <td>@Model.TPLDetails.Mileage</td>
+             <td class="font-weight-bold">Trips Per Day</td>
+            <td>@Model.TPLDetails.TripsPerDay</td>
+             <td class="font-weight-bold"> @Model.TPLDetails.ReferenceUnit Per Trip</td>
+            <td>@Model.TPLDetails.UsePerTrip</td>
+
+        </tr>
+          <tr>
+            
+            <td class="font-weight-bold">Receipt Per Trip</td>
+            <td>@Model.TPLDetails.ReceiptPerTrip</td>
+             <td class="font-weight-bold">Working Days Per Month</td>
+            <td>@Model.TPLDetails.WorkingDaysInMonth</td>
+             <td class="font-weight-bold"> Yearly Receipts</td>
+            <td> Rs. @(yearlyIncome) </td>
+
+        </tr>
+        <tr>
+            
+            <td class="font-weight-bold">
+                @if (Model.TPLDetails.TypeOfVehichle == "Electric")
+                {
+                    <span>Cost Per Full Charge </span>
+                }
+                else
+                {
+                    <span>Fuel Price Per Litre </span>
+                }
+
+                
+            </td>
+            <td>@Model.TPLDetails.FuelCost</td>
+             <td class="font-weight-bold">Service Cost Per 1000 @Model.TPLDetails.ReferenceUnit</td>
+            <td>@Model.TPLDetails.ServiceCost</td>
+             <td class="font-weight-bold"> Other Cost (Oil , Mobil etc)  Per 1000 @Model.TPLDetails.ReferenceUnit</td>
+            <td> @Model.TPLDetails.OtherCost </td>
+
+        </tr>
+        <tr>
+            
+            <td class="font-weight-bold">Tire Change Life (In KM)</td>
+            <td>@Model.TPLDetails.TireReplacementPeriod</td>
+             <td class="font-weight-bold">Tire Change Cost (All tires)</td>
+            <td>@Model.TPLDetails.TireReplacementCost</td>
+             <td class="font-weight-bold"> Driver Expenses (Yearly)</td>
+            <td> @Model.TPLDetails.DriverCost </td>
+
+        </tr>
+        <tr>
+            
+            <td class="font-weight-bold">Insurance Expense (Yearly)</td>
+            <td>@Model.TPLDetails.Insurance</td>
+             <td class="font-weight-bold">Taxes (Yearly)</td>
+            <td>@Model.TPLDetails.Taxes</td>
+             <td class="font-weight-bold"> Yearly Run in @Model.TPLDetails.ReferenceUnit</td>
+            <td> @kmRun  </td>
+
+        </tr>
+         <tr>
+            
+            <td class="font-weight-bold">Tire Replacement Expense (Yearly)</td>
+            <td>@tireExpense</td>
+             <td class="font-weight-bold">Fuel Expense (Yearly)</td>
+            <td>@fuelExpense</td>
+             <td class="font-weight-bold"> Service Expense (Yearly)</td>
+            <td> @serviceCost  </td>
+
+        </tr>
+         <tr>
+            
+            <td class="font-weight-bold">Other Expense (Yearly)</td>
+            <td>@otherCost</td>
+             <td class="font-weight-bold">Yearly Expenses</td>
+            <td>@yearlyExpense</td>
+             <td class="font-weight-bold"> Gross Profit</td>
+            <td> @(yearlyIncome - yearlyExpense)  </td>
+
+        </tr>
+              
+       
+    </table>
+    @if (ViewBag.VT == "No")
+    {
+        <table class="table teble-bordered table-sm">
+        <thead>
+            <tr>
+                <td>S.No.</td>
+                <td>Particulars</td>
+                <td>Amount (In Rs.)</td>
+                @*<td>2nd Year</td>
+                <td>3rd Year</td>
+                <td>4th Year</td>
+                <td>5th Year</td>*@
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1.</td>
+                <td>Gross Profit</td>
+                <td>@(yearlyIncome - yearlyExpense)</td>
+                @*<td>@(yearlyIncome - yearlyExpense)</td>
+                <td>@(yearlyIncome - yearlyExpense)</td>
+                <td>@(yearlyIncome - yearlyExpense)</td>
+                <td>@(yearlyIncome - yearlyExpense)</td>*@
+            </tr>
+            <tr>
+                <td>2.</td>
+                <td>Depriciation</td>
+                <td>@Math.Round((Model.ProjectCost.Sum(a=> a.Cost) * (decimal)0.15),0)</td>
+               @* <td>@(Model.ProjectCost.Sum(a=> a.Cost) * (decimal)0.85 * (decimal)0.15)</td>
+                <td>@(Model.ProjectCost.Sum(a=> a.Cost) * (decimal)0.85 * (decimal)0.15 * (decimal)0.15)</td>
+                <td>@(Model.ProjectCost.Sum(a=> a.Cost) * (decimal)0.85 * (decimal)0.15 * (decimal)0.15 * (decimal)0.15)</td>
+                <td>@(Model.ProjectCost.Sum(a=> a.Cost) * (decimal)0.85 * (decimal)0.15 * (decimal)0.15 * (decimal)0.15 * (decimal)0.15)</td>
+                
+*@
+            </tr>
+            <tr>
+                <td>3.</td>
+                <td>Interest Expense</td>
+                <td>@Math.Round(ll.Take(12).Sum(a=> a.Interest),0)</td>
+              @*  <td>@ll.GetRange(12,12).Sum(a=> a.Interest)</td>
+                <td>@ll.GetRange(24,12).Sum(a=> a.Interest)</td>
+                <td>@ll.GetRange(36,12).Sum(a=> a.Interest)</td>
+                <td>
+                    @if (ll.Count > 48)
+                    { 
+                        ll.GetRange(48, 12).Sum(a => a.Interest);
+                    }
+
+                 </td>*@
+            </tr>
+            <tr>
+                <td>4.</td>
+                <td>Net Profit</td>
+                <td>@(Math.Round(yearlyIncome - yearlyExpense,0) - Math.Round((decimal)ll.Take(12).Sum(a=> a.Interest),0) - Math.Round((Model.ProjectCost.Sum(a=> a.Cost) * (decimal)0.15),0))</td>
+              @*  <td>@ll.GetRange(12,12).Sum(a=> a.Interest)</td>
+                <td>@ll.GetRange(24,12).Sum(a=> a.Interest)</td>
+                <td>@ll.GetRange(36,12).Sum(a=> a.Interest)</td>
+                <td>
+                    @if (ll.Count > 48)
+                    { 
+                        ll.GetRange(48, 12).Sum(a => a.Interest);
+                    }
+
+                 </td>*@
+            </tr>
+            <tr>
+                <td>5.</td>
+                <td>Other Income</td>
+                <td>@(12*Model.Applicants.Sum(a=> a.AddlIncome))</td>
+              @*  <td>@ll.GetRange(12,12).Sum(a=> a.Interest)</td>
+                <td>@ll.GetRange(24,12).Sum(a=> a.Interest)</td>
+                <td>@ll.GetRange(36,12).Sum(a=> a.Interest)</td>
+                <td>
+                    @if (ll.Count > 48)
+                    { 
+                        ll.GetRange(48, 12).Sum(a => a.Interest);
+                    }
+
+                 </td>*@
+            </tr>
+            <tr>
+                <td>6.</td>
+                <td>Repayment Obligation</td>
+                <td>@(12*Math.Round((ll.First().Interest + ll.First().Principal),0)) </td>
+                @*<td>@(ll.First().Interest + ll.First().Principal)</td>
+                <td>@(ll.First().Interest + ll.First().Principal)</td>
+                <td>@(ll.First().Interest + ll.First().Principal)</td>
+                <td>@(ll.First().Interest + ll.First().Principal)</td>*@
+            </tr>
+            <tr>
+                <td>7.</td>
+                <td>DSCR</td>
+                <td id="dscr">@Math.Round((((yearlyIncome - yearlyExpense) + (12*Model.Applicants.Sum(a=> a.AddlIncome))) / (decimal)(12*Math.Round((ll.First().Interest + ll.First().Principal),0))),2)</td>
+                @*<td></td>
+                <td></td>
+                <td></td>
+                <td></td>*@
+            </tr>
+            <tr>
+                <td colspan="2">Eligibility</td>
+                <td  id="eliAmt">
+                        @if (dscr >= (decimal)1.75)
+                        {
+                            @Model.LoanApplications.Sum(a=> a.AppliedAmount)  ;
+                        }
+                        else
+                        {
+                            int k= 0 ;
+                           @k;
+                        }
+
+           </td>
+
+            </tr>
+        </tbody>
+    </table>
+    }
+
+    
+       
+</div>
+            
