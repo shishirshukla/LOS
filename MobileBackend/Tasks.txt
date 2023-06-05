@@ -1,74 +1,28 @@
-﻿1. Add function for Send To Control
-2. Add Function to add Remarks
-3. Report based on Date 
+﻿"EmandateKey": "",
+  "EmandateApp": "",
+  "Cibil": "grant_type=password&username=BR0460GO01*****&password=*********",
+  "aa_org": "crgbrrb-fiu",
+  "aa_id": "****************",
+  "aa_secret": "*****************",
+  "aa_ident": "cgbank.in",
 
-
- iziToast.success({
-                    title: 'Success!',
-                    message: 'OTP Sent successfully to xxxxxxx'+mobile.substring(7,mobile.length),
-                    position: 'topRight'
-                });
-
-
-
-                function saveAllData()
-    {
-        $('#landTbl tr').each(function(i,e){
-            var id = $(this).attr('id');
-            if(validateRow(id)){
-                $(e).removeClass('table-info');
-                $(e).removeClass('table-danger');
-                $(e).addClass('table-info');
-            }
-            else
-            {
-                $(e).removeClass('table-info');
-                $(e).removeClass('table-danger');
-                 $(e).addClass('table-danger');
-            }
-        });
-        if($('#landTbl .table-danger').length > 0)
-        {
-            alert('Please verify red colored rows.');
-            return;
-        }
-         $('#landTbl tr').each(function(i,e){
-            var a = $(this).attr('id');
-            var totalRakba = parseFloat($('#rk-'+ a).text());
-            var irrigated = parseFloat($('#irri-'+ a).val());
-            var unirrigated = parseFloat($('#unirri-'+ a).val());
-            var fasalbima = $('#ci-'+a).text();
-            var crop =  $('#crop-'+a).find(":selected").val().trim();
-           var season =  $('#season').find(":selected").text().trim();
-           var irrisof =  parseFloat($('#sofir-'+ a).text());
-           var unirrisof =  parseFloat($('#sofunir-'+ a).text());
-           //console.log(crop);
-           if(crop != '-1')
-           {
-               var formData = new FormData(document.getElementById("frm1"));
-                formData.append('AccountNo', $('#ApplicationId').val());
-                formData.append('KCCExistingLandId',a);
-                formData.append('IrrigatedArea',irrigated);
-                formData.append('UnIrrigatedArea',unirrigated);
-                formData.append('SOFIrrigatedArea',irrisof);
-                formData.append('SOFUnIrrigatedArea',unirrisof);
-                formData.append('Crop',crop);
-                formData.append('Season',season);
-                formData.append('CropInsurance',fasalbima);     
-                $.ajax({
-                    url: "/LoanFlow/SaveKCCCropExisting",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    success: function(data){
-                        $(e).removeClass('table-info');
-                        $(e).addClass('table-success');
-                    }
-                });
-           }
-        });
-       
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
     }
-    }
-  
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "ConnStr": "Host=localhost;Username=postgres;Password=**********;Database=DailyShadow",
+    "ConnStr1": "Host=10.43.104.133;Username=shishir;Password=*********;Database=Extract"
+  },
+  "UseUrls": {
+    "Prod": "http://::6000"
+  },
+  "JWT": {
+    "ValidAudience": "http://localhost:4200",
+    "ValidIssuer": "https://localhost:5001",
+    "Secret": "DevelopedByShishirShuklaITDepartmentCRGB"
+  }
