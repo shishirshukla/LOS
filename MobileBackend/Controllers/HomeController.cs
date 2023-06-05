@@ -73,8 +73,8 @@ namespace MobileBackend.Controllers
                 request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
                 request1.AddHeader("Connection", "keep-alive");
 
-                request1.AddHeader("x-parse-rest-api-key", "49eba9893d6ca293d80ac67d2d645bd5");
-                request1.AddHeader("x-parse-application-id", "chhattisgarh-rajya-gramin-bank_enach_production");
+                request1.AddHeader("x-parse-rest-api-key", _configuration["EmandateKey"]);
+                request1.AddHeader("x-parse-application-id", _configuration["EmandateApp"]);
                 request1.AddHeader("Content-Type", "application/json");
                 request1.AddBody(js, "application/json");
 
@@ -105,8 +105,8 @@ namespace MobileBackend.Controllers
                 request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
                 request1.AddHeader("Connection", "keep-alive");
 
-                request1.AddHeader("x-parse-rest-api-key", "49eba9893d6ca293d80ac67d2d645bd5");
-                request1.AddHeader("x-parse-application-id", "chhattisgarh-rajya-gramin-bank_enach_production");
+                request1.AddHeader("x-parse-rest-api-key", _configuration["EmandateKey"]);
+                request1.AddHeader("x-parse-application-id", _configuration["EmandateApp"]);
                 request1.AddHeader("Content-Type", "application/json");
                 request1.AddBody(js, "application/json");
 
@@ -734,7 +734,7 @@ namespace MobileBackend.Controllers
             request1.AddHeader("MediaType", "application/json");
             request1.AddHeader("Content-Type", "");
             request1.AddHeader("Cookie", "NSC_VBU_UVTTQM_ED_UVDM_EDQpsubm=14b5a3d9d9b5b9058d0b5e99152e05d07f58eecc38d1438e01f044a4535271aa94f4c055");
-            var body = @"grant_type=password&username=BR0460GO01_PROD001&password=Admin@1234567";
+            var body = _configuration["Cibil"];
             request1.AddParameter("text/plain", body, ParameterType.RequestBody);
             var token_response = await client.ExecuteAsync(request1,Method.Post);
             string token = token_response.Content.Split(':')[1].Split(',')[0].Replace('"', ' ').Trim();

@@ -1496,10 +1496,10 @@ namespace MobileBackend.Controllers
             var request1 = new RestRequest("https://crgbrrb.moneyone.in/v2/requestconsent");
 
             var reqId = Guid.NewGuid().ToString().Replace("-", "");
-            request1.AddHeader("client_id", "b310593699f3fc5200a0643fc47a45887f9021fc");
-            request1.AddHeader("client_secret", "b179de9bb16c99a1c094cd4103158e4ddbedcc7c");
-            request1.AddHeader("organisationId", "crgbrrb-fiu");
-            request1.AddHeader("appIdentifier", "cgbank.in");
+            request1.AddHeader("client_id", _configuration["aa_id"]);
+            request1.AddHeader("client_secret", _configuration["aa_secret"]);
+            request1.AddHeader("organisationId", _configuration["aa_secret"]);
+            request1.AddHeader("appIdentifier", _configuration["aa_ident"]);
             //var content = new StringContent("{\n  \"partyIdentifierType\": \"MOBILE\",\n  \"partyIdentifierValue\": \"" + mobile + "\",\n  \"productID\": \"PL2\",\n  \"accountID\": \"" + reqId + "\",\n  \"vua\": \"" + mobile + "@onemoney\"\n}", null, "application/json");
             AARequest aa = new AARequest();
             aa.partyIdentifierValue = mobile;
