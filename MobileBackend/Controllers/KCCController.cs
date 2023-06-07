@@ -770,6 +770,8 @@ namespace MobileBackend.Controllers
                     }
 
                 }
+            if (b1 != null)
+            {
                 if (b1.Length > 10)
                 {
 
@@ -807,6 +809,8 @@ namespace MobileBackend.Controllers
 
                     state = "B1 Saved";
                 }
+            }
+            
 
 
                 return Ok($"Success {AppId} | {dVillage} | {state} | {b1copy}");

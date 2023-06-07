@@ -154,7 +154,7 @@
         <table  class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>
-                <th colspan="7">eMandates   <a class="btn btn-sm btn-danger" href="/LoanFlow/AddMandate/@Model.Id"> Add eMandate</a></th>
+                <th colspan="8">eMandates   <a class="btn btn-sm btn-danger" href="/LoanFlow/AddMandate/@Model.Id"> Add eMandate</a></th>
             </tr>
             <tr>
                 <td>Bank Name</td>
@@ -163,7 +163,8 @@
                 <td>First Collection Date</td>
                 <td>Status</td>
                 <td>Last Run Date</td>
-                <td>LAst Run Status</td>
+                <td>Last Run Status</td>
+                <td></td>
             </tr>
             </thead>  
             <tbody>
@@ -177,6 +178,7 @@
                         <td>@x.mandate_status</td>
                         <td>@x.last_run_date</td>
                         <td>@x.last_run_status</td>
+                        <td><a href="#" onclick="javascript:checkMandate('@x.emandate_id')">Check</a></td>
                     </tr>   
                 }
             </tbody>
@@ -1520,6 +1522,20 @@
             }
             window.location = '/Home/Document?docType=loanForm&AppID=' + a + '&LoanType='+b+'&docId=4';
        }
+
+       function checkMandate(a)
+       {
+            $.ajax({   
+                url: "/LoanFlow/CheckMandateStatus",   
+                type: "GET",   
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
+                data: {emandate_id:a}   
+            }).done(function (data) {
+                    alert(data);
+            });   
+       }
+
+
     function sanction(a)
     {
         if(confirm("Are you sure ?"))

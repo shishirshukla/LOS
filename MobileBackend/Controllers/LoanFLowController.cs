@@ -723,6 +723,79 @@ namespace MobileBackend.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> CheckMandateStatus(string emandate_id)
+        {
+            CheckMandate man = new CheckMandate();
+            man.emandate_id = emandate_id;
+            var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
+            var o1 = new RestClientOptions();
+            o1.Proxy = new WebProxy("10.43.5.6:3128");
+            var client = new RestClient(o1);
+            var request1 = new RestRequest("https://api.signdesk.in/api/live/getemandatestatus");
+            request1.AddHeader("Accept", "*/*");
+            request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
+            request1.AddHeader("Connection", "keep-alive");
+
+            request1.AddHeader("x-parse-rest-api-key", _configuration["EmandateKey"]);
+            request1.AddHeader("x-parse-application-id", _configuration["EmandateApp"]);
+            request1.AddHeader("Content-Type", "application/json");
+            request1.AddBody(js, "application/json");
+
+            var token_response = await client.ExecuteAsync(request1, Method.Post);
+            if (token_response.StatusCode == HttpStatusCode.OK)
+            {
+                var item = _context.Mandates.Where(a=> a.emandate_id == emandate_id).FirstOrDefault();  
+                var st = token_response.Content.ToString();
+                var d = Newtonsoft.Json.JsonConvert.DeserializeObject<MandateCheckResponse>(st);
+                item.mandate_status = d.mandate_status;
+                item.umrn_mandate = d.umrn;
+                _context.Entry(item).State = EntityState.Modified;
+                _context.SaveChanges();
+                return Ok($"Mandate Status is {d.mandate_status}");
+            }
+            return Ok("Status could not be check");
+            
+;        }
+
+
+        [Authorize]
+        public async Task<IActionResult> CheckMandateStatusExisting(string emandate_id)
+        {
+            CheckMandate man = new CheckMandate();
+            man.emandate_id = emandate_id;
+            var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
+            var o1 = new RestClientOptions();
+            o1.Proxy = new WebProxy("10.43.5.6:3128");
+            var client = new RestClient(o1);
+            var request1 = new RestRequest("https://api.signdesk.in/api/live/getemandatestatus");
+            request1.AddHeader("Accept", "*/*");
+            request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
+            request1.AddHeader("Connection", "keep-alive");
+
+            request1.AddHeader("x-parse-rest-api-key", _configuration["EmandateKey"]);
+            request1.AddHeader("x-parse-application-id", _configuration["EmandateApp"]);
+            request1.AddHeader("Content-Type", "application/json");
+            request1.AddBody(js, "application/json");
+
+            var token_response = await client.ExecuteAsync(request1, Method.Post);
+            if (token_response.StatusCode == HttpStatusCode.OK)
+            {
+                var item = _context.ExistingAcMandates.Where(a => a.emandate_id == emandate_id).FirstOrDefault();
+                var st = token_response.Content.ToString();
+                var d = Newtonsoft.Json.JsonConvert.DeserializeObject<MandateCheckResponse>(st);
+                item.mandate_status = d.mandate_status;
+                item.umrn_mandate = d.umrn;
+                _context.Entry(item).State = EntityState.Modified;
+                _context.SaveChanges();
+                return Ok($"Mandate Status is {d.mandate_status}");
+            }
+            return Ok("Status could not be check");
+
+            ;
+        }
+
+
+        [Authorize]
         public async Task<IActionResult> MapLand()
         {
             var u = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -1498,7 +1571,7 @@ namespace MobileBackend.Controllers
             var reqId = Guid.NewGuid().ToString().Replace("-", "");
             request1.AddHeader("client_id", _configuration["aa_id"]);
             request1.AddHeader("client_secret", _configuration["aa_secret"]);
-            request1.AddHeader("organisationId", _configuration["aa_secret"]);
+            request1.AddHeader("organisationId", _configuration["aa_org"]);
             request1.AddHeader("appIdentifier", _configuration["aa_ident"]);
             //var content = new StringContent("{\n  \"partyIdentifierType\": \"MOBILE\",\n  \"partyIdentifierValue\": \"" + mobile + "\",\n  \"productID\": \"PL2\",\n  \"accountID\": \"" + reqId + "\",\n  \"vua\": \"" + mobile + "@onemoney\"\n}", null, "application/json");
             AARequest aa = new AARequest();
@@ -1551,10 +1624,10 @@ namespace MobileBackend.Controllers
             var request1 = new RestRequest("https://crgbrrb.moneyone.in/v2/getconsentslist");
 
             //var reqId = Guid.NewGuid().ToString().Replace("-", "");
-            request1.AddHeader("client_id", "b310593699f3fc5200a0643fc47a45887f9021fc");
-            request1.AddHeader("client_secret", "b179de9bb16c99a1c094cd4103158e4ddbedcc7c");
-            request1.AddHeader("organisationId", "crgbrrb-fiu");
-            request1.AddHeader("appIdentifier", "cgbank.in");
+            request1.AddHeader("client_id", _configuration["aa_id"]);
+            request1.AddHeader("client_secret", _configuration["aa_secret"]);
+            request1.AddHeader("organisationId", _configuration["aa_org"]);
+            request1.AddHeader("appIdentifier", _configuration["aa_ident"]);
             var body = Newtonsoft.Json.JsonConvert.SerializeObject(aac);
             request1.AddBody(body, "application/json");
             var response = await client.ExecuteAsync(request1, Method.Post);

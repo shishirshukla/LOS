@@ -126,6 +126,76 @@ namespace MobileBackend.Controllers
             return Ok();
         }
 
+        public async Task<IActionResult> UpdateUMRN()
+        {
+
+            var mans = _context.Mandates.Where(a => a.api_response_id == "success" && a.mandate_status == "Registered" && a.umrn_mandate == null).ToList();
+            foreach (var item in mans)
+            {
+                CheckMandate man = new CheckMandate();
+                man.emandate_id = item.emandate_id;
+                var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
+                var o1 = new RestClientOptions();
+                o1.Proxy = new WebProxy("10.43.5.6:3128");
+                var client = new RestClient(o1);
+                var request1 = new RestRequest("https://api.signdesk.in/api/live/getemandatestatus");
+                request1.AddHeader("Accept", "*/*");
+                request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
+                request1.AddHeader("Connection", "keep-alive");
+
+                request1.AddHeader("x-parse-rest-api-key", _configuration["EmandateKey"]);
+                request1.AddHeader("x-parse-application-id", _configuration["EmandateApp"]);
+                request1.AddHeader("Content-Type", "application/json");
+                request1.AddBody(js, "application/json");
+
+                var token_response = await client.ExecuteAsync(request1, Method.Post);
+                if (token_response.StatusCode == HttpStatusCode.OK)
+                {
+                    var st = token_response.Content.ToString();
+                    var d = Newtonsoft.Json.JsonConvert.DeserializeObject<MandateCheckResponse>(st);
+                    item.mandate_status = d.mandate_status;
+                    item.umrn_mandate = d.umrn;
+                    _context.Entry(item).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
+
+            }
+
+            var mans1 = _context.ExistingAcMandates.Where(a => a.api_response_id == "success" && a.mandate_status == "Registered" && a.umrn_mandate == null).ToList();
+            foreach (var item in mans1)
+            {
+                CheckMandate man = new CheckMandate();
+                man.emandate_id = item.emandate_id;
+                var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
+                var o1 = new RestClientOptions();
+                o1.Proxy = new WebProxy("10.43.5.6:3128");
+                var client = new RestClient(o1);
+                var request1 = new RestRequest("https://api.signdesk.in/api/live/getemandatestatus");
+                request1.AddHeader("Accept", "*/*");
+                request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
+                request1.AddHeader("Connection", "keep-alive");
+
+                request1.AddHeader("x-parse-rest-api-key", _configuration["EmandateKey"]);
+                request1.AddHeader("x-parse-application-id", _configuration["EmandateApp"]);
+                request1.AddHeader("Content-Type", "application/json");
+                request1.AddBody(js, "application/json");
+
+                var token_response = await client.ExecuteAsync(request1, Method.Post);
+                if (token_response.StatusCode == HttpStatusCode.OK)
+                {
+                    var st = token_response.Content.ToString();
+                    var d = Newtonsoft.Json.JsonConvert.DeserializeObject<MandateCheckResponse>(st);
+                    item.mandate_status = d.mandate_status;
+                    item.umrn_mandate = d.umrn;
+                    _context.Entry(item).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
+
+            }
+
+            return Ok();
+        }
+
         public async Task<IActionResult> Document(string docType , int AppId , string loanType = "", string docId = "")
         {
             HttpClient httpClient = new HttpClient();
