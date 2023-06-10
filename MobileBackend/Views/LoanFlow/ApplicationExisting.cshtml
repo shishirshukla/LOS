@@ -48,7 +48,7 @@
             <td><b>Limit</b></td>
             <td>@Model.OdLimit</td>
             <td><b>Open Date</b></td>
-            <td>@Model.AcOpenDate.ToShortDateString()</td>
+            <td>@Model.AcOpenDate</td>
             
         </tr>
        
@@ -103,7 +103,11 @@
                         
                     </td>
                     <td>
-                        Edit
+                    <form action="/LoanFlow/EditApplicantExisting" method="post">
+                        <input type="hidden" name="Id" value="@x.Id"/>
+                        <button type="submit">Edit</button>
+                    </form>
+                       
                         
                     </td>
                 </tr>

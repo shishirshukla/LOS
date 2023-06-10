@@ -1438,6 +1438,27 @@ namespace MobileBackend.Controllers
             AddLog(applicant.ApplicationId, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", "Add Applicant");
             return RedirectToAction("Application",new {Id =  _protector.Decode(applicant.ApplicationId.ToString())  });
         }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult EditApplicantExisting(int Id)
+        {
+            var app = _context.ExistingApplicant.Find(Id);
+            return View(app);
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EditApplicantExisting(ExistingApplicant applicant)
+        {
+
+             _context.Entry(applicant).State = EntityState.Modified;
+            _context.SaveChanges();
+           // AddLog(applicant.ApplicationId, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", "Edit Applicant :" + applicant.Id);
+            return RedirectToAction("ApplicationExisting", new { Id = applicant.AccountInfoId });
+        }
+
+
+
         [Authorize]
         public IActionResult EditApplicant(int Id)
         {
