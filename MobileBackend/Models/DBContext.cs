@@ -5,6 +5,7 @@ namespace MobileBackend.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<CibilAccounts> CibilAccounts { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<AccountStatments> AccountStatments { get; set; }
         public DbSet<ExistingAcMandate> ExistingAcMandates { get; set; }
@@ -82,6 +83,7 @@ namespace MobileBackend.Models
             builder.Entity<AccountData>().HasNoKey().ToView("AccntDt");
             builder.Entity<VillageMaster>().HasNoKey().ToView("VillMaster");
             builder.Entity<KCCInfo>().HasNoKey().ToView("KccInf");
+            builder.Entity<CibilAccounts>().HasNoKey().ToView("CibilA");
         }
     }
 }

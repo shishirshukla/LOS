@@ -7,6 +7,7 @@
 @{
     int slno = 1;
     bool editable = (bool)ViewBag.Editable;
+    var d = (List<KCCExistingLand>)ViewBag.LandDetails;
 }
 <div class="container">
 
@@ -93,7 +94,7 @@
 
                 <tr>
                     <td>@slno</td>
-                    <td>@x.Salutation @x.Applicant_First_Name @x.Applicant_Middle_Name @x.Applicant_Last_Name @x.Relationship @x.Guardian_Name</td>
+                    <td>@x.Applicant_First_Name @x.Applicant_Middle_Name @x.Applicant_Last_Name @x.Relationship @x.Guardian_Name</td>
                     <td>@x.ExistingCIF</td>
                     <td>@x.Date_Of_Birth</td>
                     <td>@x.Occupation</td>
@@ -119,23 +120,115 @@
     <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>
-                <th colspan="8">Cibil Details (Latest enquiry will be used for calculation)</th>
+                <th colspan="9">Cibil Loan Details</th>
             </tr>
             <tr>
                 <th>S.No.</th>
-                <th>Applicant Name</th>
-                <th>Cibil Score</th>
-                <th>Date</th>
-                <th>Total Accounts</th>
-                <th>Closed Accounts</th>
-                <th>Overdue Accounts</th>
-                <th></th>
-                <th></th>
+                <th>Member Name</th>
+                <th>Account Type</th>
+                <th>Open Date</th>
+                <th>Close Date</th>
+                <th>Current Outstanding</th>
+                <th>Amount Overdue</th>
+                <th>Status</th>
+                <th>Status Date</th>
+                
             </tr>
         </thead>
         <tbody id="cibilTable">
-            
+            @{
+                int sn = 1;
+            }
+            @foreach (var item in (List<CibilAccounts>)ViewBag.Cibil)
+           {
+               <tr>
+                   <td>
+                       @sn
+                   </td>
+                   <td>
+                       @item.member_name
+                   </td>
+                   <td>
+                       @item.acc_type
+                   </td>
+                   <td>
+                       @item.date_open
+                   </td>
+                   <td>
+                       @item.date_close
+                   </td>
+                   <td>
+                       @item.current_bal
+                   </td>
+                   <td>
+                       @item.amt_overdue
+                   </td>
+                   <td>
+                       @item.hist1
+                   </td>
+                   <td>
+                       @item.hist1_date
+                   </td>
+               </tr>
+               sn++;
+           }
         </tbody>
+    </table>
+
+      <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="3"><b>Attached Documents</b></td>
+                <td colspan="2">
+                 
+                    
+                        <a href="#"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">
+ Add 
+</a> 
+                    
+
+                    
+
+</td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    UserId
+                </th>
+                <th>
+                    File Download
+                </th>
+               
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="docTable">
+            @{
+                slno = 1;
+            }
+            @foreach(var x in (List<DocumentLoan>)ViewBag.Documents)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Details </td>
+                    <td>@x.UserId</td>
+                    <td><a href="/@x.FilePath" target="_blank">Download</a></td>
+                    
+                    <td> 
+                       
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
     </table>
 
 
@@ -144,7 +237,7 @@
           <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>
-                <th colspan="2">Agri Land Details</th>
+                <th colspan="2">Agri Land Details (Fetched From Bhuiyan)</th>
                 <th colspan="4">
                    
                 </th>
@@ -164,7 +257,7 @@
             @{
                 int kccCount = 1;
             }
-            @foreach(var x in ViewBag.LandDetails)
+            @foreach(var x in d.Where(a=> a.OtherInfo == null))
             {
                 <tr>
                     <td>@kccCount</td>
@@ -183,6 +276,51 @@
             }
         </tbody>
     </table>
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <th colspan="2">Agri Land Details (From Fasal Bima)</th>
+                <th colspan="4">
+                   
+                </th>
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>Description</th>
+                <th>Irrigated Area</th>
+                <th>Unirrigated Area</th>
+                <th>Total Area </th>
+                
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="kccTable1">
+            @{
+                int kccCount1 = 1;
+                
+            }
+            @foreach(var x in d.Where(a=> a.OtherInfo != null))
+            {
+                <tr>
+                    <td>@kccCount1</td>
+                    <td>@x.OwnerName | District - @x.District | Village - @x.Village | Khasra No - @x.KhasraNo</td>
+                    <td>@x.IrrigatedArea  Hect. </td>
+                    <td>@x.UnIrrigatedArea Hect.</td>
+                    <td>@x.TotalArea Hect. </td>
+                   
+                    <td>@if (editable)
+                        {
+                            <button type="button" class="btn btn-sm btn-warning" onclick="deleteKCC(@x.Id)" >Delete</button>    
+                               
+                        }</td>
+                </tr>
+                kccCount1++;
+            }
+        </tbody>
+    </table>
+
     <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>

@@ -2894,7 +2894,10 @@ namespace MobileBackend.Controllers
             var app = _context.AccountInfo.Find(Id.PadLeft(17,'0'));
 
             app.Applicants = _context.ExistingApplicant.Where(a => a.AccountInfoId == Id.PadLeft(17, '0')).ToList();
-           
+            ViewBag.Documents = _context.DocumentLoan.Where(a => a.AccountNo == Id).ToList();
+            ViewBag.Cibil = _context.CibilAccounts.FromSqlRaw($"SELECT member_ref, member_name, acc_number, acc_type, date_open, date_close, high_credit, current_bal, amt_overdue, tenure, emi, hist1, hist1_date FROM cibil_soft.accounts where member_ref = '{Id.PadLeft(17, '0').Substring(0,16)}'").ToList();
+            var z = _context.KeyValues.FromSqlRaw($"SELECT   enquirycontrol code, cname value  FROM cibil_soft.header where memberref = '{Id.PadLeft(17, '0').Substring(0, 16)}'").FirstOrDefault();
+            app.Applicants.FirstOrDefault().CreditScore = z.code;
             if (app.ProductDesc.Contains("KCC"))
             {
                 ViewBag.LandDetails = _context.KCCExistingLand.Include(a=> a.KCCCrops).Where(a => a.AccountNo == Id).ToList();

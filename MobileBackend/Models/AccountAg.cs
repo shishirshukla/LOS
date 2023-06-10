@@ -5,6 +5,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MobileBackend.Models
 {
+
+
+    public class CibilAccounts
+    {
+        public string member_ref { get; set; }
+        public string member_name { get; set; }
+        public string acc_number { get; set; }
+        public string acc_type { get; set; }
+        public string date_open { get; set; }
+        public string date_close { get; set; }
+        public Single high_credit { get; set; }
+        public Single current_bal { get; set; }
+        public Single amt_overdue { get; set; }
+        public Single tenure { get; set; }
+        public Single emi { get; set; }
+        public string hist1 { get; set; }
+        public string hist1_date { get; set; }
+        //public Single writeoff { get; set; }
+
+    }
     public class MandateCheckResponse
     {
         public string status { get; set; }
