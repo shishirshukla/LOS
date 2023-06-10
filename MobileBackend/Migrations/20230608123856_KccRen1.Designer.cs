@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MobileBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230605170626_First")]
-    partial class First
+    [Migration("20230608123856_KccRen1")]
+    partial class KccRen1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1841,6 +1841,9 @@ namespace MobileBackend.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Product")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RenFY")
                         .HasColumnType("text");
 
                     b.Property<int>("SanctionedLimit")

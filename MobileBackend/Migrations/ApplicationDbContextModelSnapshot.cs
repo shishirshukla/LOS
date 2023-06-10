@@ -1841,6 +1841,9 @@ namespace MobileBackend.Migrations
                     b.Property<string>("Product")
                         .HasColumnType("text");
 
+                    b.Property<string>("RenFY")
+                        .HasColumnType("text");
+
                     b.Property<int>("SanctionedLimit")
                         .HasColumnType("integer");
 

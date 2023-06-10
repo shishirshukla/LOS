@@ -542,6 +542,7 @@ namespace MobileBackend.Models
         public int AppliedAmt { get; set; }
         public string AcNumber { get; set; }
         public string Product { get; set; }
+        public string RenFY { get; set; }
         public DateTime AcOpenDate { get; set; }
         public int CBSLimit { get; set; }
 

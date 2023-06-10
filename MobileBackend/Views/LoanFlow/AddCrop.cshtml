@@ -56,9 +56,17 @@
                      
 
                    </td>
-                   <td id="sof-@item.Id">
-                      Irri - <span id="sofir-@item.Id"></span> |  UnIrri - <span id="sofunir-@item.Id"></span> | Fasal Bima - <span id="ci-@item.Id"></span>
-                   </td>
+                   
+                        @if (ViewBag.EditableSof == true)
+                        {
+                            <td id="sof-@item.Id">Sof Irri - <input id="sofir-@item.Id"/> |  UnIrri SOF - <input id="sofunir-@item.Id"/> | Fasal Bima - <input id="ci-@item.Id"/>    </td>
+                        }
+                        else
+                        {
+                            <td id="sof-@item.Id">Irri - <span id="sofir-@item.Id"></span> |  UnIrri - <span id="sofunir-@item.Id"></span> | Fasal Bima - <span id="ci-@item.Id"></span>  </td>   
+                        }
+                        
+                   
                </tr>
            }
         </tbody>

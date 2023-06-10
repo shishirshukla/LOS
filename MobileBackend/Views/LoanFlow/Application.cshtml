@@ -228,9 +228,9 @@
         </tbody>
     </table>
 
-
     
-     <table class="table table-bordered table-sm" style="padding-top:5px;">
+    @if (Model.LoanScheme != "KCC-Renewal" && Model.LoanScheme != "KCC-20-Renewal")
+    { <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>
                 <th colspan="8">Account Statement Through Aggregator (Other Than our Bank)</th>
@@ -272,7 +272,9 @@
             }
 
         </tbody>
-        </table>
+        </table>}
+    
+     
 
 
      <table class="table table-bordered table-sm" style="padding-top:5px;">
@@ -696,7 +698,12 @@
 
     </table>
     }
-        <table class="table table-bordered table-sm" style="padding-top:5px;">
+    @if (Model.LoanScheme != "KCC-Renewal" && Model.LoanScheme != "KCC-20-Renewal")
+    { }
+
+        @if (Model.LoanScheme != "KCC-Renewal" && Model.LoanScheme != "KCC-20-Renewal")
+    {
+           <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>
                 <td colspan="6"><b>Security</b></td>
@@ -704,8 +711,8 @@
                    @if (editable)
                     {
                                         <a href="/LoanFlow/AddSecurity/@Model.Id" class="btn btn-primary btn-sm" >
- Add 
-</a>                    
+                    Add 
+                </a>                    
                     }
                </td>
             </tr>
@@ -759,6 +766,12 @@
         </tbody>
 
     </table>
+    }
+
+
+
+
+     
     
     <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
@@ -946,7 +959,70 @@
     </table>
     }
 
-        @if (Model.LoanScheme.Contains("KCC"))
+
+    @if (Model.LoanScheme.Contains("-Renewal"))
+    {
+          <table  class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="4"><b>Additional Details (KCC Renewal Loan)</b></td>
+                <td>
+                    @if (editable)
+                    {
+                        <a href="/LoanFlow/AddRemark?formName=application&Id=@Model.Id&view=KCC-Renewal" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Add</a>
+                        <a href="/LoanFlow/AddRemarkList?formName=application&Id=@Model.Id&view=KCC-Renewal" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Add Details (List View)</a>
+                    }
+                    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Type
+                </th>
+                 <th>
+                    User Id
+                </th>
+                <th>
+                    Remark
+                </th>
+               <th></th>
+               
+                
+            </tr>
+        </thead>
+        <tbody id="HLRemarks">
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Remarks.Where(a=> a.SpecialRemark == "Yes"))
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td id="@x.TypeOfRemark.Replace(' ','_')">@x.TypeOfRemark </td>
+                     <td>@x.UserId </td>
+                    <td>@x.Statment</td>
+                     <td>  @if (editable)
+                        {
+                            <button type="button" class="btn btn-sm btn-warning" onclick="deleteRemark(@x.Id)" >Delete</button>    
+                               
+                        }
+                       </td>
+                   
+                     
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+    }
+
+
+    @if (Model.LoanScheme.Contains("KCC") && !Model.LoanScheme.Contains("-Renewal"))
     {
           <table  class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
@@ -1066,6 +1142,12 @@
         </tbody>
 
     </table>
+
+    @if (Model.LoanScheme != "KCC-Renewal" && Model.LoanScheme != "KCC-20-Renewal")
+    {
+        
+
+
     <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>
@@ -1109,7 +1191,13 @@
         </tbody>
 
     </table>
-       <table class="table table-bordered table-sm" style="padding-top:5px;">
+    }
+
+
+
+    @if (Model.LoanScheme != "KCC-Renewal" && Model.LoanScheme != "KCC-20-Renewal")
+    {
+        <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>
             <tr>
                 <td><b>Inspection Reports</b></td>
@@ -1172,6 +1260,13 @@
         </tbody>
 
     </table>
+
+    }
+
+
+
+
+       
 
     @if (Model.Status == "Sanctioned")
     {

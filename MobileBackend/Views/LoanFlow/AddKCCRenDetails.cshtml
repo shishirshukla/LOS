@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemark" >
+
+         <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-4 flex-column d-flex">
+    <label >Other Details</label>
+    <select class="form-control-sm " name="TypeOfRemark" id="SecondaryRemark">
+                    <option data-id="0"  >--</option>
+                    <option data-id="pHL" >Change in Land Holding from Time of Sanction</option>
+                    <option data-id="proType" >Change in Cropping Pattern from Time of Sanction</option>
+                    
+                    <option data-id="repType">Conduct of Account </option> 
+                    
+        
+       
+    </select>
+  </div>
+  <div class="form-group col-sm-8 flex-column d-flex">
+    <label >Value</label>
+   
+   <textarea rows="3" class="form-control hide1 hide2" name="Statment"  placeholder="Remarks"></textarea>
+   <select id="pHL" class="hide1" name="" style="display:none">
+       <option>Yes</option>
+       <option>No</option>
+       
+      
+   </select>
+
+   <select id="proType" class="hide1" name="" style="display:none">
+        <option>Yes</option>
+       <option>No</option>
+   </select>
+     <select id="repType" class="hide1" name="" style="display:none">
+        <option>Satifactory</option>
+       <option>Not Satisfactory</option>
+   </select>
+   
+
+
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>

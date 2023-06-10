@@ -195,6 +195,13 @@ namespace MobileBackend.Controllers
         public async Task<IActionResult> KCCRenewal(KCCRenewal r )
         {
             CustomerMaster c = new CustomerMaster();
+            var q = _context.Applications.Include(a=> a.Renewal).Where(a => a.MappedCCAccount == r.AcNumber && a.Renewal.RenFY == r.RenFY).FirstOrDefault();
+            if (q != null)
+            {
+                return RedirectToAction("Application", new { Id = _protector.Decode(q.Id.ToString()) });
+            }
+            
+
             HttpClient httpClient = new HttpClient();
             var d = await httpClient.GetAsync($"http://10.80.1.135/Mobile/SearchCustomer?acc={r.AcNumber}");
             if (d.IsSuccessStatusCode)
@@ -211,6 +218,8 @@ namespace MobileBackend.Controllers
                 }
                 
             }
+
+        
             // var c = _context.AccountData.FromSql("select")
             var ac = _context.AccountData.FromSqlRaw($"SELECT account_no,  acctopendate, currentbalance,  odlimit,  accounttype, interestcat, intrate,name,cust_name 	FROM public.temp_loan Where account_no = LPAD('{r.AcNumber}',17,'0')").FirstOrDefault();
             Application app =new Application();
@@ -249,9 +258,25 @@ namespace MobileBackend.Controllers
             applicant.Address_Line1 = c.Address1;
             _context.Applicants.Add(applicant);
             _context.SaveChanges();
+            LoanApplication loan = new LoanApplication();
+            loan.ApplicationId = app.Id;
+            loan.Description = "KCC:Limit Renewal";
+            loan.AppliedAmount = r.AppliedAmt;
+            loan.Cost = r.SanctionedLimit;
+            _context.LoanApplications.Add(loan);
+            _context.SaveChanges();
+            ProjectCost project = new ProjectCost();
+            project.ApplicationId = app.Id;
+            project.AppliedAmount = r.AppliedAmt;
+            project.Cost = r.AppliedAmt;
+            project.Description = "KCC Limit Renewal";
+            project.EligibleForLoan = "Yes";
+            _context.ProjectCosts.Add(project);
+            _context.SaveChanges();
+
             AddLog(app.Id, user.UserName, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", "Add Application");
             return RedirectToAction("Application", new { Id = _protector.Decode(app.Id.ToString()) });
-            return View();
+            //return View();
         }
 
 
@@ -831,6 +856,8 @@ namespace MobileBackend.Controllers
         [Authorize]
         public IActionResult AddCrop(int Id , string season)
         {
+            var app = _context.Applications.Find(Id);
+            
             ViewBag.ApplicationId = Id;
             ViewBag.Season = season;
             var lands = _context.KCCLandDetails.Where(a=> a.ApplicationId == Id).ToList();
@@ -839,7 +866,7 @@ namespace MobileBackend.Controllers
             List<KeyValue> dist1 = new List<KeyValue>();
             foreach (var item in dists)
             {
-                dist1.AddRange(_context.KeyValues.FromSqlRaw($"SELECT distinct crop as code, crop as value FROM loanflow.scale where district = '{item}' order by crop;").ToList());
+                dist1.AddRange(_context.KeyValues.FromSqlRaw($"SELECT distinct crop as code, crop as value FROM loanflow.scale where fy = '{_configuration["FY"]}' and district = '{item}' order by crop;").ToList());
             }
             ViewBag.crops = dist1;
             return View();
@@ -1900,6 +1927,10 @@ namespace MobileBackend.Controllers
             {
                 return View("AddKCCDetails");
             }
+            if (view == "KCC-Renewal")
+            {
+                return View("AddKCCRenDetails");
+            }
             return View();
         }
 
@@ -1935,6 +1966,10 @@ namespace MobileBackend.Controllers
             if (view == "TPL")
             {
                 return View("AddOtherDetailsTPL");
+            }
+            if (view == "KCC-Renewal")
+            {
+                return View("AddKCCRenDetailsList");
             }
             return View();
         }

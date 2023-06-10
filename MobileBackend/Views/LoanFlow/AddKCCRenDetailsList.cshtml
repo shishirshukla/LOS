@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemarkList" >
+
+         <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Change in Land Holding from Time of Sanction</label>
+    <select name="Change in Land Holding from Time of Sanction">
+        <option>Yes</option>
+       <option>No</option>
+   </select>
+   
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Change in Cropping Pattern from Time of Sanction</label>
+     <select name="Change in Cropping Pattern from Time of Sanction">
+        <option>Yes</option>
+       <option>No</option>
+   </select>
+  </div>
+ 
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Conduct of Account</label>
+   <select  name="Conduct of Account" >
+        <option>Satifactory</option>
+       <option>Not Satisfactory</option>
+   </select>
+  </div>
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>

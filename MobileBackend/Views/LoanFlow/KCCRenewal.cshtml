@@ -31,13 +31,25 @@
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label px-1">Applied Amount<span class="text-danger"> *</span></label> <input type="text" id="mob" name="AppliedAmt" placeholder="" > </div>
+
+                          
                     </div>
                    
                      
                     <div class="row justify-content-between text-left" style="padding-right:15px;">
                         
                          <div class="form-group col-sm-5 flex-column d-flex"> <label class="form-control-label px-1">Credit Balance Date<span class="text-danger"> *</span></label> <input class="form-control" type="date" id="AppDate" name="CreditBalanceDate" placeholder=""  value="@DateTime.Today.ToString("yyyy-MM-dd")" max="@DateTime.Today.ToString("yyyy-MM-dd")" /> </div>
-                        <div class="form-group col-sm-2"><label class="form-control-label px-1"></label> <button type="submit" class="btn-block btn-primary">Save</button> </div>
+                        <div class="form-group col-sm-5 flex-column d-flex">
+                            <label class="form-control-label px-1">Renewal For Year
+                                <span class="text-danger"> *</span></label> <select name="RenFY">
+                                    <option>2022-23</option>
+                                    <option>2023-24</option>
+                                    <option>2025-26</option>
+                                    <option>2026-27</option>
+                                    <option>2027-28</option>
+                                </select>
+                                </div>
+                         <div class="form-group col-sm-2"><label class="form-control-label px-1"></label> <button type="submit" class="btn-block btn-primary">Save</button> </div>
                     </div>
                 </form>
             </div>
