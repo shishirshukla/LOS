@@ -1446,15 +1446,16 @@ namespace MobileBackend.Controllers
             var app = _context.ExistingApplicant.Find(Id);
             return View(app);
         }
+
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> EditApplicantExisting(ExistingApplicant applicant)
+        public async Task<IActionResult> EditApplicantExistingSave(ExistingApplicant applicant)
         {
 
-             _context.Entry(applicant).State = EntityState.Modified;
+            _context.Entry(applicant).State = EntityState.Modified;
             _context.SaveChanges();
-           // AddLog(applicant.ApplicationId, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", "Edit Applicant :" + applicant.Id);
-            return RedirectToAction("ApplicationExisting", new { Id = applicant.AccountInfoId });
+            //return View(applicant);
+            return RedirectToAction("ApplicationExisting","LoanFlow",new { AId = applicant.AccountInfoId , message = "OK"});
         }
 
 
@@ -2190,6 +2191,55 @@ namespace MobileBackend.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> ListOnBoarded()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            List<string> list = new List<string>();
+            var brInfo = _context.Branches.Find(user.BranchId);
+            if (brInfo.BrType == "Branch")
+            {
+                list.Add(brInfo.Id);
+            }
+            else if (brInfo.BrType == "AMH")
+            {
+                list.AddRange(_context.Branches.Where(a => a.AMHCode == user.BranchId).Select(a => a.Id).ToList());
+            }
+            else if (brInfo.BrType == "HO")
+            {
+                list.AddRange(_context.Branches.Select(a => a.Id).ToList());
+            }
+            else
+            {
+                list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchDetails.RegionalOffice && a.BrType == "Branch").Select(a => a.Id).ToList());
+            }
+            var accs = _context.AccountInfo.Where(a => list.Contains(a.BranchId)).ToList();
+            List<AccountView> view = new List<AccountView>();
+            foreach (var item in accs)
+            {
+                AccountView av = new AccountView();
+                av.AccountName = item.AccountName;
+                av.AccountNumber = item.AccountNo;
+                av.AccountType = item.ProductDesc;
+                av.BranchId = item.BranchId;
+                av.OS = (float)item.CurrentOs;
+                av.Limit = (float)item.OdLimit;
+                var cibil = _context.CibilAccounts.FromSqlRaw($"SELECT member_ref, member_name, acc_number, acc_type, date_open, date_close, high_credit, current_bal, amt_overdue, tenure, emi, hist1, hist1_date FROM cibil_soft.accounts where member_ref = '{item.AccountNo.PadLeft(17, '0').Substring(0, 16)}'").ToList(); ;
+                if (cibil != null)
+                {
+                    av.Cibil = "Yes";
+                }
+                var bhuiyan = _context.KCCExistingLand.Where(a => a.AccountNo == item.AccountNo.TrimStart('0')).ToList();
+                if (bhuiyan != null)
+                {
+                    av.Bhuiyan = "Yes";
+                }
+                view.Add(av);
+            }
+            return View(view);
+        }
+
+
+        [Authorize]
         public async Task<IActionResult> ListApplication(string search = "")
         {
             List<string> ls = new List<string>();
@@ -2888,7 +2938,7 @@ namespace MobileBackend.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> ApplicationExisting(string Id, string message = "", string dmessage = "")
+        public IActionResult ApplicationExisting(string AId, string message = "", string dmessage = "")
         {
 
             ViewData["Message"] = message;
@@ -2912,27 +2962,21 @@ namespace MobileBackend.Controllers
 //            int id = int.Parse(_protector.Encode(Id));
             
 
-            var app = _context.AccountInfo.Find(Id.PadLeft(17,'0'));
+            var app = _context.AccountInfo.Find(AId.PadLeft(17,'0'));
 
-            app.Applicants = _context.ExistingApplicant.Where(a => a.AccountInfoId == Id.PadLeft(17, '0')).ToList();
-            ViewBag.Documents = _context.DocumentLoan.Where(a => a.AccountNo == Id).ToList();
-            ViewBag.Cibil = _context.CibilAccounts.FromSqlRaw($"SELECT member_ref, member_name, acc_number, acc_type, date_open, date_close, high_credit, current_bal, amt_overdue, tenure, emi, hist1, hist1_date FROM cibil_soft.accounts where member_ref = '{Id.PadLeft(17, '0').Substring(0,16)}'").ToList();
-            var z = _context.KeyValues.FromSqlRaw($"SELECT   enquirycontrol code, cname value  FROM cibil_soft.header where memberref = '{Id.PadLeft(17, '0').Substring(0, 16)}'").FirstOrDefault();
+            app.Applicants = _context.ExistingApplicant.Where(a => a.AccountInfoId == AId.PadLeft(17, '0')).ToList();
+            ViewBag.Documents = _context.DocumentLoan.Where(a => a.AccountNo == AId).ToList();
+            ViewBag.Cibil = _context.CibilAccounts.FromSqlRaw($"SELECT member_ref, member_name, acc_number, acc_type, date_open, date_close, high_credit, current_bal, amt_overdue, tenure, emi, hist1, hist1_date FROM cibil_soft.accounts where member_ref = '{AId.PadLeft(17, '0').Substring(0,16)}'").ToList();
+            var z = _context.KeyValues.FromSqlRaw($"SELECT   enquirycontrol code, cname value  FROM cibil_soft.header where memberref = '{AId.PadLeft(17, '0').Substring(0, 16)}'").FirstOrDefault();
             app.Applicants.FirstOrDefault().CreditScore = z.code;
             if (app.ProductDesc.Contains("KCC"))
             {
-                ViewBag.LandDetails = _context.KCCExistingLand.Include(a=> a.KCCCrops).Where(a => a.AccountNo == Id).ToList();
-                ViewBag.CropDetails = _context.KCCCropDetailExisting.Include(a=> a.KCCExistingLand).Where(a => a.AccountNo == Id).ToList();
+                ViewBag.LandDetails = _context.KCCExistingLand.Include(a=> a.KCCCrops).Where(a => a.AccountNo == AId).ToList();
+                ViewBag.CropDetails = _context.KCCCropDetailExisting.Include(a=> a.KCCExistingLand).Where(a => a.AccountNo == AId).ToList();
                 // ViewBag.CropDetails = _context.KCCCropDetails.Where(a => a.AccountNo == Id);
             }
            
            
-           
-            //var application = _context.Applications.Include(a => a.Applicants).Include(a => a.LoanApplications).Include(a => a.Documents).Include(a => a.Inspections).Include(a => a.Charges).Include(a => a.Disbursements).Include(a => a.Remarks).Include(a => a.Securities).Include(a => a.KCCLandDetails).Include(a => a.KCCCropDetails).FirstOrDefault(a => a.Id == id);
-            //if (User.Identity.Name != app.OwnerUser)
-            //{
-            //    ViewBag.Editable = false;
-            //}
             if (User.Identity.Name == "4729388")
             {
                 ViewBag.Editable = true;

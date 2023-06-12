@@ -1,0 +1,139 @@
+﻿@model List<AccountView>
+@inject CustomIDataProtection _protector
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var x = Model.GroupBy(p => p.AccountType).Select(p=> new {prod = p.Key  , accs = p.Count() , cibil = p.Where(a=> a.Cibil != null).Count() ,bhuiyan = p.Where(a=> a.Bhuiyan != null).Count() ,iss = p.Where(a=> a.ISS != null).Count()}).ToList();
+}
+
+<div class="container">
+    <table class="table table-bordered table-sm" id="myTable">
+        <thead>
+           
+            <tr>
+                <th>
+                    Product Desc
+                </th>
+                <th>
+                    Accounts
+                </th>
+                               
+                <th>
+                    Cibil Available
+                </th>
+                
+                <th>
+                    Bhuiyan Land
+                </th>
+                
+                 <th>
+                    ISS Status
+                </th>
+                
+            </tr>
+            
+        </thead>
+        <tbody>
+           @foreach (var item in x)
+          {
+              <tr>
+                  <td>@item.prod</td>
+                  <td>@item.accs</td>
+                  <td>@item.cibil</td>
+                  <td>@item.bhuiyan</td>
+                  <td>@item.iss</td>
+              </tr>
+          }
+        </tbody>
+    </table>
+
+</div>
+
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+       
+      <div class="modal-body">
+        <img src="/images/loading-6.gif" class="img-fluid"/>
+      </div>
+       
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" type="text/css" href="/js/datatables.min.css"/>
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <script src="~/js/datatable-button.js" asp-append-version="true"></script>
+    <script src="~/js/html5btn.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        function showModal() {
+            $('#loadingModal').modal('show');
+        }
+
+        $(document).ready( function () {
+                    $('#myTable').DataTable({dom: 'Bfrtip',buttons: ['csv', 'pdf']});
+        } );
+        function reject(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Remarks not recorded , Cannot proceed !');
+                return;
+            }
+            else
+            {
+                count = $('#RejectRemarks').length;
+                if(count == 0)
+                {
+                    alert('Return Remarks not recorded , Cannot proceed  !');
+                    return;
+                }
+                
+            }
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Reject';
+        }
+        
+    }
+     function returnp(a)
+    {
+        if(confirm("Are you sure ?"))
+        {
+            var count = $("#remarkSection tr").length;
+            if(count == 0)
+            {
+                alert('Remarks not recorded , Cannot proceed !');
+                return;
+            }
+            else
+            {
+                count = $('#ReturnRemarks').length;
+                if(count == 0)
+                {
+                    alert('Return Remarks not recorded , Cannot proceed  !');
+                    return;
+                }
+                
+            }
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Return';
+        }
+        
+    }
+    function approveLoan(a) {
+        console.log(a);
+        if(confirm("Are you sure ?"))
+        {
+            
+            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Sanction';
+                    
+        }
+   
+  }
+    </script>
+    
+}

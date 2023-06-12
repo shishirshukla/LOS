@@ -6,8 +6,8 @@
    // Layout = null;
 }
 
-<form method="post" action="/LoanFlow/EditApplicantExisting" enctype="multipart/form-data">
-    <input type="hidden" value="@Model.AccountInfoId" name="ApplicationId"/>
+<form method="post" action="/LoanFlow/EditApplicantExistingSave" enctype="multipart/form-data">
+    <input type="hidden" value="@Model.AccountInfoId" name="AccountInfoId"/>
     <input type="hidden" value="@Model.Id" name="Id"/>
     <div class="row justify-content-between text-left">
   <div class="form-group col-sm-2 flex-column d-flex">
@@ -109,11 +109,11 @@
   <div class="row justify-content-between text-left">
    <div class="form-group col-sm-4 flex-column d-flex">
     <label >Name of Work Place</label>
-    <input type="text" class="form-control-sm" name="WorkPlace" value="@Model.WorkPlace" required placeholder="Institute / Business Name">
+    <input type="text" class="form-control-sm" name="WorkPlace" value="@Model.WorkPlace"  placeholder="Institute / Business Name">
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
     <label >Working Since</label>
-    <input type="date" class="form-control-sm" name="WorkingSince" value="@Model.WorkingSince" required placeholder="Job / Business Start Date">
+    <input type="date" class="form-control-sm" name="WorkingSince" value="@Model.WorkingSince"  placeholder="Job / Business Start Date">
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
     <label >Education Qualificatin</label>
@@ -282,7 +282,7 @@
   </div>
   <div class="form-group col-sm-6 flex-column d-flex">
     <label >Work Place Address</label>
-    <input type="text" class="form-control-sm" required name="WorkPlaceAddress" placeholder="WorkPlaceAddress" value="@Model.WorkPlaceAddress">
+    <input type="text" class="form-control-sm"  name="WorkPlaceAddress" placeholder="WorkPlaceAddress" value="@Model.WorkPlaceAddress">
   </div>
   
   </div>
@@ -293,11 +293,11 @@
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
     <label >Net MI</label>
-    <input type="text" class="form-control-sm" required name="NMI" placeholder="NMI" value="@Model.NMI">
+    <input type="text" class="form-control-sm"  name="NMI" placeholder="NMI" value="@Model.NMI">
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
     <label >Addl Income</label>
-    <input type="text" class="form-control-sm" required name="AddlIncome" placeholder="Addl Income" value="@Model.AddlIncome">
+    <input type="text" class="form-control-sm"  name="AddlIncome" placeholder="Addl Income" value="@Model.AddlIncome">
   </div>
   
   </div>
@@ -316,7 +316,7 @@
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
     <label >Remark Addl Income</label>
-    <textarea rows="3" class="form-control-sm" required name="RemarkOnAddlIncome" placeholder="Remark On Addl Income">@Model.RemarkOnAddlIncome</textarea>
+    <textarea rows="3" class="form-control-sm"  name="RemarkOnAddlIncome" placeholder="Remark On Addl Income">@Model.RemarkOnAddlIncome</textarea>
   </div>
   </div>
   <div class="row justify-content-between text-left">
@@ -372,7 +372,7 @@
   </div>
    <div class="form-group col-sm-4 flex-column d-flex">
     <label >Max Repay Date (Retirement)</label>
-     <input type="date" required value="@Model.Driving_Lic" name="Driving_Lic" class="form-control-sm"/>
+     <input type="date"  value="@Model.Driving_Lic" name="Driving_Lic" class="form-control-sm"/>
   </div>
   
  

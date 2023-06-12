@@ -5,7 +5,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MobileBackend.Models
 {
+    public class AccountView
+    {
+        public string AccountNumber { get; set; }
+        public string BranchId { get; set; }
+        public string AccountName { get; set; }
+        public Single OS { get; set; }
+        public Single Limit { get; set; }
+        public string AccountType { get; set; }
+        public string Cibil { get; set; }
+        public string Bhuiyan { get; set; }
+        public string KYCVerified { get; set; }
+        public string ISS { get; set; }
 
+    }
 
     public class CibilAccounts
     {

@@ -27,3 +27,44 @@ dRI:पिलखा
 	dTehsil:लटोरी
 	bhuswami:(1) रतन कुमार जोत का प्रकार - अकेला
 	b1:https://bhuiyan.cg.nic.in/administrator/CheckSignedFileExistance.aspx?DscUrl=B1/6407218/20220928640700027.pdf
+
+
+-- FUNCTION: loanflow.onboarding(text)
+
+ DROP FUNCTION IF EXISTS loanflow.onboarding(text);
+
+CREATE OR REPLACE FUNCTION loanflow.onboarding(
+	region text, code text)
+    RETURNS TABLE(amhcode text, pending bigint, forwarded bigint, sanctioned bigint) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+
+begin
+if region = 'HO' then
+Create Temp Table cibil_rep As
+Select "AccountNo" , 1 cibil
+FROM loanflow."AccountInfo" a Where Exists (Select 1 from cibil_soft.header b Where Substring(a."AccountNo",1,16) = b.memberref)  ;
+
+Create Temp Table bhuiyan As
+Select a."AccountNo" , 1 bhuiyan
+FROM loanflow."AccountInfo" a Where Exists (Select 1 from loanflow."KCCExistingLand" b where b."OtherInfo" isnull and a."AccountNo" = Lpad(b."AccountNo",17,'0') ) ;
+
+return query
+
+SELECT b.new_report , Count(a."AccountNo") ac , sum(Coalesce(c.cibil,0))  , sum(Coalesce(d.bhuiyan,0)) --, "AccountName", "BranchId", "CIFNo", "AccountType", "IntCat", "ProductDesc", "AccountFacility", "IracStatus", "OdLimit", "CurrentOs", "Arrears", "UnitLocation", "BorrowersLocation", "AccountStatus", "MappedApplicationId", "AcOpenDate"
+	FROM loanflow."AccountInfo" a 
+	inner join loanflow.master_product b on (a."IntCat"::text = b.int_cate and a."AccountType"::text = b.prod_code)
+	left join cibil_rep c on (a."AccountNo" = c."AccountNo")
+	left join bhuiyan d on (a."AccountNo" = d."AccountNo")
+	group by 1;
+
+
+end;
+$BODY$;
+
+ALTER FUNCTION loanflow.onboarding(text)
+    OWNER TO shishir;
