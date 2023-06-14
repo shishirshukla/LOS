@@ -98,6 +98,47 @@ namespace MobileBackend.Models
         public string residential_vill { get; set; }
 
     }
+
+    public class KYCInfoExisting
+    {
+        [Key]
+        public int Id { get; set; }
+        public string ExistingApplicantId { get; set; }
+        public string IdType { get; set; }
+        public string IdNumber { get; set; }
+        public string IdSource { get; set; }
+        public string VerificationStatus { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string Address { get; set; }
+        public string Image { get; set; }
+        public string response { get; set; }
+        public string request { get; set; }
+        public ExistingApplicant ExistingApplicant { get; set; }
+
+    }
+    public class KYCInfo
+    {
+        [Key]
+        public int Id { get; set; }
+        public int ApplicantId { get; set; }
+        public string IdType { get; set; }
+        public string IdNumber { get; set; }
+        public string IdSource { get; set; }
+        public string VerificationStatus { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string Address { get; set; }
+        public string Image { get; set; }
+        public string response { get; set; }
+        public string request { get; set; }
+        public Applicant Applicant { get; set; }
+
+    }
+
+
     public class AccountInfo
     {
         [Key]
@@ -908,6 +949,7 @@ namespace MobileBackend.Models
         public string MobileNumber { get; set; }
 
         public AccountInfo Account { get; set; }
+        public List<KYCInfoExisting> ExistingKYCs { get; set; }
     }
 
     public class Applicant
@@ -970,6 +1012,7 @@ namespace MobileBackend.Models
         public string KYC_Upload { get; set; }
         public string MobileNumber { get; set; }
         public List<CIBILRequest> CibilRequests { get; set; }
+        public List<KYCInfo> KYCInfos { get; set; }
 
     }
 

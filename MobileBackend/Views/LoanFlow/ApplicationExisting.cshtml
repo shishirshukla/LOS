@@ -116,7 +116,39 @@
 
     </table>
 
-   
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="5"><b>KYC Details &amp; Verification Status</b></td>
+            </tr>
+            <tr>
+               <td>Applicant Name (As per Application)</td>
+               <td>Id Type</td>
+               <td>Applicant First Name (KYC)</td>
+               <td>Applicant Middle Name (KYC)</td>
+               <td>Applicant Last Name (KYC)</td>
+               <td>Image</td>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Applicants)
+                {
+                   
+                        foreach (var x in item.ExistingKYCs)
+                        { <tr>
+                        
+                            <td>@item.Applicant_First_Name @item.Applicant_Middle_Name @item.Applicant_Last_Name </td>
+                            <td>@x.IdType</td>
+                            <td>@x.FirstName</td>
+                                <td>@x.MiddleName</td>
+                                    <td>@x.LastName</td>
+                                    <td></td> </tr>
+                        }
+                   
+                    
+                }
+            </tbody>
+    </table>
    
 
 

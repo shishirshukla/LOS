@@ -2944,6 +2944,7 @@ namespace MobileBackend.Controllers
             var app = _context.AccountInfo.Find(AId.PadLeft(17,'0'));
 
             app.Applicants = _context.ExistingApplicant.Where(a => a.AccountInfoId == AId.PadLeft(17, '0')).ToList();
+            app.Applicants.FirstOrDefault().ExistingKYCs = _context.KycInfoExisting.Where(a => a.ExistingApplicantId == AId.PadLeft(17, '0')).ToList();
             ViewBag.Documents = _context.DocumentLoan.Where(a => a.AccountNo == AId).ToList();
             ViewBag.Cibil = _context.CibilAccounts.FromSqlRaw($"SELECT member_ref, member_name, acc_number, acc_type, date_open, date_close, high_credit, current_bal, amt_overdue, tenure, emi, hist1, hist1_date FROM cibil_soft.accounts where member_ref = '{AId.PadLeft(17, '0').Substring(0,16)}'").ToList();
             var z = _context.KeyValues.FromSqlRaw($"SELECT   enquirycontrol code, cname value  FROM cibil_soft.header where memberref = '{AId.PadLeft(17, '0').Substring(0, 16)}'").FirstOrDefault();
