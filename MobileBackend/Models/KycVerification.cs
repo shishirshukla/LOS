@@ -1,5 +1,9 @@
 ﻿namespace MobileBackend.Models
 {
+    public class Token
+    {
+        public string access_token { get; set; }
+    }
     public class PanrespData
     {
         public string pan { get; set; }

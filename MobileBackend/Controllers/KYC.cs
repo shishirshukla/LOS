@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MobileBackend.Models;
 using RestSharp;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MobileBackend.Controllers
@@ -32,12 +33,69 @@ namespace MobileBackend.Controllers
                 var app = _context.Applicants.Find(appId);
                 if (app != null)
                 {
-                    var s = await VerifyPAN(app.PAN_No);
-                    if (s != "")
+                    if (_context.KycInfo.Where(a=> a.ApplicantId == app.Id && a.IdType == "PAN" && a.VerificationStatus == "Yes").FirstOrDefault() == null)
                     {
+                        var s = await VerifyPAN(app.PAN_No);
+                        if (s != "")
+                        {
+                            var z = Newtonsoft.Json.JsonConvert.DeserializeObject<PANResponse>(s);
+                            KYCInfo k = new KYCInfo();
+                            k.ApplicantId = app.Id;
+                            k.IdType = "PAN";
+                            k.IdNumber = app.PAN_No;
+                            k.FirstName = z.data.first_name;
+                            k.MiddleName = z.data.middle_name;
+                            k.LastName = z.data.last_name;
+                            k.response = s;
+                            k.VerificationStatus = "Yes";
+                            _context.KycInfo.Add(k);
+                            _context.SaveChanges();
+                            return View(z);
+                        }
+                       
+                    }
+                    else
+                    {
+                        var s = _context.KycInfo.Where(a => a.ApplicantId == app.Id && a.IdType == "PAN" && a.VerificationStatus == "Yes").FirstOrDefault().response;
                         var z = Newtonsoft.Json.JsonConvert.DeserializeObject<PANResponse>(s);
                         return View(z);
                     }
+
+
+                }
+            }
+            if (acc != "")
+            {
+                var app = _context.ExistingApplicant.Where(a=> a.AccountInfoId == acc.PadLeft(17,'0')).FirstOrDefault();
+                if (app != null)
+                {
+                    if (_context.KycInfoExisting.Where(a => a.ExistingApplicantId == app.AccountInfoId && a.IdType == "PAN" && a.VerificationStatus == "Yes").FirstOrDefault() == null)
+                    {
+                        var s = await VerifyPAN(app.PAN_No);
+                        if (s != "")
+                        {
+                            var z = Newtonsoft.Json.JsonConvert.DeserializeObject<PANResponse>(s);
+                            KYCInfoExisting k = new KYCInfoExisting();
+                            k.ExistingApplicantId = app.AccountInfoId;
+                            k.IdType = "PAN";
+                            k.IdNumber = app.PAN_No;
+                            k.FirstName = z.data.first_name;
+                            k.MiddleName = z.data.middle_name;
+                            k.LastName = z.data.last_name;
+                            k.response = s;
+                            k.VerificationStatus = "Yes";
+                            _context.KycInfoExisting.Add(k);
+                            _context.SaveChanges();
+                            return View(z);
+                        }
+                    }
+                    else
+                    {
+                        var s = _context.KycInfoExisting.Where(a => a.ExistingApplicantId == app.AccountInfoId && a.IdType == "PAN" && a.VerificationStatus == "Yes").FirstOrDefault().response;
+                        var z = Newtonsoft.Json.JsonConvert.DeserializeObject<PANResponse>(s);
+                        return View(z);
+                    }
+                    
                 }
             }
             return View();
@@ -65,6 +123,7 @@ namespace MobileBackend.Controllers
                     var token_response = await client.ExecuteAsync(request, Method.Post);
                     if (token_response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
+                        var x = Newtonsoft.Json.JsonConvert.DeserializeObject<Token>(token_response.Content);
                         var js = Newtonsoft.Json.JsonConvert.SerializeObject(req);
 
                         var request1 = new RestRequest("https://api.sandbox.co.in/kyc/pan");
@@ -73,7 +132,7 @@ namespace MobileBackend.Controllers
                         request1.AddHeader("Connection", "keep-alive");
                         request1.AddHeader("x-api-key", "key_live_OFvIY6g1pK23IQQmDJz5MyucAdIzCCJ0");
                         request1.AddHeader("x-api-version", "1.0");
-                        request1.AddHeader("Authorization", token_response.Content.ToString());
+                        request1.AddHeader("Authorization", x.access_token);
                         request1.AddHeader("Content-Type", "application/json");
                         request1.AddBody(js, "application/json");
                         var resp = await client.ExecuteAsync(request1, Method.Post);

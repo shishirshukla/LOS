@@ -129,10 +129,7 @@
                     <td>@x.Date_Of_Birth</td>
                     <td>@x.Occupation</td>
                     <td>
-                        @if (x.KYC_Upload !=  null)
-                        {
-                            <a href="/@x.KYC_Upload" target="_blank">Download KYC</a>  
-                        }
+                        <a class="btn-primary btn btn-sm" href="/Kyc/PanResult?AppId=@x.Id" data-toggle="modal" data-target="#applicantModal">Verify PAN</a>
                         
                     </td>
                     <td>
