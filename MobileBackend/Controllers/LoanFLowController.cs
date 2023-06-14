@@ -2196,46 +2196,25 @@ namespace MobileBackend.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             List<string> list = new List<string>();
             var brInfo = _context.Branches.Find(user.BranchId);
+            List<AppReport> app = new List<AppReport>();
             if (brInfo.BrType == "Branch")
             {
-                list.Add(brInfo.Id);
+                app = _context.Report.FromSqlRaw($"SELECT * from  loanflow.onboarding('branch','{brInfo.Id}');").ToList();
             }
             else if (brInfo.BrType == "AMH")
             {
-                list.AddRange(_context.Branches.Where(a => a.AMHCode == user.BranchId).Select(a => a.Id).ToList());
+                app = _context.Report.FromSqlRaw($"SELECT * from  loanflow.onboarding('amh','{brInfo.Id}');").ToList();
             }
             else if (brInfo.BrType == "HO")
             {
-                list.AddRange(_context.Branches.Select(a => a.Id).ToList());
+                app = _context.Report.FromSqlRaw($"SELECT * from  loanflow.onboarding('ho','ho');").ToList();
             }
             else
             {
-                list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchDetails.RegionalOffice && a.BrType == "Branch").Select(a => a.Id).ToList());
+                app = _context.Report.FromSqlRaw($"SELECT * from  loanflow.onboarding('ro','{brInfo.Id}');").ToList();
             }
-            var accs = _context.AccountInfo.Where(a => list.Contains(a.BranchId)).ToList();
-            List<AccountView> view = new List<AccountView>();
-            foreach (var item in accs)
-            {
-                AccountView av = new AccountView();
-                av.AccountName = item.AccountName;
-                av.AccountNumber = item.AccountNo;
-                av.AccountType = item.ProductDesc;
-                av.BranchId = item.BranchId;
-                av.OS = (float)item.CurrentOs;
-                av.Limit = (float)item.OdLimit;
-                var cibil = _context.CibilAccounts.FromSqlRaw($"SELECT member_ref, member_name, acc_number, acc_type, date_open, date_close, high_credit, current_bal, amt_overdue, tenure, emi, hist1, hist1_date FROM cibil_soft.accounts where member_ref = '{item.AccountNo.PadLeft(17, '0').Substring(0, 16)}'").ToList(); ;
-                if (cibil != null)
-                {
-                    av.Cibil = "Yes";
-                }
-                var bhuiyan = _context.KCCExistingLand.Where(a => a.AccountNo == item.AccountNo.TrimStart('0')).ToList();
-                if (bhuiyan != null)
-                {
-                    av.Bhuiyan = "Yes";
-                }
-                view.Add(av);
-            }
-            return View(view);
+             
+            return View(app);
         }
 
 

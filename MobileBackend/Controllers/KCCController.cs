@@ -669,7 +669,7 @@ namespace MobileBackend.Controllers
                     }
 
                 }
-                if (b1.Length > 10)
+                if (b1.Contains("http"))
                 {
                     
                     
@@ -772,7 +772,7 @@ namespace MobileBackend.Controllers
                 }
             if (b1 != null)
             {
-                if (b1.Length > 10)
+                if (b1.Contains("http"))
                 {
 
 

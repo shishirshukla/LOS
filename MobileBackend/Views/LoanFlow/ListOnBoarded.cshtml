@@ -1,10 +1,10 @@
-﻿@model List<AccountView>
+﻿@model List<AppReport>
 @inject CustomIDataProtection _protector
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    var x = Model.GroupBy(p => p.AccountType).Select(p=> new {prod = p.Key  , accs = p.Count() , cibil = p.Where(a=> a.Cibil != null).Count() ,bhuiyan = p.Where(a=> a.Bhuiyan != null).Count() ,iss = p.Where(a=> a.ISS != null).Count()}).ToList();
+   
 }
 
 <div class="container">
@@ -27,22 +27,19 @@
                     Bhuiyan Land
                 </th>
                 
-                 <th>
-                    ISS Status
-                </th>
-                
+                 
             </tr>
             
         </thead>
         <tbody>
-           @foreach (var item in x)
+           @foreach (var item in Model)
           {
               <tr>
-                  <td>@item.prod</td>
-                  <td>@item.accs</td>
-                  <td>@item.cibil</td>
-                  <td>@item.bhuiyan</td>
-                  <td>@item.iss</td>
+                  <td>@item.AMHCode</td>
+                  <td>@item.Pending</td>
+                  <td>@item.Forwarded</td>
+                  <td>@item.Sanctioned</td>
+                  
               </tr>
           }
         </tbody>
