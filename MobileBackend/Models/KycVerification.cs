@@ -1,5 +1,14 @@
 ﻿namespace MobileBackend.Models
 {
+    public class AdhaarReqOTP
+    {
+        public string aadhaar_number { get; set; }
+    }
+    public class AdhaarRespOTP
+    {
+        public string ref_id { get; set; }
+        public string message { get; set; }
+    }
     public class Token
     {
         public string access_token { get; set; }

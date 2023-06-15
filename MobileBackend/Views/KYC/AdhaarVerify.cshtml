@@ -1,0 +1,21 @@
+﻿@model AdhaarRespOTP
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form class="form-row" method="post" action="/Kyc/AdhaarVerify">
+    <div class="form-group col-md-4">
+        <label>@Model.message</label>
+        <input type="text" class="form-control form-control-sm" name="otp"/>
+        <small>Please enter OTP received from UIDAI</small>
+    </div>
+  
+
+    <input type="hidden" value="@Model.ref_id" name="ref_id"/>
+    <input type="hidden" value="@ViewBag.callType" name="callType"/>
+    <input type="hidden" value="@ViewBag.KycId" name="KycId"/>
+    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+</form>
