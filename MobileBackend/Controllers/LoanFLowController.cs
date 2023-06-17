@@ -163,10 +163,77 @@ namespace MobileBackend.Controllers
             var s = await _userManager.CheckPasswordAsync(u,p);
             if (s == true)
             {
+                Dictionary<string, string> amh_map = new Dictionary<string, string>();
+
+                amh_map.Add("AMH1", "09907");
+                amh_map.Add("AMBIKAPUR (RO)", "09907");
+                amh_map.Add("BALRAMPUR", "06075");
+                amh_map.Add("SITAPUR", "06052");
+                amh_map.Add("WADRAF NAGAR", "06034");
+                amh_map.Add("FUNDURDIHARI", "06051");
+                amh_map.Add("PRATAPPUR", "06079");
+                amh_map.Add("BAIKUNTHPUR (RO)", "09908");
+                amh_map.Add("MAHAVIR PUR", "06097");
+                amh_map.Add("MANENDRAGARH", "06064");
+                amh_map.Add("AMH-SURAJPUR", "06009");
+                amh_map.Add("AMH-BAIKUNTHPUR", "06074");
+                amh_map.Add("AMH-Mahavirpur", "06097");
+                amh_map.Add("MUNGELI", "00417");
+                amh_map.Add("BILASPUR (RO)", "09901");
+                amh_map.Add("VYAPAR VIHAR", "00437");
+                amh_map.Add("BEMETARA", "08108");
+                amh_map.Add("MUNGELI ", "00417");
+                amh_map.Add("PENDRA", "00419");
+                amh_map.Add("DHAMTARI AMH BRANCH", "00303");
+                amh_map.Add("DHAMTARI (RO)", "09905");
+                amh_map.Add("KANKER", "01003");
+                amh_map.Add("RAJIM", "00131");
+                amh_map.Add("GARIYABAND", "00116");
+                amh_map.Add("BHANUPRATAP PUR", "01011");
+                amh_map.Add("DURG (RO)", "09910");
+                amh_map.Add("DURG (BR)", "08788");
+                amh_map.Add("BALOD", "08106");
+                amh_map.Add("GUNDERDEHI", "08160");
+                amh_map.Add("BHILAI-3", "08109");
+                amh_map.Add("JAGDALPUR (RO)", "09903");
+                amh_map.Add("KONDAGAON", "01113");
+                amh_map.Add("DANTEWADA", "01207");
+                amh_map.Add("SUKMA", "01215");
+                amh_map.Add("JANJGIR", "00714");
+                amh_map.Add("SAKTI", "00721");
+                amh_map.Add("KORBA RO", "09906");
+                amh_map.Add("SHEORI NARAYAN", "00724");
+                amh_map.Add("KATGHORA", "00608");
+                amh_map.Add("RAIGARH (Br.)", "00832");
+                amh_map.Add("SARANGARH", "00835");
+                amh_map.Add("KUNKURI", "00912");
+                amh_map.Add("PATTHALGAON", "00918");
+                amh_map.Add("JASHPUR", "00910");
+                amh_map.Add("RAIGARH (RO)", "09902");
+                amh_map.Add("BASNA", "00202");
+                amh_map.Add("RAIPUR (RO)", "09904");
+                amh_map.Add("SUNDAR NAGAR", "00138");
+                amh_map.Add("BALODABAZAR", "00106");
+                amh_map.Add("MAHASAMUND", "00208");
+                amh_map.Add("SARSIWA", "00134");
+                amh_map.Add("AMH-RAJNANDGAON", "09909");
+                amh_map.Add("RAJNANDGAON (RO)", "09909");
+                amh_map.Add("KAWARDHA", "08223");
+                amh_map.Add("AMBAGARH CHAWKI", "08243");
+                amh_map.Add("RAJNANDGAON (BR)", "08201");
+                amh_map.Add("DONGARGAON", "08215");
+                amh_map.Add("KHAIRAGARH", "08225");
+
+
                 apiUser.UserId = uid;
                 apiUser.Status = "True";
                 apiUser.EmpName = u.EmployeeName;
                 apiUser.Branch = u.BranchId;
+                if (amh_map.ContainsKey(u.BranchId))
+                {
+                    apiUser.Branch = amh_map.GetValueOrDefault(u.BranchId);
+                }
+                
                 apiUser.Designation = u.Designation;
             }
             else
