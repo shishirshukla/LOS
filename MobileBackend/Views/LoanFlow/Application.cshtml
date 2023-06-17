@@ -129,8 +129,8 @@
                     <td>@x.Date_Of_Birth</td>
                     <td>@x.Occupation</td>
                     <td>
-                        <a class="btn-primary btn btn-sm" href="/Kyc/PanResult?AppId=@x.Id" data-toggle="modal" data-target="#applicantModal">Verify PAN</a>
-                        <a class="btn-primary btn btn-sm" href="/Kyc/AdhaarVerify?AppId=@x.Id" data-toggle="modal" data-target="#applicantModal">Verify Adhaar</a>
+                        @*<a class="btn-primary btn btn-sm" href="/Kyc/PanResult?AppId=@x.Id" data-toggle="modal" data-target="#applicantModal">Verify PAN</a>
+                        <a class="btn-primary btn btn-sm" href="/Kyc/AdhaarVerify?AppId=@x.Id" data-toggle="modal" data-target="#applicantModal">Verify Adhaar</a>*@
                     </td>
                     <td>
                         @if (editable)
@@ -1404,7 +1404,7 @@
         </button>
       </div>
       <div class="modal-body" id="appModal">
-        
+        <b>Please wait , processing</b>
       </div>
       <div class="modal-footer">
        

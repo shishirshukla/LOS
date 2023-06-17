@@ -1012,7 +1012,7 @@ namespace MobileBackend.Controllers
                     user.UserName = x.Split(',')[0];
                     user.EmployeeName = x.Split(',')[2];
                     user.Scale = x.Split(',')[3];
-                    user.BranchId = x.Split(',')[1];
+                    user.BranchId = x.Split(',')[1].PadLeft(5,'0');
                     user.Role = "Staff";
                     var c = await _userManager.CreateAsync(user, "admin@123");
                 }

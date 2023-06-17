@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using MobileBackend.Models;
 using RestSharp;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MobileBackend.Controllers
@@ -29,7 +30,56 @@ namespace MobileBackend.Controllers
         [HttpPost]
         public async Task<IActionResult> AdhaarVerify(string ref_id , string otp , int kycId , string calltype)
         {
-            return View();
+
+            if (calltype == "Applicant")
+            {
+                var kyc = _context.KycInfo.Find(kycId);
+                if (kyc.VerificationStatus == "No")
+                {
+                    var s = await AdhaarValidateOTP(otp, ref_id);
+
+                    if (s != "")
+                    {
+                        var k = Newtonsoft.Json.JsonConvert.DeserializeObject<AdhaarResp>(s);
+                        kyc.response = s;
+                        kyc.VerificationStatus = "Yes";
+                        _context.Entry(kyc).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                        _context.SaveChanges();
+                        return View("AdhaarView", k.data);
+                    }
+                }
+                else
+                {
+                    var k = Newtonsoft.Json.JsonConvert.DeserializeObject<AdhaarResp>(kyc.response);
+                    return View("AdhaarView", k.data);
+                }
+
+            }
+            else
+            {
+                var kyc = _context.KycInfoExisting.Find(kycId);
+                if (kyc.VerificationStatus == "No")
+                {
+                    var s = await AdhaarValidateOTP(otp, ref_id);
+
+                    if (s != "")
+                    {
+                        var k = Newtonsoft.Json.JsonConvert.DeserializeObject<AdhaarResp>(s);
+                        kyc.response = s;
+                        _context.Entry(kyc).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                        _context.SaveChanges();
+                        return View("AdhaarView", k.data);
+                    }
+                }
+                else
+                {
+                    var k = Newtonsoft.Json.JsonConvert.DeserializeObject<AdhaarResp>(kyc.response);
+                    return View("AdhaarView", k.data);
+                }
+            }
+            
+            
+            return View("AdhaarView", null);
         }
 
         public async Task<IActionResult> AdhaarVerify(string acc = "", int appId = 0)
@@ -61,7 +111,8 @@ namespace MobileBackend.Controllers
                     else
                     {
                         var s = _context.KycInfo.Where(a => a.ApplicantId == app.Id && a.IdType == "Adhaar" && a.VerificationStatus == "Yes").FirstOrDefault();
-                        return RedirectToAction("AdhaarResult",new {dbId = s.Id });
+                        var k = Newtonsoft.Json.JsonConvert.DeserializeObject<AdhaarResp>(s.response);
+                        return View("AdhaarView", k.data);
                     }
 
 
@@ -94,7 +145,8 @@ namespace MobileBackend.Controllers
                     else
                     {
                         var s = _context.KycInfoExisting.Where(a => a.ExistingApplicantId == app.AccountInfoId && a.IdType == "Adhaar" && a.VerificationStatus == "Yes").FirstOrDefault();
-                        return RedirectToAction("AdhaarResultExisting", new { dbId = s.Id });
+                        var k = Newtonsoft.Json.JsonConvert.DeserializeObject<AdhaarResp>(s.response);
+                        return View("AdhaarView", k.data);
                     }
 
                 }
@@ -185,8 +237,8 @@ namespace MobileBackend.Controllers
                 if (req.pan.Length == 10)
                 {
                     var o1 = new RestClientOptions();
-                    //o1.Proxy = new WebProxy("10.43.5.6:3128");
-                    var client = new RestClient();
+                    o1.Proxy = new WebProxy("10.43.5.6:3128");
+                    var client = new RestClient(o1);
                     var request = new RestRequest("https://api.sandbox.co.in/authenticate");
                     request.AddHeader("Accept", "*/*");
                     request.AddHeader("Accept-Encoding", "gzip, deflate, br");
@@ -223,6 +275,56 @@ namespace MobileBackend.Controllers
             }
             return "";
         }
+
+        public async Task<string> AdhaarValidateOTP(string otp , string ref_id)
+        {
+            AdhaarReq req = new AdhaarReq();
+            req.otp = otp;
+            req.ref_id = ref_id;
+            if (req.otp != null)
+            {
+                if (req.otp.Length > 3)
+                {
+                    var o1 = new RestClientOptions();
+                    o1.Proxy = new WebProxy("10.43.5.6:3128");
+                    var client = new RestClient(o1);
+                    var request = new RestRequest("https://api.sandbox.co.in/authenticate");
+                    request.AddHeader("Accept", "*/*");
+                    request.AddHeader("Accept-Encoding", "gzip, deflate, br");
+                    request.AddHeader("Connection", "keep-alive");
+
+                    request.AddHeader("x-api-key", "key_live_OFvIY6g1pK23IQQmDJz5MyucAdIzCCJ0");
+                    request.AddHeader("x-api-secret", "secret_live_OBR4AqcaHxF6ddc96imWpVJFWNponbTT");
+                    request.AddHeader("x-api-version", "1.0");
+                    request.AddHeader("Content-Type", "application/json");
+                    var token_response = await client.ExecuteAsync(request, Method.Post);
+                    if (token_response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var x = Newtonsoft.Json.JsonConvert.DeserializeObject<Token>(token_response.Content);
+                        var js = Newtonsoft.Json.JsonConvert.SerializeObject(req);
+
+                        var request1 = new RestRequest("https://api.sandbox.co.in/kyc/aadhaar/okyc/otp/verify");
+                        request1.AddHeader("Accept", "*/*");
+                        request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
+                        request1.AddHeader("Connection", "keep-alive");
+                        request1.AddHeader("x-api-key", "key_live_OFvIY6g1pK23IQQmDJz5MyucAdIzCCJ0");
+                        request1.AddHeader("x-api-version", "1.0");
+                        request1.AddHeader("Authorization", x.access_token);
+                        request1.AddHeader("Content-Type", "application/json");
+                        request1.AddBody(js, "application/json");
+                        var resp = await client.ExecuteAsync(request1, Method.Post);
+                        if (resp.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            return resp.Content.ToString();
+                        }
+                    }
+
+
+                }
+            }
+            return "";
+        }
+
         public async Task<string> AdhaarSendOTP(string s)
         {
             AdhaarReqOTP req = new AdhaarReqOTP();
@@ -232,8 +334,8 @@ namespace MobileBackend.Controllers
                 if (req.aadhaar_number.Length == 12)
                 {
                     var o1 = new RestClientOptions();
-                    //o1.Proxy = new WebProxy("10.43.5.6:3128");
-                    var client = new RestClient();
+                    o1.Proxy = new WebProxy("10.43.5.6:3128");
+                    var client = new RestClient(o1);
                     var request = new RestRequest("https://api.sandbox.co.in/authenticate");
                     request.AddHeader("Accept", "*/*");
                     request.AddHeader("Accept-Encoding", "gzip, deflate, br");

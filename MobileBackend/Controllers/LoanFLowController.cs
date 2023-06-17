@@ -387,6 +387,22 @@ namespace MobileBackend.Controllers
 
         }
 
+        [HttpPost]
+       public async Task<IActionResult> ChangePasswordApi(string userId , string oldPassword, string newPassword)
+        {
+            var user = await _userManager.FindByNameAsync(userId);
+            var x = await _userManager.CheckPasswordAsync(user, oldPassword);
+            if (x != false)
+            {
+                await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+                return Ok("Password Changed") ;
+                
+            }
+            return Ok("Password Mismatch");
+//            return View();
+
+        }
+
 
         [HttpPost]
         [Authorize]
@@ -2980,7 +2996,17 @@ namespace MobileBackend.Controllers
         public async Task<IActionResult> Sanction(String Id)
         {
             int id = int.Parse(_protector.Encode(Id));
-            var application = _context.Applications.Include(a => a.Applicants).Include(a => a.LoanApplications).Include(a => a.Documents).Include(a => a.Inspections).Include(a => a.Disbursements).Include(a => a.Charges).Include(a=> a.Remarks).Include(a=> a.Securities).Where(a => a.Id == id).FirstOrDefault();
+            var application = _context.Applications.Find(id);
+            _context.Entry(application).Collection(a => a.Applicants).Load();
+            _context.Entry(application).Collection(a => a.Documents).Load();
+            _context.Entry(application).Collection(a => a.Remarks).Load();
+            _context.Entry(application).Collection(a => a.LoanApplications).Load();
+            _context.Entry(application).Collection(a => a.Inspections).Load();
+            _context.Entry(application).Collection(a => a.ProjectCost).Load();
+            _context.Entry(application).Collection(a => a.Securities).Load();
+            _context.Entry(application).Collection(a => a.AccountStatments).Load();
+            _context.Entry(application).Collection(a => a.Charges).Load();
+            _context.Entry(application).Collection(a => a.Disbursements).Load();
             ViewBag.Editable = await Check(id);
             Dictionary<int, List<CIBILLoanInfo>> result = new Dictionary<int, List<CIBILLoanInfo>>();
             foreach (var a in application.Applicants.Where(a=> a.Driving_Lic != "Deleted"))
@@ -3033,16 +3059,21 @@ namespace MobileBackend.Controllers
         
         public async Task<IActionResult> Eligibility(int Id , string vt = "No")
         {
-            var application = _context.Applications.Include(a => a.Applicants).Include(a => a.LoanApplications).Include(a => a.Documents).Include(a => a.Inspections).Include(a => a.Disbursements).Include(a => a.Charges).Include(a => a.Remarks).Include(a => a.Securities).Where(a => a.Id == Id).FirstOrDefault();
+            //var application = _context.Applications.Include(a => a.Applicants).Include(a => a.LoanApplications).Include(a => a.Documents).Include(a => a.Inspections).Include(a => a.Disbursements).Include(a => a.Charges).Include(a => a.Remarks).Include(a => a.Securities).Where(a => a.Id == Id).FirstOrDefault();
             //ViewBag.Editable = await Check(Id);
+            var application = _context.Applications.Find(Id);
+            _context.Entry(application).Collection(a => a.Applicants).Load();
             Dictionary<int, List<CIBILLoanInfo>> result = new Dictionary<int, List<CIBILLoanInfo>>();
-            foreach (var a in application.Applicants.Where(a => a.Driving_Lic != "Deleted" && a.TypeofApplicant != "Guarantor"))
+            foreach (var a in application.Applicants.Where(a => a.Driving_Lic != "Deleted" && a.TypeofApplicant != "Guarantor").ToList())
             {
                 var checkId = a.Id;
                 var cibilReqId = _context.CIBILRequests.Where(b => b.ApplicantId == checkId && b.CiibilControlNumber != "Deleted"&& b.Score2 != "Failed").ToList().Max(z => z.Id);
                 //int cibilReqId = 0;
                 result.Add(a.Id, _context.CIBILLoanInfo.Where(b => b.CIBILRequestId == cibilReqId).ToList());
             }
+            _context.Entry(application).Collection(a => a.LoanApplications).Load();
+            _context.Entry(application).Collection(a => a.Remarks).Load();
+
             List<ProjectCost> pj = _context.ProjectCosts.Where(a => a.ApplicationId == Id).ToList();
             ViewBag.ProjectCost = pj;
             ViewBag.LoanInfo = result;

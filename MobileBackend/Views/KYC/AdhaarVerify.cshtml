@@ -6,16 +6,19 @@
     Layout = null;
 }
 
-<form class="form-row" method="post" action="/Kyc/AdhaarVerify">
-    <div class="form-group col-md-4">
-        <label>@Model.message</label>
+<form class="form-row" id="frmAdhaar" method="post" action="/Kyc/AdhaarVerify">
+    <div class="form-group col-md-6">
+        <label>@Model.data.message</label>
         <input type="text" class="form-control form-control-sm" name="otp"/>
         <small>Please enter OTP received from UIDAI</small>
+         <button type="submit" class="btn btn-primary btn-sm">Submit</button>
     </div>
   
 
-    <input type="hidden" value="@Model.ref_id" name="ref_id"/>
+    <input type="hidden" value="@Model.data.ref_id" name="ref_id"/>
     <input type="hidden" value="@ViewBag.callType" name="callType"/>
     <input type="hidden" value="@ViewBag.KycId" name="KycId"/>
-    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+   
 </form>
+
+

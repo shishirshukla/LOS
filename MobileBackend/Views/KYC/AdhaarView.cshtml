@@ -1,0 +1,46 @@
+﻿@model AdhaarRespData
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+@if (Model == null)
+{
+    <b>Data cannot be fetched / OTP is incorrect. Please try again.</b>
+
+}
+else
+{
+    <table>
+    <tr>
+        <td colspan="2">
+            <img src="data:image/png;base64, @Model.photo_link" class="card-img" />
+        </td>
+        
+    </tr>
+    <tr>
+        <td>Name</td>
+        <td>@Model.name</td>
+    </tr>
+    <tr>
+        <td>Dob</td>
+        <td>@Model.dob</td>
+    </tr>
+    <tr>
+        <td>Gender</td>
+        <td>@Model.gender</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>@Model.split_address.house <br/>
+            @Model.split_address.landmark <br/>
+            @Model.split_address.street <br/>
+            @Model.split_address.dist <br/>
+            @Model.split_address.state <br/>@Model.split_address.pincode
+            </td>
+    </tr>
+</table>
+}
+
+
