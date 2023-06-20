@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MobileBackend.Models;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MobileBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230618072338_Leads")]
+    partial class Leads
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1632,12 +1634,6 @@ namespace MobileBackend.Migrations
                     b.Property<string>("OtherIncomeSource")
                         .HasColumnType("text");
 
-                    b.Property<int>("OtherInfo1")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OtherInfo2")
-                        .HasColumnType("integer");
-
                     b.Property<string>("PANNo")
                         .HasColumnType("text");
 
@@ -1645,9 +1641,6 @@ namespace MobileBackend.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PrimaryBank")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RefNoCRGB")
                         .HasColumnType("text");
 
                     b.Property<string>("SourcedBy")

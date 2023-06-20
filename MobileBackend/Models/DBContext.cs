@@ -60,6 +60,7 @@ namespace MobileBackend.Models
 
         public DbSet<CIFData> CIFDatas { get; set; }
         public DbSet<ControlInformation> ControlInformation { get; set; }
+        public DbSet<GeneralLeads> CommonLeads { get; set; }
         public DbSet<KCCLeads> KCCLeads { get; set; }
         public DbSet<TPLLeads> TPLLeads { get; set; }
         public DbSet<GoldLoanLeads> GoldLeads { get; set; }
