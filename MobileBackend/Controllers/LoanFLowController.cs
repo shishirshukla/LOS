@@ -2488,7 +2488,7 @@ namespace MobileBackend.Controllers
             }
             else if (user.Designation == "Manager Business" || user.Designation == "AMH Head")
             {
-                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == "AMH 2nd Officer")).ToList();
+                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == "AMH 2nd Officer" || a.SanctioningLevel == "Branch Manager")).ToList();
             }
             return View(applications);
         }
