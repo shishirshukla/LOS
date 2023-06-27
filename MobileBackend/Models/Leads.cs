@@ -110,8 +110,20 @@ namespace MobileBackend.Models
         public string RefNoCRGB { get; set; }
 
 
-        public List<LeadRoadMap> Comments { get; set; }
+        public List<LeadRoadMapGen> Comments { get; set; }
         public Branch Branch { get; set; }
+    }
+
+    public class LeadRoadMapGen
+    {
+        public int Id { get; set; }
+        public int LeadId { get; set; }
+        public string EntryType { get; set; }
+        public string UserId { get; set; }
+        public DateTime ActionDate { get; set; }
+        public string Remark { get; set; }
+        public string Attachement { get; set; }
+        public GeneralLeads LeadDetails { get; set; }
     }
 
     public class LeadRoadMap

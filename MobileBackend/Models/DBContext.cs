@@ -65,6 +65,7 @@ namespace MobileBackend.Models
         public DbSet<TPLLeads> TPLLeads { get; set; }
         public DbSet<GoldLoanLeads> GoldLeads { get; set; }
         public DbSet<LeadRoadMap> LeadComments { get; set; }
+        public DbSet<LeadRoadMapGen> LeadCommentsGen { get; set; }
         public DbSet<TPLDetail> TPLDetails { get; set; }
         public DbSet<MudraDetail> MudraDetails { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)

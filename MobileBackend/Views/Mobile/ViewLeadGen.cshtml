@@ -1,0 +1,194 @@
+﻿@model GeneralLeads
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container-fluid px-1 py-5 mx-auto">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 text-center">
+            <h3>Lead Details</h3>
+            
+            <div class="card">
+                
+                <form class="form-card" method="post" action="#">
+                     <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Sourced By</label> 
+                            <input class="form-control" type="text" value="@Model.SourcingAgency" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">User</label> 
+                            <input class="form-control" type="text" value="@Model.SourcedBy " readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Lead Status</label> 
+                            <input class="form-control" type="text" value="@Model.LeadStatus" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Source Date</label> 
+                            <input class="form-control" type="text" value="@Model.LeadDate" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Applicant Name</label> 
+                            <input class="form-control" type="text" value="@Model.ApplicantName" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Mobile Number</label> 
+                            <input class="form-control" type="text" value="@Model.MobileNumber" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Applied Amt</label> 
+                            <input class="form-control" type="text" value="@Model.AppliedAmt" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Loan Scheme</label> 
+                            <input class="form-control" type="text" value="@ViewBag.LeadType" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+
+                     <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Details</label> 
+                            <textarea class="form-control" type="text" readonly="readonly" rows="3"  >
+                                @Model.LoanPurpose
+                            </textarea> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Other Bank Loan A/c</label> 
+                            <input class="form-control" type="text" value="@Model.OtherInfo1" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Other Bank O/S</label> 
+                            <input class="form-control" type="text" value="@Model.OtherInfo2" readonly="readonly"  /> 
+                        </div>
+                        <div class="form-group col-sm-3 flex-column d-flex">
+                            <label class="form-control-label px-1">Loan A/c</label> 
+                            <input class="form-control" type="text" value="@Model.RefNoCRGB" readonly="readonly"  /> 
+                        </div>
+                       
+                    </div>
+                   
+                 
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <th colspan="9">Cibil Loan Details</th>
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>Member Name</th>
+                <th>Account Type</th>
+                <th>Open Date</th>
+                <th>Close Date</th>
+                <th>Current Outstanding</th>
+                <th>Amount Overdue</th>
+                <th>Status</th>
+                <th>Status Date</th>
+                
+            </tr>
+        </thead>
+        <tbody id="cibilTable">
+            @{
+                int sn = 1;
+            }
+            @foreach (var item in (List<CibilAccounts>)ViewBag.Cibil)
+           {
+               <tr>
+                   <td>
+                       @sn
+                   </td>
+                   <td>
+                       @item.member_name
+                   </td>
+                   <td>
+                       @item.acc_number
+                   </td>
+                   <td>
+                       @item.date_open
+                   </td>
+                   <td>
+                       @item.date_close
+                   </td>
+                   <td>
+                       @item.current_bal
+                   </td>
+                   <td>
+                       @item.amt_overdue
+                   </td>
+                   <td>
+                       @item.hist1
+                   </td>
+                   <td>
+                       @item.hist1_date
+                   </td>
+               </tr>
+               sn++;
+           }
+        </tbody>
+    </table>
+                    
+                  
+                    <a href="/Mobile/TakeAction?LeadType=@ViewBag.LeadType&Id=@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Update Status</a>   
+                  
+                    </form>
+           </div>
+           </div>
+           </div>
+           </div>
+           
+           <div class="container">
+                 @foreach (var item in Model.Comments)
+                   {
+                       <div class="card"  style="padding-bottom:5px;">
+                                <div class="card-body">
+                                 <h5 class="card-title">@item.UserId</h5>
+                                 <div class="row">
+                                     <h6 class="card-subtitle mb-2 col-10">@item.EntryType</h6>
+                                     <h6 class="card-subtitle mb-2 text-muted col-2">@item.ActionDate.ToString("dd-MM-yyyy")</h6>
+                                 </div>
+                                 
+                                 
+
+                                 <p class="card-text">@item.Remark</p>
+                                 
+                                </div>
+                        </div>
+                   }
+           </div>
+
+           <div class="modal" id="applicantModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="appModal">
+        
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts
+{
+<script type="text/javascript">
+    $('#applicantModal').on('show.bs.modal', function (e) {
+    $(this).find('.modal-body').load(e.relatedTarget.href);
+  });
+</script>
+  
+}

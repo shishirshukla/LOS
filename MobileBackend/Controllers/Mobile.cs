@@ -337,12 +337,12 @@ namespace MobileBackend.Controllers
             var tplleads = _context.TPLLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
             var kccleads = _context.KCCLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
             var goldleads = _context.GoldLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
-
+            var genLeads = _context.CommonLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
             LeadCollection leadCollection = new LeadCollection();
             leadCollection.KCCLead = kccleads;
             leadCollection.GoldLoanLeads = goldleads;
             leadCollection.TPLLeads = tplleads;
-
+            leadCollection.GeneralLeads = genLeads;
             return View(leadCollection);
         }
 
@@ -375,6 +375,17 @@ namespace MobileBackend.Controllers
                 ViewBag.Lead = lead;
                 return View(lead);
             }
+            if (LeadType == "Gen")
+            {
+
+                var lead = _context.CommonLeads.Find(Id);
+                _context.Entry(lead).Reference(a => a.Branch).Load();
+                lead.Comments = _context.LeadCommentsGen.Include(a => a.LeadDetails).Include(a => a.LeadDetails.Branch).Where(a => a.LeadId == Id).ToList();
+                ViewBag.Lead = lead;
+                ViewBag.Cibil = _context.CibilAccounts.FromSqlRaw($"SELECT member_ref, member_name, acc_number, acc_type, date_open, date_close, high_credit, current_bal, amt_overdue, tenure, emi, hist1, hist1_date FROM cibil_soft.accounts where member_ref = '{lead.RefNoCRGB.PadLeft(17, '0').Substring(0, 16)}'").ToList();
+
+                return View("ViewLeadGen",lead);
+            }
 
             return View();
         }
@@ -400,6 +411,29 @@ namespace MobileBackend.Controllers
             if (LeadType == "TPL")
             {
                 leads = _context.TPLLeads.Find(Id);
+            }
+            if (LeadType == "Gen")
+            {
+                var gleads = _context.CommonLeads.Find(Id);
+                if (gleads.LeadStatus != null)
+                {
+                    if (leads.LeadStatus == "Sourced")
+                    {
+                        availActions.Add("Contact With Customer");
+                    }
+                    if (leads.LeadStatus == "Contact With Customer")
+                    {
+                        availActions.Add("Contact With Customer");
+                        availActions.Add("Documents Obtained");
+                    }
+                    if (leads.LeadStatus == "Documents Obtained")
+                    {
+                        availActions.Add("Converted To Application");
+                    }
+                    ViewBag.AvailableActions = availActions;
+                    return View();
+
+                }
             }
             if (leads.LeadStatus != null)
             {
@@ -447,10 +481,21 @@ namespace MobileBackend.Controllers
             {
                 leads = _context.TPLLeads.Find(LeadId);
             }
-            leads.LeadStatus = UpdateAction;
-            _context.Entry(leads).State = EntityState.Modified;
-            _context.SaveChanges(true);
-            if (UpdateAction == "Converted To Application")
+            if (LeadType == "Gen")
+            {
+                var gleads = _context.CommonLeads.Find(LeadId);
+                gleads.LeadStatus = UpdateAction;
+                _context.Entry(gleads).State = EntityState.Modified;
+                _context.SaveChanges(true);
+            }
+            else {
+                leads.LeadStatus = UpdateAction;
+                _context.Entry(leads).State = EntityState.Modified;
+                _context.SaveChanges(true);
+            }
+
+           
+            if (UpdateAction == "Converted To Application" && LeadType != "Gen")
             {
                 var app = new Application();
                 app.LoanScheme = LeadType;
