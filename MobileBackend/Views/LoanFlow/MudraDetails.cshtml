@@ -7,7 +7,7 @@
 
 <form method="post" action="/LoanFlow/AddMUDRA" id="frm1">
 
-   <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.ApplicationId" id="ApplicationId"/>
 
 <table class="table table-sm">
     <thead>
@@ -141,16 +141,19 @@
                 var currYear = parseFloat($($(e).children()[2]).find('input').first().val());
                 var est1 = parseFloat($($(e).children()[3]).find('input').first().val());
                 var est2 = parseFloat($($(e).children()[4]).find('input').first().val());
-                console.log(parameter);
+                //console.log(parameter);
                 var formData = new FormData(document.getElementById("frm1"));
-                formData.append('ApplicationId', $('#ApplicationId').val());
-                formData.append('Parameter',parameter);
-                formData.append('PrevYear',prevYear);
-                formData.append('CurrentYear',currYear);
-                formData.append('Estimate1',est1);
-                formData.append('Estimate2',est2);
-                 formData.append('ParameterType',parametert);
-                  
+                //formData.reset();
+                formData.set('ApplicationId', $('#ApplicationId').val());
+                formData.set('Parameter',parameter);
+                formData.set('PrevYear',prevYear);
+                formData.set('CurrentYear',currYear);
+                formData.set('Estimate1',est1);
+                formData.set('Estimate2',est2);
+                 formData.set('ParameterType',parametert);
+                console.log($('#ApplicationId').val());
+                console.log('para :' + a);
+                 console.log(formData);
                 $.ajax({
                     url: "/LoanFlow/AddMUDRA",
                     data: formData,
