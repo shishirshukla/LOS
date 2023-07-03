@@ -144,7 +144,12 @@ namespace MobileBackend.Controllers
             return Ok(apiUser);
         }
 
-
+        [HttpPost]
+        public IActionResult GetUserList(string branch)
+        {
+            var userList = _context.Users.Where(a => a.BranchId == branch && a.Designation != "BC").Select(b=> new {empCode = b.UserName , empName = b.EmployeeName }).ToList();
+            return Ok(userList);
+        }
 
 
         [HttpPost]
