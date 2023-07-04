@@ -17,7 +17,7 @@
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
     <label >Category</label>
-     <select name="Category" class="form-control">
+     <select name="Category" class="form-control" id="securityCat">
          <option value="Movable">Movable </option>
          <option value="Immovable">Immovable </option>
          <option value="Liquid">Liquid </option>
@@ -38,7 +38,7 @@
   <div class="row justify-content-between text-left border border-primary">
   <div class="form-group col-sm-4 flex-column d-flex">
     <label >Security Detail</label>
-     <select name="Description" class="form-control">
+     <select name="Description" class="form-control" id="secDetail">
          <option value="Plant & Machinary">Plant & Machinary  </option>
          <option value="Vehichle">Vehichle  </option>
          <option value="Equipments">Equipments  </option>
@@ -54,18 +54,18 @@
      </select>
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
-    <label  >Plot / Khasra No.</label>
-     <input type="text" name="PlotNo" class="form-control" placeholder="Plot / Khasra No."/> 
+    <label id="wt" >Plot / Khasra No.</label>
+     <input id="wt1" type="text" name="PlotNo" class="form-control" placeholder="Plot / Khasra No."/> 
  
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
-    <label  >Detail / Location </label>
+    <label id="ot" >Detail / Location </label>
      <input type="text" name="Location" class="form-control"/> 
   </div>
   
   </div>
 
-   <div class="row justify-content-between text-left border border-primary">
+   <div class="row justify-content-between text-left border border-primary immovable">
     <div class="form-group col-sm-4 flex-column d-flex">
     <label  >Advocate Name (TSR1) </label>
      <input type="text" name="Advocate1" class="form-control" placeholder="Name of Advocate"/> 
@@ -84,7 +84,7 @@
    
    </div>
 
-   <div class="row justify-content-between text-left border border-primary">
+   <div class="row justify-content-between text-left border border-primary immovable">
     <div class="form-group col-sm-4 flex-column d-flex">
     <label  >Advocate Name (TSR2) </label>
      <input type="text" name="Advocate2" class="form-control" placeholder="Name of Advocate"/> 
@@ -118,7 +118,7 @@
    
    </div>
 
-   <div class="row justify-content-between text-left border border-primary">
+   <div class="row justify-content-between text-left border border-primary immovable">
     <div class="form-group col-sm-4 flex-column d-flex">
     <label  >Govt. Value (For Val1) </label>
      <input type="number" name="GovtVal1" class="form-control" placeholder=""/> 
@@ -137,7 +137,7 @@
    
    </div>
 
-   <div class="row justify-content-between text-left border border-primary">
+   <div class="row justify-content-between text-left border border-primary immovable">
     <div class="form-group col-sm-6 flex-column d-flex">
     <label  >Valuer Name  (For Val2)</label>
      <input type="text" name="Valuer2" class="form-control" placeholder=""/> 
@@ -152,7 +152,7 @@
    
    </div>
 
-   <div class="row justify-content-between text-left border border-primary">
+   <div class="row justify-content-between text-left border border-primary immovable">
     <div class="form-group col-sm-4 flex-column d-flex">
     <label  >Govt. Value (For Val2) </label>
      <input type="number" name="GovtVal2" class="form-control" placeholder=""/> 
@@ -180,10 +180,13 @@
      <input type="text" name="Owner" class="form-control" placeholder="" /> 
  
   </div>
-  <div class="form-group col-sm-4 flex-column d-flex">
-    <label  >Boundary (For Land / Flat) </label>
+  <div class="form-group col-sm-4 flex-column d-flex ">
+      <div class="immovable">
+          <label  >Boundary (For Land / Flat) </label>
      <input type="text" name="Boundary" class="form-control" value="North: , South : , East : , West :" placeholder="Boundary Details for Immovable"/> 
  
+      </div>
+    
   </div>
    <div class="form-group col-sm-4 flex-column d-flex">
     <label  > Valuation Considered </label>
@@ -199,3 +202,35 @@
   
   
 </form>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function() { 
+            $(".immovable").hide();
+        });
+        $('#securityCat').change(function() {
+            var x = $('#securityCat').find(":selected").val();
+            if (x == 'Immovable') {
+                $(".immovable").show();
+            }
+            else {
+                $(".immovable").hide();
+            }
+        });
+         $('#secDetail').change(function() {
+            var x = $('#secDetail').find(":selected").val();
+            if (x.includes('Gold')) {
+                $('#wt').text('Weight (In Gms)');
+                $('#ot').text('Ornament Type');
+                $('#wt1').removeAttr('placeholder');
+                $('#wt1').attr('type','number');
+            }
+            else {
+                 $('#wt').text('Plot / Khasra No.');
+                $('#ot').text('Detail /Location');
+                $('#wt1').attr('placeholder','Plot / Khasra No.');
+                $('#wt1').attr('type','text');
+            }
+        });
+    </script>
+}
