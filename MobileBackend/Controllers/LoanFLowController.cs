@@ -2864,6 +2864,13 @@ namespace MobileBackend.Controllers
             _context.Entry(app).Collection(a => a.ProjectCost).Load();
             _context.Entry(app).Collection(a => a.Securities).Load();
             _context.Entry(app).Collection(a => a.AccountStatments).Load();
+            foreach (var item in app.Applicants)
+            {
+                _context.Entry(item).Collection(a => a.KYCInfos).Load();
+            }
+            
+            //_context.Entry(app).Collection(a => a.Applicants).Load();
+
             //var application = _context.Applications.Include(a => a.Applicants).Include(a => a.LoanApplications).Include(a => a.Documents).Include(a => a.Inspections).Include(a => a.Charges).Include(a => a.Disbursements).Include(a => a.Remarks).Include(a => a.Securities).Include(a => a.KCCLandDetails).Include(a => a.KCCCropDetails).FirstOrDefault(a => a.Id == id);
 
             ViewBag.CreditScore = cs;

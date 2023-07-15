@@ -363,7 +363,8 @@ namespace MobileBackend.Controllers
             var tplleads = _context.TPLLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId) && a.LeadStatus == "Sourced").ToList();
             var kccleads = _context.KCCLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId) && a.LeadStatus == "Sourced").ToList();
             var goldleads = _context.GoldLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId) && a.LeadStatus == "Sourced").ToList();
-            int Leads = tplleads.Count() + kccleads.Count() + goldleads.Count();
+            var genLeads = _context.CommonLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
+            int Leads = tplleads.Count() + kccleads.Count() + goldleads.Count() + genLeads.Count();
             ViewBag.LeadCount = Leads;
             return View();
         }
@@ -998,6 +999,21 @@ namespace MobileBackend.Controllers
                 return Ok("True");
             }
             return Ok("False");
+        }
+
+        public async Task<IActionResult> AddUserApi(string empCode , string empName , string scale , string branchId )
+        {
+                 ApplicationUser user = new ApplicationUser();
+                    user.UserName = empCode;
+                    user.EmployeeName = empName;
+                    user.Scale = scale;
+                    user.BranchId = branchId;
+                    user.Role = "Staff";
+                    var c = await _userManager.CreateAsync(user, "admin@123");
+           
+
+
+            return Ok("Done");
         }
 
         public async Task<IActionResult> AddUser()

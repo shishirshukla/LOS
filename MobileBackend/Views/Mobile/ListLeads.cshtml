@@ -1,97 +1,11 @@
 ﻿@model LeadCollection
 @{
-    ViewData["Title"] = "Lead Dashboard";
+    ViewData["Title"] = "Lead List";
 }
-@{
-    var kccSourced = Model.KCCLead.Where(a => a.LeadStatus == "Sourced").Count();
-    var kccCC = Model.KCCLead.Where(a => a.LeadStatus == "Contact With Customer").Count();
-    var kccDoc = Model.KCCLead.Where(a => a.LeadStatus == " Documents Obtained").Count();
-    var kccApp = Model.KCCLead.Where(a => a.LeadStatus == "Converted To Application").Count();
 
-    var tplSourced = Model.TPLLeads.Where(a => a.LeadStatus == "Sourced").Count();
-    var tplCC = Model.TPLLeads.Where(a => a.LeadStatus == "Contact With Customer").Count();
-    var tplDoc = Model.TPLLeads.Where(a => a.LeadStatus == "Documents Obtained").Count();
-    var tplApp = Model.TPLLeads.Where(a => a.LeadStatus == "Converted To Application").Count();
-
-    var goldSourced = Model.GoldLoanLeads.Where(a => a.LeadStatus == "Sourced").Count();
-    var goldCC = Model.GoldLoanLeads.Where(a => a.LeadStatus == "Contact With Customer").Count();
-    var goldDoc = Model.GoldLoanLeads.Where(a => a.LeadStatus == "Documents Obtained").Count();
-    var goldApp = Model.GoldLoanLeads.Where(a => a.LeadStatus == "Converted To Application").Count();
-
-    var genSourced = Model.GeneralLeads.Where(a => a.LeadStatus == "Sourced").Count();
-    var genCC = Model.GeneralLeads.Where(a => a.LeadStatus == "Contact With Customer").Count();
-    var genDoc = Model.GeneralLeads.Where(a => a.LeadStatus == "Documents Obtained").Count();
-    var genApp = Model.GeneralLeads.Where(a => a.LeadStatus == "Converted To Application").Count();
-
-}
 
 <div class="container">
-   <div class="row">
-       <div class="col-9">
-           
-            <div class="row">
-                <div class="col bg-primary card" style="color:white;min-height:100px;">
-                    <b class="display-6">Sourced</b>
-                    <b class="display-4"><a style="color:white;" href="/Mobile/ListLeads?ll=Sourced">@(kccSourced + tplSourced + goldSourced + genSourced)</a></b>
-                </div>
-                 <div class="col bg-danger  card" style="margin-left:5px;color:white;min-height:100px;">
-                      <b class="display-6">Customer Contacted</b>
-                      <b class="display-4"><a style="color:white;" href="/Mobile/ListLeads?ll=Contact With Customer">@(kccCC + tplCC + goldCC + genCC)</a></b>
-                </div>
-                 <div class="col bg-warning  card" style="margin-left:5px;color:white;min-height:100px;">
-                      <b class="display-6">Document Obtained</b>
-                      <b class="display-4"><a style="color:white;" href="/Mobile/ListLeads?ll=Documents Obtained">@(kccDoc + tplDoc + goldDoc + genDoc)</a></b>
-                </div>
-                 <div class="col bg-success  card" style="margin-left:5px;color:white;min-height:100px;">
-                      <b class="display-6">Converted to Application</b>
-                      <b class="display-4"><a style="color:white;" href="/Mobile/ListLeads?ll=Converted To Application">@(kccApp+ tplApp + goldApp + genApp)</a></b>
-                </div>
-
-            </div>
-             <b>Lead Rejection</b>
-             <div class="row">
-                <div class="col bg-secondary card" style="color:white;min-height:100px;">
-                    <b class="display-6">Fake Lead</b>
-                    <b class="display-4">@ViewBag.FakeLead</b>
-                </div>
-                 <div class="col bg-info  card" style="margin-left:5px;color:white;min-height:100px;">
-                      <b class="display-6">Not Intrested</b>
-                      <b class="display-4">@ViewBag.NotInterested</b>
-                </div>
-                 <div class="col bg-primary  card" style="margin-left:5px;color:white;min-height:100px;">
-                      <b class="display-6">Not Eligible</b>
-                      <b class="display-4">@ViewBag.NotEligible</b>
-                </div>
-                 <div class="col bg-danger  card" style="margin-left:5px;color:white;min-height:100px;">
-                      <b class="display-6">Migrated</b>
-                      <b class="display-4">@ViewBag.Migrated</b>
-                </div>
-
-            </div>
-     </div>
-       <div class="col-3">
-           <div class="card">
-
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-11" style="padding-right: 5px;padding-left: 5px;">
-                        <div class="list-group list-group-flush">
-                            <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ListOnBoarded">Onboarded Summary</a>
-                            <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="MandateExisting">Non LMS Mandate List</a>
-                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="AddMandateExisting">eMandate Add (Non LMS)</a>
-                                 <a class="list-group-item list-group-item-action" asp-controller="LoanFlow" asp-action="ListApplication">Pending Proposals</a>
-                             
-                              
-</div>
-                    </div>
-                     
-                </div>
-            </div>
-        </div>
-       </div>
-
-   </div>
-
+ 
    <div class="row">
        
          <section id="tabs" class="project-tab col-12" style="padding-top:5px;margin-top: 0px; padding-bottom:60px;">
@@ -221,7 +135,7 @@
                 </tr>
             </thead>
             
-            @foreach(var item in Model.GeneralLeads.Take(100))
+            @foreach(var item in Model.GeneralLeads)
             {
                 <tr>
                     <td>@item.Branch.BranchName</td>

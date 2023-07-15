@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using MobileBackend.Models;
 using Newtonsoft.Json;
 using RestSharp;
@@ -13,6 +16,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+//using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -311,7 +315,7 @@ namespace MobileBackend.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> LeadDashboard()
+        public async Task<IActionResult> ListLeads(string ll = "Sourced")
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             List<string> list = new List<string>();
@@ -333,16 +337,72 @@ namespace MobileBackend.Controllers
             {
                 list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchId).Select(a => a.Id).ToList());
             }
-
-            var tplleads = _context.TPLLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
-            var kccleads = _context.KCCLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
-            var goldleads = _context.GoldLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
-            var genLeads = _context.CommonLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
+            var tplleads = _context.TPLLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId) && a.LeadStatus == ll).ToList();
+            var kccleads = _context.KCCLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId) && a.LeadStatus == ll).ToList();
+            var goldleads = _context.GoldLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId) && a.LeadStatus == ll).ToList();
+            var genLeads = _context.CommonLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId) && a.LeadStatus == ll).ToList();
             LeadCollection leadCollection = new LeadCollection();
             leadCollection.KCCLead = kccleads;
             leadCollection.GoldLoanLeads = goldleads;
             leadCollection.TPLLeads = tplleads;
             leadCollection.GeneralLeads = genLeads;
+
+
+
+
+            return View(leadCollection);
+        }
+
+       [Authorize]
+        public async Task<IActionResult> LeadDashboard()
+        {
+            Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromSeconds(1),
+                MustRevalidate = true,
+                NoStore = true,
+                NoCache = true,
+                MaxStale = true
+            };
+            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            List<string> list = new List<string>();
+            var brInfo = _context.Branches.Find(user.BranchId);
+            ViewBag.UserInfo = $"{user.EmployeeName} ({user.UserName}) , Branch : {user.BranchId} ({brInfo.BrType})";
+            if (brInfo.BrType == "Branch")
+            {
+                list.Add(brInfo.Id);
+            }
+            else if (brInfo.BrType == "AMH")
+            {
+                list.AddRange(_context.Branches.Where(a => a.AMHCode == user.BranchId).Select(a => a.Id).ToList());
+            }
+            else if (brInfo.BrType == "HO")
+            {
+                list.AddRange(_context.Branches.Select(a => a.Id).ToList());
+            }
+            else
+            {
+                list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchId).Select(a => a.Id).ToList());
+            }
+            List<string> rejects = new List<string>();
+            rejects.Add("Not Interested");
+            rejects.Add("Not Eligible");
+            rejects.Add("Migrated to Other Bank");
+            rejects.Add("Fake Lead");
+            var tplleads = _context.TPLLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
+            var kccleads = _context.KCCLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
+            var goldleads = _context.GoldLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
+            var genLeads = _context.CommonLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
+            LeadCollection leadCollection = new LeadCollection();
+            leadCollection.KCCLead = kccleads.Where(a=> !rejects.Contains(a.LeadStatus)).ToList();
+            leadCollection.GoldLoanLeads = goldleads.Where(a => !rejects.Contains(a.LeadStatus)).ToList();
+            leadCollection.TPLLeads = tplleads.Where(a => !rejects.Contains(a.LeadStatus)).ToList();
+            leadCollection.GeneralLeads = genLeads.Where(a => !rejects.Contains(a.LeadStatus)).ToList();
+            ViewBag.FakeLead = tplleads.Where(a => a.LeadStatus == "Fake Lead").Count() + kccleads.Where(a => a.LeadStatus == "Fake Lead").Count() + goldleads.Where(a => a.LeadStatus == "Fake Lead").Count() + genLeads.Where(a => a.LeadStatus == "Fake Lead").Count();
+            ViewBag.NotEligible = tplleads.Where(a => a.LeadStatus == "Not Eligible").Count() + kccleads.Where(a => a.LeadStatus == "Not Eligible").Count() + goldleads.Where(a => a.LeadStatus == "Not Eligible").Count() + genLeads.Where(a => a.LeadStatus == "Not Eligible").Count();
+            ViewBag.Migrated = tplleads.Where(a => a.LeadStatus == "Migrated to Other Bank").Count() + kccleads.Where(a => a.LeadStatus == "Migrated to Other Bank").Count() + goldleads.Where(a => a.LeadStatus == "Migrated to Other Bank").Count() + genLeads.Where(a => a.LeadStatus == "Migrated to Other Bank").Count();
+            ViewBag.NotInterested = tplleads.Where(a => a.LeadStatus == "Not Interested").Count() + kccleads.Where(a => a.LeadStatus == "Not Interested").Count() + goldleads.Where(a => a.LeadStatus == "Not Interested").Count() + genLeads.Where(a => a.LeadStatus == "Not Interested").Count();
             return View(leadCollection);
         }
 
@@ -417,16 +477,16 @@ namespace MobileBackend.Controllers
                 var gleads = _context.CommonLeads.Find(Id);
                 if (gleads.LeadStatus != null)
                 {
-                    if (leads.LeadStatus == "Sourced")
+                    if (gleads.LeadStatus == "Sourced")
                     {
                         availActions.Add("Contact With Customer");
                     }
-                    if (leads.LeadStatus == "Contact With Customer")
+                    if (gleads.LeadStatus == "Contact With Customer")
                     {
                         availActions.Add("Contact With Customer");
                         availActions.Add("Documents Obtained");
                     }
-                    if (leads.LeadStatus == "Documents Obtained")
+                    if (gleads.LeadStatus == "Documents Obtained")
                     {
                         availActions.Add("Converted To Application");
                     }

@@ -89,8 +89,8 @@
                 <th>Close Date</th>
                 <th>Current Outstanding</th>
                 <th>Amount Overdue</th>
-                <th>Status</th>
                 <th>Status Date</th>
+                <th>Status</th>
                 
             </tr>
         </thead>
@@ -123,7 +123,7 @@
                        @item.amt_overdue
                    </td>
                    <td>
-                       @item.hist1
+                       @DateTime.ParseExact(item.hist1,"ddMMyyyy",null).ToString("dd-MM-yyyy");
                    </td>
                    <td>
                        @item.hist1_date
@@ -133,7 +133,7 @@
            }
         </tbody>
     </table>
-                    
+                    <a href="/Mobile/LeadDashboard" class="btn btn-secondary btn-sm" >Back to Lead Dashboard</a>  | 
                   
                     <a href="/Mobile/TakeAction?LeadType=@ViewBag.LeadType&Id=@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Update Status</a>   
                   
