@@ -47,10 +47,10 @@
          <option value="Flat">Flat </option>
          <option value="Land & Building"> Land & Building </option>
          <option value="Crop"> Crop </option>
-         <option value="Gold Ornaments : 18K"> Gold Ornaments : 18K </option>
-         <option value="Gold Ornaments : 20K"> Gold Ornaments : 20K </option>
-         <option value="Gold Ornaments : 22K"> Gold Ornaments : 22K </option>
-         <option value="Gold Ornaments : 24K"> Gold Ornaments : 24K </option>
+         <option value="18K"> Gold Ornaments : 18K </option>
+         <option value="20K"> Gold Ornaments : 20K </option>
+         <option value="22K"> Gold Ornaments : 22K </option>
+         <option value="24K"> Gold Ornaments : 24K </option>
      </select>
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
@@ -60,10 +60,32 @@
   </div>
   <div class="form-group col-sm-4 flex-column d-flex">
     <label id="ot" >Detail / Location </label>
-     <input type="text" name="Location" class="form-control"/> 
+     <input id="wt2" type="text" name="Location" class="form-control"/> 
   </div>
   
   </div>
+
+   <div class="row justify-content-between text-left border border-primary">
+        <div class="form-group col-sm-4 flex-column d-flex">
+    <label id="orna" >Owner </label>
+     <input type="text" name="Owner" class="form-control" placeholder="" /> 
+ 
+  </div>
+  <div class="form-group col-sm-4 flex-column d-flex ">
+      <div>
+          <label id="qty" >Boundary (For Land / Flat) </label>
+     <input type="text" id="qty1" name="Boundary" class="form-control" value="North: , South : , East : , West :" placeholder="Boundary Details for Immovable"/> 
+ 
+      </div>
+    
+  </div>
+   <div class="form-group col-sm-4 flex-column d-flex">
+    <label  > Valuation Considered </label>
+     <input type="number" name="Valuation" class="form-control" placeholder="Value"/> 
+ 
+  </div>
+   </div>
+
 
    <div class="row justify-content-between text-left border border-primary immovable">
     <div class="form-group col-sm-4 flex-column d-flex">
@@ -175,24 +197,7 @@
 
 
    <div class="row justify-content-between text-left border border-primary">
-       <div class="form-group col-sm-4 flex-column d-flex">
-    <label  >Owner </label>
-     <input type="text" name="Owner" class="form-control" placeholder="" /> 
- 
-  </div>
-  <div class="form-group col-sm-4 flex-column d-flex ">
-      <div class="immovable">
-          <label  >Boundary (For Land / Flat) </label>
-     <input type="text" name="Boundary" class="form-control" value="North: , South : , East : , West :" placeholder="Boundary Details for Immovable"/> 
- 
-      </div>
-    
-  </div>
-   <div class="form-group col-sm-4 flex-column d-flex">
-    <label  > Valuation Considered </label>
-     <input type="number" name="Valuation" class="form-control" placeholder="Value"/> 
- 
-  </div>
+      
   
  <div class="form-group col-sm-4 flex-column d-flex">
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -220,16 +225,30 @@
          $('#secDetail').change(function() {
             var x = $('#secDetail').find(":selected").val();
             if (x.includes('Gold')) {
-                $('#wt').text('Weight (In Gms)');
-                $('#ot').text('Ornament Type');
+                $('#wt').text('Net Weight (In Gms)');
+                $('#ot').text('Gross Weight (In Gms)');
+                $('#qty').text('Quantity');
+                $('#orna').text('Ornament Type');
                 $('#wt1').removeAttr('placeholder');
                 $('#wt1').attr('type','number');
+                $('#wt2').removeAttr('placeholder');
+                $('#wt2').attr('type','number');
+                $('#qty1').removeAttr('placeholder');
+                $('#qty1').attr('type','number');
+                $('#qty1').val('1');
             }
             else {
                  $('#wt').text('Plot / Khasra No.');
                 $('#ot').text('Detail /Location');
+                $('#qty').text('Boundary (For Land / Flat)');
+                $('#orna').text('Owner');
                 $('#wt1').attr('placeholder','Plot / Khasra No.');
                 $('#wt1').attr('type','text');
+                $('#wt2').attr('placeholder','Detail / Location');
+                $('#wt2').attr('type','text');
+               
+                $('#qty1').attr('type','text');
+                $('#qty1').val('North : , South : , East : , West :');
             }
         });
     </script>

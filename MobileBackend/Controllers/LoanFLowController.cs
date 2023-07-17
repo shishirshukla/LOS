@@ -2830,6 +2830,7 @@ namespace MobileBackend.Controllers
             ls.Add("MUDRA-Transport");
             ls.Add("KCC-Renewal");
             ls.Add("KCC-20-Renewal");
+            ls.Add("Gold-LMS");
 
             int id = int.Parse(_protector.Encode(Id));
 
@@ -3160,16 +3161,23 @@ namespace MobileBackend.Controllers
             if (application.LoanScheme == "Car")
             {
 
-                return View("EligibilityCar",application);
+                return View("EligibilityCar", application);
             }
             else if (application.LoanScheme == "HL")
             {
-               // var otherDetails = _context.Remarks.Where(b => b.ApplicationId == Id).ToList();
+                // var otherDetails = _context.Remarks.Where(b => b.ApplicationId == Id).ToList();
                 return View("EligibilityHL", application);
+            }
+            else if (application.LoanScheme == "Gold-LMS")
+            {
+                ViewBag.AdvRate = 54000;
+                ViewBag.IbjaRate = 53000;
+                _context.Entry(application).Collection(a => a.Securities).Load();
+                return View("EligibilityGold", application);
             }
             else if (application.LoanScheme == "MUDRA-Transport")
             {
-               
+
                 _context.Entry(application).Reference(a => a.TPLDetails).Load();
                 int repayTerms = 60;
                 if (application.TPLDetails.TypeOfVehichle == "3 Wheeler")
@@ -3187,7 +3195,7 @@ namespace MobileBackend.Controllers
                 ViewBag.KCCAddl = _context.ProjectCosts.Where(a => a.ApplicationId == Id && a.Description == "KCC-Addl").Select(b => b.AppliedAmount).FirstOrDefault();
                 ViewBag.KCCAppl = _context.ProjectCosts.Where(a => a.ApplicationId == Id && a.Description == "KCC").Select(b => b.AppliedAmount).FirstOrDefault();
                 ViewBag.LandInfo = _context.KCCLandDetails.Where(a => a.ApplicationId == Id).ToList();
-                ViewBag.CropInfo = _context.CropDetails.FromSqlRaw($"SELECT * from  loanflow.cropdetail({Id})").ToList(); 
+                ViewBag.CropInfo = _context.CropDetails.FromSqlRaw($"SELECT * from  loanflow.cropdetail({Id})").ToList();
                 ViewBag.Kharif = _context.KCCEligillity.FromSqlRaw($"SELECT * from loanflow.cropcalculation('Kharif', {Id})").ToList();
                 ViewBag.Rabi = _context.KCCEligillity.FromSqlRaw($"SELECT * from loanflow.cropcalculation('Rabi', {Id})").ToList();
                 ViewBag.Summer = _context.KCCEligillity.FromSqlRaw($"SELECT * from loanflow.cropcalculation('Summer', {Id})").ToList();

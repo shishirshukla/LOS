@@ -1,0 +1,165 @@
+﻿@model Application
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    int slno = 1;
+    double elig1 = 0;
+    double elig = 0;
+    double projCost = (double)((List<ProjectCost>)ViewBag.ProjectCost).Where(b=> b.EligibleForLoan == "Yes").Sum(a => a.Cost);
+    double projCost1 = (double)((List<ProjectCost>)ViewBag.ProjectCost).Where(b=> b.EligibleForLoan == "Yes").Sum(a => a.AppliedAmount);
+    var l = (Dictionary<int, List<CIBILLoanInfo>>)ViewBag.LoanInfo;
+    List<double> repay = new List<double>();
+    List<double> nmiTotal = new List<double>();
+    List<double> gmiTotal = new List<double>();
+    List<DateTime> repayDates = new List<DateTime>();
+    int eminmi = 0;
+}
+
+  
+
+   
+        <div class="border border-dark">
+            <b>Eligibility for Gold Loan</b>
+            <br/>
+            <table width="100%" id="assetTable">
+                <tr>
+                    <td><b>Applicant Name</b></td>
+                    @foreach(var a in Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.Applicant_First_Name @a.Applicant_Middle_Name @a.Applicant_Last_Name</td>   
+                    }
+                </tr>
+                <tr>
+                    <td><b>Occupation</b></td>
+                    @foreach(var a in Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor"))
+                    {
+                        <td>@a.Occupation</td>   
+                    }
+                </tr>
+               
+                
+                 <tr>
+                    <td><b>Gold Ornaments</b></td>
+                        <td colspan="@Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor").Count()">
+                          <table class="table table-sm table-bordered">
+                              <thead>
+                                  <tr>
+                                      <th>Ornament</th>
+                                      <th>Purity</th>
+                                      <th>Qty</th>
+                                      <th>Gross Weight (Gms)</th>
+                                      <th>Net Weight (Gms)</th>
+                                      <th>Valuer</th>
+                                      <th>Valuation Date</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                    @foreach(var x in Model.Securities)
+                               {
+                                   <tr>
+                                       <td>@x.Owner</td>
+                                       <td>@x.Description</td>
+                                       <td>@x.Boundary</td>
+                                       <td>@x.PlotNo</td>
+                                       <td>@x.Location</td>
+                                       <td>@x.Valuer1</td>
+                                       <td>@x.DateVal1</td>
+                                   </tr>
+                    
+                                }
+                              </tbody>
+                            
+
+
+                          </table>
+                          
+
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td><b>Amt Available for EMI</b></td>
+                     <td colspan="@Model.Applicants.Where(a=> a.Driving_Lic != "Deleted"&& a.TypeofApplicant != "Guarantor").Count()">
+                 
+                        </td>
+                    
+                </tr>
+
+                 <tr>
+                    <td><b>Retirement Date / Max Repay Date</b></td>
+                   
+                    
+                    
+                </tr>
+                <tr>
+                    <td><b>Eligibility As Per EMI/NMI</b></td>
+                    <td colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
+                
+                    </td>
+                </tr>
+                <tr>
+                    <td>Details of Project Cost</td>
+                    <td colspan="@Model.Applicants.Count">
+                        <table class="table-bordered table-responsive-sm">
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Description</th>
+                                <th>Eligible for Bank Finance</th>
+                                <th>Cost</th>
+                                <th>Bank Finance</th>
+                            </tr>
+                            @{
+                int pjCount = 1;
+            }
+            @foreach(var x in (List<ProjectCost>)ViewBag.ProjectCost)
+            {
+                <tr>
+                    <td>@pjCount</td>
+                    <td>@x.Description</td>
+                    <td>@x.EligibleForLoan  </td>
+                    <td>@x.Cost</td>
+                    <td>@x.AppliedAmount</td>
+                   
+                   
+                </tr>
+                pjCount++;
+            }
+            <tr>
+                <td></td>
+                <td>Total</td>
+                <td></td>
+                <td>@projCost</td>
+                <td>@projCost1</td>
+            </tr>
+                        </table>
+                    </td>
+                </tr>
+                 <tr>
+                    <td><b>Applied Amt.</b></td>
+                    <td colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
+                            @Model.LoanApplications.Where(a=> a.TypeOfFacility == "TL").FirstOrDefault().AppliedAmount;
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>48 Times of NMI</b></td>
+                    <td colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
+                            @(nmiTotal.Sum() * 48)
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Eligible Amount</b></td>
+                    <td colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
+                @{
+                    var gmiAll = gmiTotal.Sum() * 48;
+                    elig = Math.Min(projCost,Math.Min((double)gmiAll, Math.Min(elig1, (double)Model.LoanApplications.Where(a => a.TypeOfFacility == "TL").FirstOrDefault().AppliedAmount)));
+                }
+                            <b id='eliAmt'>@elig</b>
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+            
