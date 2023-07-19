@@ -3170,8 +3170,9 @@ namespace MobileBackend.Controllers
             }
             else if (application.LoanScheme == "Gold-LMS")
             {
-                ViewBag.AdvRate = 54000;
-                ViewBag.IbjaRate = 53000;
+                var dist1 = _context.KeyValues.FromSqlRaw($"SELECT circ_no as code, value::text FROM loanflow.goldrate_bank where start_dt <= Current_Date and end_dt >= Current_Date order by create_dt desc limit 1").ToList();
+                ViewBag.AdvRate = Single.Parse(dist1.FirstOrDefault().value) * 10;
+                ViewBag.IbjaRate = 54080;
                 _context.Entry(application).Collection(a => a.Securities).Load();
                 return View("EligibilityGold", application);
             }

@@ -17,19 +17,28 @@
     decimal appliedAmt = Model.LoanApplications.Where(a => a.TypeOfFacility == "TL" || a.TypeOfFacility == "OD").FirstOrDefault().AppliedAmount;
     double valueIbja = 0;
     double valueBank = 0;
-    var goldRate22K = 54000;
+    var goldRate22K = (float)ViewBag.IbjaRate;
     var goldRate18K = 18 * goldRate22K / 22;
+    var goldRate19K = 19 * goldRate22K / 22;
     var goldRate20K = 20 * goldRate22K / 22;
-      var goldRate22K1 = 53000;
+    var goldRate21K = 21 * goldRate22K / 22;
+      var goldRate22K1 = (float)ViewBag.AdvRate;
     var goldRate18K1 = 18 * goldRate22K1 / 22;
+    var goldRate19K1 = 19 * goldRate22K1 / 22;
     var goldRate20K1 = 20 * goldRate22K1 / 22;
+    var goldRate21K1 = 21 * goldRate22K1 / 22;
     Dictionary<string, Single> s = new Dictionary<string, float>();
     s.Add("18K", goldRate18K);
+    s.Add("19K", goldRate18K);
     s.Add("20K", goldRate20K);
+    s.Add("21K", goldRate18K);
     s.Add("22K", goldRate22K);
      Dictionary<string, Single> s1 = new Dictionary<string, float>();
     s1.Add("18K", goldRate18K1);
+    s1.Add("19K", goldRate19K1);
+
     s1.Add("20K", goldRate20K1);
+    s1.Add("21K", goldRate21K1);
     s1.Add("22K", goldRate22K1);
 }
 
@@ -87,6 +96,9 @@
                 <td></td>
                 <td>@projCost</td>
                 <td>@projCost1</td>
+            </tr>
+            </table>
+            </td>
             </tr>
                  <tr>
                     <td><b>Applied Amt.</b></td>
@@ -196,13 +208,18 @@
                            Total Value as per rates issued by IBJA (Screenshot attached) is Rs. @valueIbja and as per Bank's circular no , is Rs @valueBank.
                     </td>
                 </tr>
-
+                 <tr>
+                    <td><b>Eligibility as per Valuation </b></td>
+                    <td  colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
+                            @(0.75 * Math.Min(valueBank,valueIbja))  (Margin 25%)
+                    </td>
+                </tr>
              
                
                 <tr>
                     <td><b>Eligible Amount</b></td>
                     <td id="eliAmt" colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
-                            @Math.Min((double)appliedAmt,Math.Min(valueBank,valueIbja))
+                            @Math.Min((double)appliedAmt,0.75 * Math.Min(valueBank,valueIbja))
                     </td>
                 </tr>
 
