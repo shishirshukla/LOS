@@ -223,7 +223,7 @@
             }
         });
          $('#secDetail').change(function() {
-            var x = $('#secDetail').find(":selected").val();
+            var x = $('#secDetail').find(":selected").text();
             if (x.includes('Gold')) {
                 $('#wt').text('Net Weight (In Gms)');
                 $('#ot').text('Gross Weight (In Gms)');
