@@ -2858,6 +2858,10 @@ namespace MobileBackend.Controllers
             {
                 _context.Entry(app).Reference(a => a.Renewal).Load();
             }
+            if (app.LoanScheme.Contains("MUDRA"))
+            {
+                _context.Entry(app).Collection(a => a.MudraDetails).Load();
+            }
             _context.Entry(app).Collection(a => a.Documents).Load();
             _context.Entry(app).Collection(a => a.Remarks).Load();
             _context.Entry(app).Collection(a => a.LoanApplications).Load();

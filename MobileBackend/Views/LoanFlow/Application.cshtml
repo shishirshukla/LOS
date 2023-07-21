@@ -441,6 +441,97 @@
     </table>
     }
 
+     @if (Model.LoanScheme == "MUDRA-Simplified")
+    {
+        <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <th colspan="2">Financial Details (Amt in Lakhs)</th>
+                <th >
+                     @if (editable)
+                    {
+                        
+ <a href="/LoanFlow/MudraDetails/@Model.Id" class="btn btn-primary btn-sm">
+                        Add Details
+</a>    
+                    }
+                </th>
+                <th colspan="2">
+                     <a href="/LoanFlow/Eligibility/@Model.Id" data-toggle="modal" data-target="#applicantModal" class="btn btn-danger btn-sm">
+                        Limit Assesment</a>
+                </th>
+            </tr>
+            <tr>
+                  
+        <tr>
+            <td style="width: 40%">Particulars</td>
+            <td style="width: 15%">Prev Year (Existing Unit)</td>
+            <td style="width: 15%">Current Year (Existing Unit)</td>
+            <td style="width: 15%">Estimate 1st Year</td>
+            <td style="width: 15%">Estimate 2nd Year</td>
+        
+            </tr>
+        </thead>
+        <tbody id="smeTable">
+            <tr>
+                <td colspan="5" >
+                    <div class="d-flex justify-content-center font-weight-bold">
+                        Profit / Loss Details
+                    </div>
+                    
+                </td>
+            </tr>
+                @if (Model.MudraDetails != null)
+                {
+                    foreach (var i in Model.MudraDetails.Where(a=> a.ParameterType == "PL").OrderByDescending(a=> a.ParameterClass))
+                    {
+                        <tr>
+                            <td>@i.Parameter</td>
+                            <td>@i.PrevYear</td>
+                            <td>@i.CurrentYear</td>
+                            <td>@i.Estimate1</td>
+                            <td>@i.Estimate2</td>
+                        </tr>
+                    
+                        }
+
+
+                }
+
+                 <tr>
+                <td colspan="5" >
+                    <div class="d-flex justify-content-center font-weight-bold">
+                        Balance Sheet Details
+                    </div>
+                    
+                </td>
+            </tr>
+                @if (Model.MudraDetails != null)
+                {
+                    foreach (var i in Model.MudraDetails.Where(a=> a.ParameterType == "BS").OrderByDescending(a=> a.ParameterClass))
+                    {
+                        <tr>
+                            <td>@i.Parameter</td>
+                            <td>@i.PrevYear</td>
+                            <td>@i.CurrentYear</td>
+                            <td>@i.Estimate1</td>
+                            <td>@i.Estimate2</td>
+                        </tr>
+                    
+                        }
+
+
+                }
+
+             
+        </tbody>
+    </table>
+    }
+
+
+
+
+
     @if (Model.LoanScheme.Contains("KCC") )
     {
           <table class="table table-bordered table-sm" style="padding-top:5px;">

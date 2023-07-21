@@ -28,16 +28,19 @@
         </tr>
         <tr>
             <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Sales (Avg)"/>
-                <input type="hidden" value="PL" name="ParamType"/>    
+                <input type="hidden" value="PL" name="ParameterType"/>    
+                <input type="hidden" value="INC" name="ParameterClass"/>    
             </td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
             <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+             
         </tr>
         <tr>
             <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Raw Materials)"/>
-            <input type="hidden" value="PL" name="ParamType"/>    
+            <input type="hidden" value="PL" name="ParameterType"/>    
+            <input type="hidden" value="EXP" name="ParameterClass"/>
             </td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
@@ -45,21 +48,27 @@
             <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
         </tr>
         <tr>
-            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Wages/Salary)"/><input type="hidden" value="PL" name="ParamType"/></td>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Wages/Salary)"/>
+                <input type="hidden" value="EXP" name="ParameterClass"/>
+                <input type="hidden" value="PL" name="ParameterType"/></td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
             <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
         </tr>
         <tr>
-            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Drawings)"/><input type="hidden" value="PL" name="ParamType"/></td>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Drawings)"/>
+                <input type="hidden" value="EXP" name="ParameterClass"/>
+                <input type="hidden" value="PL" name="ParameterType"/></td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
             <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
         </tr>
           <tr>
-            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Other Expenses)"/><input type="hidden" value="PL" name="ParamType"/></td>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Monthly Expense : (Other Expenses)"/>
+                <input type="hidden" value="EXP" name="ParameterClass"/>
+                <input type="hidden" value="PL" name="ParameterType"/></td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
@@ -71,7 +80,9 @@
             </td>
         </tr>
         <tr>
-            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Owner's Equity / Net Worth"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Owner's Equity / Net Worth"/>
+                <input type="hidden" value="L3" name="ParameterClass"/>
+                <input type="hidden" value="BS" name="ParameterType"/></td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
@@ -79,21 +90,36 @@
         </tr>
          
          <tr>
-            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Current Liabilities"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Current Liabilities"/>
+                <input type="hidden" value="L1" name="ParameterClass"/>
+                <input type="hidden" value="BS" name="ParameterType"/></td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
             <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
         </tr>
          <tr>
-            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Term Liabilities"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Term Liabilities"/>
+                <input type="hidden" value="L2" name="ParameterClass"/>
+                <input type="hidden" value="BS" name="ParameterType"/></td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
             <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
         </tr>
         <tr>
-            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Current Assets"/><input type="hidden" value="BS" name="ParamType"/></td>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Current Assets"/>
+                <input type="hidden" value="A2" name="ParameterClass"/>
+                <input type="hidden" value="BS" name="ParameterType"/></td>
+            <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
+            <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
+            <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
+            <td>   <input type="number"  name="Est2" placeholder="Estimate 2"/></td>
+        </tr>
+         <tr>
+            <td> <input style="width: 95%" type="text" readonly name="Parameter" value="Fixed Assets"/>
+                <input type="hidden" value="A1" name="ParameterClass"/>
+                <input type="hidden" value="BS" name="ParameterType"/></td>
             <td> <input type="number"  name="PrevYear" placeholder="Prev Year"/></td>
             <td>   <input type="number"  name="CurrentYear" placeholder="Current Year"/></td>
             <td>    <input type="number"  name="Est1" placeholder="Estimate 1"/></td>
@@ -136,7 +162,8 @@
             if(count > 2)
             {
                 var parameter = $($(e).children()[0]).find('input').first().val();
-                 var parametert = $($(e).children()[1]).find('input').first().val();
+                var parametert = $($(e).children()[0]).find('input[name="ParameterType"]').val();
+                var parameterc = $($(e).children()[0]).find('input[name="ParameterClass"]').val();
                 var prevYear = parseFloat($($(e).children()[1]).find('input').first().val());
                 var currYear = parseFloat($($(e).children()[2]).find('input').first().val());
                 var est1 = parseFloat($($(e).children()[3]).find('input').first().val());
@@ -150,7 +177,8 @@
                 formData.set('CurrentYear',currYear);
                 formData.set('Estimate1',est1);
                 formData.set('Estimate2',est2);
-                 formData.set('ParameterType',parametert);
+                formData.set('ParameterType',parametert);
+                formData.set('ParameterClass',parameterc);
                 console.log($('#ApplicationId').val());
                 console.log('para :' + a);
                  console.log(formData);

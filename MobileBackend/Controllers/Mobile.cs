@@ -383,7 +383,7 @@ namespace MobileBackend.Controllers
             }
             else
             {
-                list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchId).Select(a => a.Id).ToList());
+                list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchDetails.RegionalOffice && a.BrType == "Branch").Select(a => a.Id).ToList());
             }
             List<string> rejects = new List<string>();
             rejects.Add("Not Interested");
