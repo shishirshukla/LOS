@@ -14,15 +14,16 @@
     List<double> nmiTotal = new List<double>();
     List<double> gmiTotal = new List<double>();
     List<DateTime> repayDates = new List<DateTime>();
+    decimal netWeight = 0;
     decimal appliedAmt = Model.LoanApplications.Where(a => a.TypeOfFacility == "TL" || a.TypeOfFacility == "OD").FirstOrDefault().AppliedAmount;
     double valueIbja = 0;
     double valueBank = 0;
-    var goldRate22K = (float)ViewBag.IbjaRate;
+    var goldRate22K = (float)ViewBag.IbjaRate / 10;
     var goldRate18K = 18 * goldRate22K / 22;
     var goldRate19K = 19 * goldRate22K / 22;
     var goldRate20K = 20 * goldRate22K / 22;
     var goldRate21K = 21 * goldRate22K / 22;
-      var goldRate22K1 = (float)ViewBag.AdvRate;
+      var goldRate22K1 = (float)ViewBag.AdvRate / 10;
     var goldRate18K1 = 18 * goldRate22K1 / 22;
     var goldRate19K1 = 19 * goldRate22K1 / 22;
     var goldRate20K1 = 20 * goldRate22K1 / 22;
@@ -40,6 +41,13 @@
     s1.Add("20K", goldRate20K1);
     s1.Add("21K", goldRate21K1);
     s1.Add("22K", goldRate22K1);
+    //  Dictionary<string, Single> s2 = new Dictionary<string, float>();
+    //s2.Add("18K", 18);
+    //s2.Add("19K", 19);
+
+    //s2.Add("20K", goldRate20K1);
+    //s2.Add("21K", goldRate21K1);
+    //s2.Add("22K", goldRate22K1);
 }
 
   
@@ -118,8 +126,8 @@
                                       <th>Net Weight (Gms)</th>
                                       <th>Gross Weight (Gms)</th>
                                       
-                                      <th>Valuer</th>
-                                      <th>Valuation Date</th>
+                                      <th>Net Weight (On 22K Purity Gms)</th>
+                                      
                                   </tr>
                               </thead>
                               <tbody>
@@ -131,11 +139,30 @@
                                        <td>@x.Boundary</td>
                                        <td>@x.PlotNo</td>
                                        <td>@x.Location</td>
-                                       <td>@x.Valuer1</td>
-                                       <td>@x.DateVal1</td>
+                                        <td>
+                                    @{
+                                        var p = Math.Round(int.Parse(x.Description.Replace("K", "")) * decimal.Parse(x.PlotNo) / 22,2);
+                                        netWeight = netWeight + p;
+                                    }
+                                            @p
+                                        </td>
                                    </tr>
                     
                                 }
+                                <tr>
+                                    <td colspan="3">
+                                        Total
+                                    </td>
+                                    <td>
+                                        @Model.Securities.Where(a=> a.Description.Contains("K")).Sum(a=> Decimal.Parse(a.PlotNo))
+                                    </td>
+                                    <td>
+                                        @Model.Securities.Where(a=> a.Description.Contains("K")).Sum(a=> Decimal.Parse(a.Location))
+                                    </td>
+                                    <td>
+                                        @netWeight
+                                    </td>
+                                </tr>
                               </tbody>
                             
 
@@ -148,70 +175,38 @@
                 <tr>
                     <td><b>Value as IBJA Rate</b></td>
                     <td colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
-                           <table>
-                               <thead>
-                                   <tr>
-                                       <th>
-                                           Purity
-                                       </th>
-                                       <th>
-                                           Rate 22K (IBJA)
-                                       </th>
-                                       <th>
-                                           Rate 22K (Bank)
-                                       </th>
-                                       <th>
-                                           Rate as per purity (IBJA)
-                                       </th>
-                                       <th>
-                                           Rate as per purity (Bank)
-                                       </th>
-                                       <th>
-                                           Net Weight
-                                       </th>
-                                       <th>
-                                           Value (IBJA)
-                                       </th>
-                                       <th>
-                                           Value (Bank)
-                                       </th>
-                                   </tr>
-                               </thead>
-                               <tbody>
-                                    @foreach(var x in Model.Securities.GroupBy(a=> a.Description).Select(g=> new { g.Key, sum = g.Sum(a=> Single.Parse(a.PlotNo)) }  ))
-                                    {
-                                        <tr>
-                                            <td>@x.Key</td>
-                                            <td>@goldRate22K</td>
-                                            <td>@goldRate22K1</td>
-                                            <td>@s[x.Key]</td>
-                                            <td>@s1[x.Key]</td>
-                                            <td>@x.sum</td>
-                                            <td>@Math.Round(s[x.Key] * x.sum / 10,0) 
-                                                @{
-                                                    valueIbja = valueIbja + Math.Round(s[x.Key] * x.sum / 10, 0);
-                                                }
+                          
+                          Rs. @goldRate22K / Gm
 
+                          
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Screenshot</b></td>
+                    <td style="height:150px;">
+                        <img style="max-height: 400px;" class="img-fluid"  src="data:image/png;base64, @ViewBag.IbjaProof" />
 
-                                            </td>
-                                            <td>@Math.Round(s1[x.Key] * x.sum / 10,0) 
-                                                @{
-                                                    valueBank = valueBank + Math.Round(s1[x.Key] * x.sum / 10, 0);
-                                                }
-
-
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                           </table>
-                           Total Value as per rates issued by IBJA (Screenshot attached) is Rs. @valueIbja and as per Bank's circular no , is Rs @valueBank.
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Value as Bank Circular</b></td>
+                    <td colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
+                          
+                          Rs. @goldRate22K1 / Gm 
+                          (Circular No - @ViewBag.GoldLoanCircular)
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Valuation Considered</b></td>
+                    <td colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
+                          
+                          Rs. @Math.Min(goldRate22K,goldRate22K1) / Gm
                     </td>
                 </tr>
                  <tr>
                     <td><b>Eligibility as per Valuation </b></td>
                     <td  colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
-                            @(0.75 * Math.Min(valueBank,valueIbja))  (Margin 25%)
+                            @(Math.Round(0.75 * Math.Min(goldRate22K,goldRate22K1) * (double)netWeight,2))  (Margin 25%)
                     </td>
                 </tr>
              
@@ -219,7 +214,7 @@
                 <tr>
                     <td><b>Eligible Amount</b></td>
                     <td id="eliAmt" colspan="@Model.Applicants.Where(b=> b.Driving_Lic != "Deleted" && b.TypeofApplicant != "Guarantor").Count()">
-                            @Math.Min((double)appliedAmt,0.75 * Math.Min(valueBank,valueIbja))
+                            @Math.Min((double)appliedAmt,Math.Round(0.75 * Math.Min(goldRate22K,goldRate22K1) * (double)netWeight,2))
                     </td>
                 </tr>
 

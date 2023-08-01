@@ -268,6 +268,7 @@ namespace MobileBackend.Controllers
                     ViewBag.Doc = tt;
                     return View();
                 }
+               
                 else
                 {
                     var s = await httpClient.GetAsync(docURL);
@@ -369,6 +370,11 @@ namespace MobileBackend.Controllers
             return View();
         }
 
+        string parseCibilDate(string c)
+        {
+            return c;
+        }
+
         public IActionResult CreditScore(int Id,string c = "NO")
         {
             string json;
@@ -377,6 +383,7 @@ namespace MobileBackend.Controllers
             json = t.ResponseFileName;
             ViewBag.ApplicationId = app.ApplicationId;
             var d = new DateTime(2023, 01,3, 17, 00, 0);
+
             if (DateTime.Parse(t.RequestDate) > d.Date)
             {
                 var resp = JsonConvert.DeserializeObject<Models.Cibil3.Root>(json);

@@ -40,24 +40,43 @@
                 {
                     if (Model.LoanScheme != "KCC" )
                     {
-                    if (!(Model.LoanScheme.Contains("Transport")))
+                    if (!(Model.LoanScheme.Contains("Transport")) && !(Model.LoanScheme.Contains("Gold")))
+                    {
+                        <tr>
+                            <td>3 माह की वेतन पर्ची  </td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>
+                        <tr>
+                            <td>Annexure 'E'' &amp; Annexure 'F' (If applicable) </td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>
+                    }
+                    if (Model.LoanScheme.Contains("Gold"))
                     {
                          <tr>
-                        <td>3 माह की वेतन पर्ची  </td>
-                        <td style="font-size:large">▢</td>
-                        <td>...........................</td>
-                    </tr>
-                    <tr>
-                        <td>Annexure 'E'' &amp; Annexure 'F' (If applicable) </td>
-                        <td style="font-size:large">▢</td>
-                        <td>...........................</td>
-                    </tr>    
+                            <td>Latest Salary Slip </td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>
+                        <tr>
+                            <td>Latest Form 16 </td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>
+                        <tr>
+                            <td>Salary Account Statement (Last 6 months) </td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>
                     }
-                   
+
                     }
                 
-                    @if (Model.LoanScheme != "PL" && Model.LoanScheme != "KCC" && !Model.LoanScheme.Contains("Transport"))
+                    @if (Model.LoanScheme != "PL" && Model.LoanScheme != "KCC" && !Model.LoanScheme.Contains("Transport") && !Model.LoanScheme.Contains("Gold"))
                     {
+
                      <tr>
                         <td>2 वर्षों का Form 16  </td>
                         <td style="font-size:large">▢</td>
@@ -73,7 +92,18 @@
                 }
                  @if (Model.Applicants.Where(a => a.Occupation == "Professional" || a.Occupation == "Self Employed" || a.Occupation == "Businessman" && Model.LoanScheme != "KCC" ).Count() > 0)
                 {
-                    <tr>
+                if (Model.LoanScheme.Contains("Gold"))
+                {
+                     <tr>
+                        <td>2 वर्षों  का  ITR with computation of Income  </td>
+                        <td style="font-size:large">▢</td>
+                        <td>...........................</td>
+                    </tr>
+                     
+                }
+                else
+                {
+                     <tr>
                         <td>3 वर्षों  का  ITR  </td>
                         <td style="font-size:large">▢</td>
                         <td>...........................</td>
@@ -83,6 +113,8 @@
                         <td style="font-size:large">▢</td>
                         <td>...........................</td>
                     </tr>
+                }
+               
                     
                 }
                 @if (Model.LoanScheme == "Car" || Model.LoanScheme.Contains("Transport"))
@@ -107,6 +139,21 @@
                         </tr>    
                         
                 }
+            @if (Model.LoanScheme.Contains("Gold"))
+            { 
+                        <tr>
+                            <td>Copy of B1 / P2 (In case of Agri Gold) </td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>  
+                        <tr>
+                            <td>Copy of Udyam Adhaar / Registration (In case of SME Gold)</td>
+                            <td style="font-size:large">▢</td>
+                            <td>...........................</td>
+                        </tr>    
+            }
+
+
             @if (Model.LoanScheme == "KCC")
             {
                 <tr>

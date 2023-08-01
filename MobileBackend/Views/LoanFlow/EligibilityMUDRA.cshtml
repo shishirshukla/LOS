@@ -1,0 +1,231 @@
+﻿@model Application
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    decimal pyInc = 0;
+    decimal pyExp = 0;
+    decimal cyInc = 0;
+    decimal cyExp = 0;
+    decimal e1Inc = 0;
+    decimal e1Exp = 0;
+    decimal e2Inc = 0;
+    decimal e2Exp = 0;
+     
+     var crAsstestPy = Model.MudraDetails.Where(a => a.ParameterClass == "A2").Sum(a=>a.PrevYear);
+     var crAsstestCy = Model.MudraDetails.Where(a => a.ParameterClass == "A2").Sum(a=>a.CurrentYear);
+     var crAsstestE1 = Model.MudraDetails.Where(a => a.ParameterClass == "A2").Sum(a=>a.Estimate1);
+     var crAsstestE2 = Model.MudraDetails.Where(a => a.ParameterClass == "A2").Sum(a=>a.Estimate2);
+
+     var crLiabPy = Model.MudraDetails.Where(a => a.ParameterClass == "L2").Sum(a=>a.PrevYear);
+     var crLiabCy = Model.MudraDetails.Where(a => a.ParameterClass == "L2").Sum(a=>a.CurrentYear);
+     var crLiabE1 = Model.MudraDetails.Where(a => a.ParameterClass == "L2").Sum(a=>a.Estimate1);
+     var crLiabE2 = Model.MudraDetails.Where(a => a.ParameterClass == "L2").Sum(a=>a.Estimate2);
+
+     //var crLiabPy = Model.MudraDetails.Where(a => a.ParameterClass == "L3").Sum(a=>a.PrevYear);
+     //var crLiabCy = Model.MudraDetails.Where(a => a.ParameterClass == "L3").Sum(a=>a.CurrentYear);
+     //var crLiabE1 = Model.MudraDetails.Where(a => a.ParameterClass == "L3").Sum(a=>a.Estimate1);
+     //var crLiabE2 = Model.MudraDetails.Where(a => a.ParameterClass == "L3").Sum(a=>a.Estimate2);
+
+     var crPy = Math.Round(crAsstestPy / crLiabPy , 2);
+     var crCy = Math.Round(crAsstestCy / crLiabCy , 2);
+     var crE1 = Math.Round(crAsstestE1 / crLiabE1 , 2);
+     var crE2 = Math.Round(crAsstestE2 / crLiabE2 , 2);
+
+
+                       
+
+}
+
+
+
+
+<div class="border border-dark">
+    <b>MUDRA Simplified Loan Details</b>
+    <br/>
+     <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <th colspan="5">Financial Details (Amt in Lakhs)</th>
+                 
+            </tr>
+            <tr>
+                  
+        <tr>
+            <td style="width: 40%">Particulars</td>
+            <td style="width: 15%">Prev Year (Existing Unit)</td>
+            <td style="width: 15%">Current Year (Existing Unit)</td>
+            <td style="width: 15%">Estimate 1st Year</td>
+            <td style="width: 15%">Estimate 2nd Year</td>
+        
+            </tr>
+        </thead>
+        <tbody id="smeTable">
+            <tr>
+                <td colspan="5" >
+                    <div class="d-flex justify-content-center font-weight-bold">
+                        Profit / Loss Details
+                    </div>
+                    
+                </td>
+            </tr>
+                @if (Model.MudraDetails != null)
+                {
+                    foreach (var i in Model.MudraDetails.Where(a=> a.ParameterType == "PL").OrderByDescending(a=> a.ParameterClass).OrderByDescending(a=> a.Estimate1))
+                    {
+                    if (i.ParameterClass == "INC")
+                    {
+                        pyInc = pyInc + (i.PrevYear*12);
+                        cyInc = cyInc + (i.CurrentYear*12);
+                        e1Inc = e1Inc + (i.Estimate1*12);
+                        e2Inc = e2Inc + (i.Estimate2*12);
+                    }
+                    else
+                    {
+                         pyExp = pyExp + (12*i.PrevYear);
+                        cyExp = cyExp + (12*i.CurrentYear);
+                        e1Exp = e1Exp + (12*i.Estimate1);
+                        e2Exp = e2Exp + (12*i.Estimate2);
+                    }
+
+
+                        <tr>
+                            <td>@i.Parameter</td>
+                            <td class="align-content-end">@i.PrevYear.ToString("0.00")</td>
+                            <td class="align-content-end">@i.CurrentYear.ToString("0.00")</td>
+                            <td class="align-content-end">@i.Estimate1.ToString("0.00")</td>
+                            <td class="align-content-end">@i.Estimate2.ToString("0.00")</td>
+                        </tr>
+                    
+                        }
+
+
+                }
+
+
+                <tr>
+                    <td class="font-weight-bold"> Yearly Surplus</td>
+                    <td class="font-weight-bold">@(pyInc - pyExp)</td>
+                    <td class="font-weight-bold">@(cyInc - cyExp)</td>
+                    <td class="font-weight-bold"> @(e1Inc - e1Exp)</td>
+                    <td class="font-weight-bold">@(e2Inc - e2Exp)</td>
+                </tr>
+                  <tr>
+                    <td class="font-weight-bold"> Working Capital Required</td>
+                    <td class="font-weight-bold"></td>
+                    <td class="font-weight-bold"></td>
+                    <td class="font-weight-bold"> @((double)e1Inc * 31.25 / 100)</td>
+                    <td class="font-weight-bold">@((double)e2Inc * 31.25 / 100)</td>
+                </tr>
+                <tr>
+                    <td class="font-weight-bold"> Eligible Bank Finance
+                         @if (Model.LoanApplications.Where(a => a.TypeOfFacility == "CC").Sum(a => a.AppliedAmount) > 50000)
+                    {
+                        <b>(90%)</b>
+                    }
+                    else
+                    {
+                        <b>(100%)</b>
+                    }
+
+                    </td>
+                    <td class="font-weight-bold">
+                   
+                    
+                    </td>
+                    <td class="font-weight-bold"></td>
+                    <td class="font-weight-bold">
+                          @if (Model.LoanApplications.Where(a => a.TypeOfFacility == "CC").Sum(a => a.AppliedAmount) > 50000)
+                    {
+                        <b id='eliAmt'>@(Math.Round(0.90* (double)e1Inc * 31.25 / 100,2))</b>
+                    }
+                    else
+                    {
+                        <b>@(Math.Round((double)e1Inc * 31.25 / 100,2))</b>
+                    }
+                        
+
+                        
+                    </td>
+                    <td class="font-weight-bold">
+
+                    @if (Model.LoanApplications.Where(a => a.TypeOfFacility == "CC").Sum(a => a.AppliedAmount) > 50000)
+                    {
+                        <b>@(Math.Round(0.90* (double)e2Inc * 31.25 / 100,2))</b>
+                    }
+                    else
+                    {
+                        <b>@(Math.Round((double)e2Inc * 31.25 / 100,2))</b>
+                    }
+                        
+                   </td>
+                </tr>
+
+                 <tr>
+
+                <td colspan="5" >
+                    <div class="d-flex justify-content-center font-weight-bold">
+                        Balance Sheet Details
+                    </div>
+                    
+                </td>
+            </tr>
+                @if (Model.MudraDetails != null)
+                {
+                    foreach (var i in Model.MudraDetails.Where(a=> a.ParameterType == "BS").OrderByDescending(a=> a.ParameterClass))
+                    {
+                        <tr>
+                            <td>@i.Parameter</td>
+                            <td>@i.PrevYear</td>
+                            <td>@i.CurrentYear</td>
+                            <td>@i.Estimate1</td>
+                            <td>@i.Estimate2</td>
+                    </tr>
+
+                }
+
+                <tr>
+                    <td>Current Ratio</td>
+                    <td>
+                       
+                        @crPy
+                            </td>
+                            <td>
+                                @crCy
+                            </td>
+                            <td>
+                                @crE1
+                            </td>
+                            <td>
+                                @crE2
+                            </td>
+                        </tr>
+                       @* <tr>
+                            <td>TOL /TNW</td>
+                            <td>@i.PrevYear</td>
+                            <td>@i.CurrentYear</td>
+                            <td>@i.Estimate1</td>
+                            <td>@i.Estimate2</td>
+                        </tr>
+                        @if(Model.LoanApplications.Where(a=> a.TypeOfFacility == "TL").Sum(a=> a.AppliedAmount) > 0)
+                {
+                     <tr>
+                            <td>Current Ratio</td>
+                            <td>@i.PrevYear</td>
+                            <td>@i.CurrentYear</td>
+                            <td>@i.Estimate1</td>
+                            <td>@i.Estimate2</td>
+                        </tr>
+                }*@
+               
+                }
+
+             
+        </tbody>
+    </table>
+
+    
+       
+</div>
+            

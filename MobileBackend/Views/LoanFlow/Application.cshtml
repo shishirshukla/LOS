@@ -983,6 +983,72 @@
 
     </table>
 
+      @if(Model.LoanScheme.Contains("MUDRA-Simplified"))
+    {
+           <table  class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="4"><b>Additional Details (MUDRA Loan)</b></td>
+                <td>
+                    @if (editable)
+                    {
+                       
+                        <a href="/LoanFlow/AddRemarkList?formName=application&Id=@Model.Id&view=MUDRA" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Add Additonal Details</a>
+                        
+                    }
+                    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Type
+                </th>
+                 <th>
+                    User Id
+                </th>
+                <th>
+                    Remark
+                </th>
+               <th></th>
+               
+                
+            </tr>
+        </thead>
+        <tbody id="HLRemarks">
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Remarks.Where(a=> a.SpecialRemark == "Yes"))
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td id="@x.TypeOfRemark.Replace(' ','_')">@x.TypeOfRemark </td>
+                     <td>@x.UserId </td>
+                    <td>@x.Statment</td>
+                     <td>  @if (editable)
+                        {
+                            <button type="button" class="btn btn-sm btn-warning" onclick="deleteRemark(@x.Id)" >Delete</button>    
+                               
+                        }
+                       </td>
+                   
+                     
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+    }
+
+
+
+
+
     @if(Model.LoanScheme.Contains("Transport"))
     {
            <table  class="table table-bordered table-sm" style="padding-top:5px;">
@@ -1764,7 +1830,19 @@
                 }
                 
             }
-            window.location = '/Home/Document?docType=loanForm&AppID=' + a + '&LoanType='+b+'&docId=4';
+
+            if($('#LoanScheme') == 'MUDRA-Simplified')
+            {
+                window.location = '/Home/Document?docType=SMEAppraisalForm&AppID=' + a + '&LoanType='+b+'&docId=4';
+            }
+            else
+            {
+                window.location = '/Home/Document?docType=loanForm&AppID=' + a + '&LoanType='+b+'&docId=4';
+            }
+
+
+             
+            
        }
 
        function checkMandate(a)

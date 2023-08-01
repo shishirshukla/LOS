@@ -1153,7 +1153,7 @@ namespace MobileBackend.Controllers
         public IActionResult GetEMI(int Id)
         {
             var scheme = _context.Applications.Find(Id).LoanScheme;
-            var la = _context.LoanApplications.Where(a => a.TypeOfFacility == "TL" && a.ApplicationId == Id).FirstOrDefault();
+            var la = _context.LoanApplications.Where(a => a.ApplicationId == Id && (a.TypeOfFacility == "TL" || a.TypeOfFacility == "OD")).FirstOrDefault();
             var max_date = DateTime.Parse(_context.Applicants.Where(a => a.ApplicationId == Id && a.NMI > 0 && a.Driving_Lic != "Deleted" && a.TypeofApplicant != "Guarantor").Min(b => b.Driving_Lic));
             if (la != null)
             {
@@ -1843,6 +1843,7 @@ namespace MobileBackend.Controllers
             ls.Add("MUDRA-Simplified");
             ls.Add("MUDRA-Transport");
             ls.Add("KCC-Renewal");
+            ls.Add("Gold-LMS");
             ls.Add("KCC-20-Renewal");
             if (brInfo.BrType == "Branch")
             {
@@ -1864,7 +1865,7 @@ namespace MobileBackend.Controllers
             {
                 return RedirectToAction("Application", "LoanFlow" ,new {Id= _protector.Decode(appid.ToString()) });
             }
-            return RedirectToAction("Home", "Dashboard");
+            return RedirectToAction( "Dashboard", "Home");
         }
 
         [Authorize]
@@ -2072,6 +2073,10 @@ namespace MobileBackend.Controllers
             if (view == "KCC")
             {
                 return View("AddKCCDetailsList");
+            }
+            if (view == "MUDRA")
+            {
+                return View("AddMUDRARemarks");
             }
             if (view == "TPL")
             {
@@ -3176,8 +3181,11 @@ namespace MobileBackend.Controllers
             {
                 var dist1 = _context.KeyValues.FromSqlRaw($"SELECT circ_no as code, value::text FROM loanflow.goldrate_bank where start_dt <= Current_Date and end_dt >= Current_Date order by create_dt desc limit 1").ToList();
                 ViewBag.AdvRate = Single.Parse(dist1.FirstOrDefault().value) * 10;
-                ViewBag.IbjaRate = 54080;
+                var dist2 = _context.KeyValues.FromSqlRaw($"SELECT circ_no as code, value::text FROM loanflow.goldrate_ibja where start_dt <= Current_Date and end_dt >= Current_Date order by create_dt desc limit 1").ToList();
+                ViewBag.IbjaRate = Single.Parse(dist2.FirstOrDefault().value) ; 
                 _context.Entry(application).Collection(a => a.Securities).Load();
+                ViewBag.GoldLoanCircular = dist1.FirstOrDefault().code;
+                ViewBag.IbjaProof = dist2.FirstOrDefault().code;
                 return View("EligibilityGold", application);
             }
             else if (application.LoanScheme == "MUDRA-Transport")
@@ -3194,6 +3202,11 @@ namespace MobileBackend.Controllers
 
                 // var otherDetails = _context.Remarks.Where(b => b.ApplicationId == Id).ToList();
                 return View("EligibilityTPL", application);
+            }
+            else if (application.LoanScheme == "MUDRA-Simplified")
+            {
+                _context.Entry(application).Collection(a => a.MudraDetails).Load();
+                return View("EligibilityMUDRA", application);
             }
             else if (application.LoanScheme == "KCC" || application.LoanScheme == "KCC-20")
             {

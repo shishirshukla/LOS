@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<form method="post" action="/LoanFlow/AddRemarkList" >
+
+         <input type="hidden" value="@ViewBag.ApplicationId" name="ApplicationId"/>
+   <input type="hidden" value="@ViewBag.FormName" name="formName"/>
+   <input type="hidden" value="Yes" id="SpecialRemark" name="SpecialRemark" />
+   <div class="row justify-content-between text-left">
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Address of Unit</label>
+    <input type="text" name="Address of Unit"  class="form-control"/>
+   
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Premises</label>
+    <select id="pHL" class="" name="Premises" >
+       <option>Owned</option>
+       <option>Leased</option>
+       <option>Rented</option>
+       
+       <option>Other</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+      <label >Udyam Aadhaar</label>
+    <input type="text" name="Udyam Aadhaar"  class="form-control"/>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Categorization of Unit</label>
+    <select id="Tractor" class="" name="Categorization of Unit" >
+       <option>Micro Entrerprise</option>
+       <option>Small Enterprise</option>
+       <option>Medium Enterprise</option>
+       
+       
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+    <label >Business Activity</label>
+    <select id="House" class="" name="Business Activity" >
+       <option>Retail Trading</option>
+       <option>Wholesale Trading</option>
+       <option>Service Sector</option>
+       <option>Manufacturing Unit</option>
+       <option>Professional Services</option>
+       <option>Transportation Services</option>
+       <option>Construction Services</option>
+       <option>Real Estate</option>
+      
+   </select>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+      <label >Date of Establishment</label>
+    <input type="text" name="Date of Establishment"  class="form-control"/>
+  </div>
+  <div class="form-group col-sm-6 flex-column d-flex">
+  <label >Associate Concerns</label>
+    <input type="text" name="Associate Concerns"  class="form-control"/>
+  </div>
+   
+
+    
+    
+
+   
+    
+   
+
+  </div>
+ 
+  </div>
+   <div class="row justify-content-between text-left">
+  
+ 
+  
+ <div class="form-group col-sm-4 flex-column d-flex">
+    <button type="submit" class="btn btn-primary" id="btnContactUs">Submit</button>
+  </div>
+  </div>
+
+    <!-- form controls -->
+
+    
+    <span id="loading" style="display:none;"> <i class="fas fa-spinner fa-spin"></i></span>
+</form>
+
+<script type="text/javascript">
+
+    
+    
+</script>
