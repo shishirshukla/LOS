@@ -6,6 +6,8 @@ namespace MobileBackend.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<KYCInfo> KycInfo { get; set; }
+
+        public DbSet<PANValidation> PANValidation { get; set; }
         public DbSet<KYCInfoExisting> KycInfoExisting { get; set; }
         public DbSet<CibilAccounts> CibilAccounts { get; set; }
         public DbSet<Branch> Branches { get; set; }

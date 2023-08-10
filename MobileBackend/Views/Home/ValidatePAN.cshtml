@@ -1,0 +1,71 @@
+﻿@model RPACRoot
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<b>Check Status of PAN</b>
+<form method="post" action="/Home/ValidatePAN" enctype="multipart/form-data"  >
+    
+   <div class="row justify-content-between text-left">
+    <div class="form-group col-sm-4 flex-column d-flex">
+        <label >PAN Number</label>
+        <input type="text" name="PAN"  class="form-control-sm" />
+        </div>
+  </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@if(Model != null)
+{
+    <table>
+
+
+     
+        <tr>
+                <td>PAn</td>
+                <td>@Model.data.userpan</td>
+        </tr>
+            <tr>
+                <td>Full Name</td>
+            <td>@Model.data.fullName</td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+            <td>@Model.data.gender</td>
+            </tr>
+           
+            <tr>
+                <td>idenity Type</td>
+            <td>@Model.data.idenityType</td>
+            </tr>
+            <tr>
+                <td>Aadhar Linked Status</td>
+            <td>@Model.data.aadharLinked</td>
+            </tr>
+            
+        <tr>
+            <td>206 AB Applicable</td>
+            <td>
+                @try
+                {
+                    if (((C206AB)ViewBag.Response).responseMessage == "success")
+                    {
+                        <b>@(((C206AB)ViewBag.Response).data.FirstOrDefault().aplicableFlag)</b>
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                    <b>Invalid Data</b>
+                }
+                
+
+                
+                </td>
+        </tr>
+    </table>
+}

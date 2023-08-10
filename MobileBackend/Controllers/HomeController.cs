@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using MobileBackend.Models.PAN;
 using System.Net;
+using MobileBackend.Models.CIBILRespone;
 
 namespace MobileBackend.Controllers
 {
@@ -54,6 +55,63 @@ namespace MobileBackend.Controllers
         public IActionResult Index()
         {
             return RedirectToAction("Login");
+        }
+
+        [Authorize]
+        public IActionResult ValidatePAN()
+        {
+            ViewBag.Response = "";
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ValidatePAN(string PAN)
+        {
+            PANRpac man = new PANRpac();
+            man.entity = PAN;
+            var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
+            var o1 = new RestClientOptions();
+            o1.Proxy = new WebProxy("10.43.5.6:3128");
+            var client = new RestClient(o1);
+            //var client = new RestClient();
+            var request1 = new RestRequest("https://api.rpacpc.com/services/get-adv-lite");
+            request1.AddHeader("Accept", "*/*");
+            request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
+            request1.AddHeader("Connection", "keep-alive");
+
+            request1.AddHeader("secretkey", _configuration["rpac_secret"]);
+            request1.AddHeader("token", _configuration["rpac_token"]);
+            request1.AddHeader("Content-Type", "application/json");
+            request1.AddBody(js, "application/json");
+            var token_response = await client.ExecuteAsync(request1, Method.Post);
+
+            PANRpac206 man1 = new PANRpac206();
+            man1.pancard = PAN;
+            var js1 = Newtonsoft.Json.JsonConvert.SerializeObject(man1);
+
+            var request2 = new RestRequest("https://api.rpacpc.com/services/get-ab-details");
+            request2.AddHeader("Accept", "*/*");
+            request2.AddHeader("Accept-Encoding", "gzip, deflate, br");
+            request2.AddHeader("Connection", "keep-alive");
+
+            request2.AddHeader("secretkey", _configuration["rpac_secret"]);
+            request2.AddHeader("token", _configuration["rpac_token"]);
+            request2.AddHeader("Content-Type", "application/json");
+            request2.AddBody(js1, "application/json");
+            var token_response1 = await client.ExecuteAsync(request2, Method.Post);
+
+            PANValidation pan = new PANValidation();
+            pan.UserId = User.Identity.Name;
+            pan.PANNo = PAN;
+            pan.response1 = token_response.Content;
+            pan.response2 = token_response1.Content;
+            pan.req_date = DateTime.Now;
+            _context.PANValidation.Add(pan);
+            _context.SaveChanges();
+
+
+            ViewBag.Response = Newtonsoft.Json.JsonConvert.DeserializeObject<C206AB>(token_response1.Content); 
+
+            return View(Newtonsoft.Json.JsonConvert.DeserializeObject<RPACRoot>(token_response.Content));
         }
 
         public async Task<IActionResult> UpdateMandateStatus()

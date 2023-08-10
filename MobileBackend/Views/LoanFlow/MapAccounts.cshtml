@@ -60,12 +60,12 @@
                 <tr>
                     <td>  @if (!ls.Contains(x.LoanScheme))
                         { 
-                           <a href="/LoanFlow/AddControlDetails?Id=@_protector.Decode(x.Id.ToString())" onclick="showModal();">Details</a>
+                           <a href="/LoanFlow/AddControlDetails?Id=@_protector.Decode(x.Id.ToString())" onclick="showModal();">@x.Id</a>
 
                         }
                         else
                         {
-                            <a href="/LoanFlow/Application?Id=@_protector.Decode(x.Id.ToString())" onclick="showModal();">Details</a>
+                            <a href="/LoanFlow/Application?Id=@_protector.Decode(x.Id.ToString())" onclick="showModal();">@x.Id</a>
                         }
                      </td>
                     <td>@x.ApplicantShortName</td>

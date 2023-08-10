@@ -22,6 +22,8 @@
         
     </div>
 
+ 
+
    
 
     <table class="table table-bordered table-sm" style="padding-top:5px;">
@@ -1431,6 +1433,9 @@
                 <th>
                     Visit Date
                 </th>
+                 <th>
+                   Location
+                </th>
                 <th>
                     <button type="button" class="btn btn-sm btn-warning" onclick="viewPresanction(@Model.Id,'@Model.LoanScheme')" >View Report</button>
                 </th>
@@ -1459,7 +1464,7 @@
                     </td>
                     <td>@x.UserId</td>
                     <td>@x.VisitDate.ToShortDateString()</td>
-                   
+                    <td>@x.ClosureOfficialId</td>
                     <td> 
                         @if (editable)
                         {
@@ -1478,7 +1483,38 @@
 
     }
 
-
+       <table class="table table-bordered table-sm" style="padding-top:5px;"> 
+        <tr>
+            <td colspan="2">External Verification</td>
+        </tr>
+       @foreach (var item in (List<KeyValue>)ViewBag.Inspections )
+        {
+            if (item.code.Contains("Photo"))
+            {
+                <tr>
+                <td>
+                    @item.code
+                </td>
+                <td>
+                        <img class="img img-thumbnail" style="max-height:250px;" src="data:image/jpeg;base64, @item.value" />
+                    </td>
+            </tr>
+            }
+            else
+            {
+                <tr>
+                <td>
+                    @item.code
+                </td>
+                <td>
+                    @item.value
+                </td>
+            </tr>
+            }
+            
+            
+        }
+    </table>
 
 
        

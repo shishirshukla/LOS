@@ -2462,7 +2462,7 @@ namespace MobileBackend.Controllers
                 list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchDetails.RegionalOffice && a.BrType == "Branch").Select(a => a.Id).ToList());
             }
             ViewBag.UserLevel = branch.BrType;
-            var applications = _context.Applications.Where(a => a.Status == "Sanctioned"  && (a.ControlStatus=="Pending" || a.ControlStatus == "Control Return") && list.Contains(a.BranchId) ).Include(a=> a.Branch).ToList();
+            var applications = _context.Applications.Where(a => a.Status == "Sanctioned"  && (a.ControlStatus=="Pending" || a.ControlStatus == "Control Returned") && list.Contains(a.BranchId) ).Include(a=> a.Branch).ToList();
             return View(applications);
         }
         [Authorize]
@@ -2529,14 +2529,15 @@ namespace MobileBackend.Controllers
             ViewBag.UserLevel = branch.BrType;
 
             var applications = new List<Application>();
-            if (user.Designation == "Regional Manager")
-            {
-                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "Control Returned" && list.Contains(a.BranchId) && (a.SanctioningLevel == "AMH Head" || a.SanctioningLevel == "Manager Business" || a.SanctioningLevel == "Manager Advance")).ToList();
-            }
-            else if (user.Designation == "Manager Business")
-            {
-                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "Control Returned" && list.Contains(a.BranchId) && !(a.SanctioningLevel == "AMH Head" || a.SanctioningLevel == "Manager Business" || a.SanctioningLevel == "Manager Advance")).ToList();
-            }
+            applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "Control Returned" && list.Contains(a.BranchId)).ToList();
+            //if (user.Designation == "Regional Manager")
+            //{
+            //    applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "Control Returned" && list.Contains(a.BranchId)).ToList();
+            //}
+            //else if (user.Designation == "Manager Business")
+            //{
+            //    applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "Control Returned" && list.Contains(a.BranchId)).ToList();
+            //}
             return View("PendingControl",applications);
         }
         [Authorize]
@@ -2844,6 +2845,11 @@ namespace MobileBackend.Controllers
             {
                 return RedirectToAction("AddControlDetails",new {Id = Id });
             }
+
+
+            var inspectionIds = _context.KeyValues.FromSqlRaw($"SELECT  \"Statement\" code, \"RemarksVisitingOfficial\" value FROM loanflow.\"PreIsnpectionRemarks\" a inner join loanflow.\"PreInspectionValueStatements\" b on (a.\"ValueStatementId\" = b.\"Id\") inner join loanflow.\"PreInspection\" c on (c.\"Id\" = a.\"VisitId\") Where c.\"Status\" = 'EXTERNAL' and c.\"ApplicationId\" = {app.Id};").ToList();
+            ViewBag.Inspections = inspectionIds;
+           // _context.Entry(app).Collection(a => a.Inspections).Load();
             _context.Entry(app).Collection(a=> a.Applicants).Load();
             List<int> applicantIds = app.Applicants.Where(a=> a.ApplicationId == id && a.Driving_Lic != "Deleted").Select(b=> b.Id).ToList();
             List<CIBILRequest> cs = _context.CIBILRequests.Include(a=> a.CibilLoans).Include(a=> a.ApplicantDetail).Where(a=>  applicantIds.Contains(a.ApplicantId) && a.CiibilControlNumber != "Deleted" && a.Score2 != "Failed").ToList();

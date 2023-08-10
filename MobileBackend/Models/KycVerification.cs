@@ -1,4 +1,6 @@
-﻿namespace MobileBackend.Models
+﻿using System;
+
+namespace MobileBackend.Models
 {
     public class AdhaarReq
     {
@@ -81,5 +83,25 @@
         public string pan { get; set; }
         public string consent { get; set; }
         public string reason { get; set; }
+    }
+    public class PANRpac
+    {
+        public PANRpac()
+        {
+            requestid = Guid.NewGuid().ToString().Replace("-","");
+            //reason = "For KYC of Customer";
+        }
+        public string entity { get; set; }
+        public string requestid { get; set; }
+    }
+    public class PANRpac206
+    {
+        public PANRpac206()
+        {
+            requestid = Guid.NewGuid().ToString().Replace("-", "");
+            //reason = "For KYC of Customer";
+        }
+        public string pancard { get; set; }
+        public string requestid { get; set; }
     }
 }

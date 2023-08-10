@@ -139,12 +139,12 @@ namespace MobileBackend
                     }
                     else {
                         var header = context.Request.Headers["Authorization"];
-                        if (string.IsNullOrEmpty(header)) {
-                            if (!context.Request.Path.Value.Contains("Login"))
-                            {
-                                context.Response.Redirect("/Home/Login");
-                            }
-                        }
+                        //if (string.IsNullOrEmpty(header)) {
+                        //    if (!context.Request.Path.Value.Contains("Login"))
+                        //    {
+                        //        context.Response.Redirect("/Home/Login");
+                        //    }
+                        //}
                        
                          
                         
