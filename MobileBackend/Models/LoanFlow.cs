@@ -448,6 +448,20 @@ namespace MobileBackend.Models
 
     }
 
+    public class PostSanctionVisit
+    {
+        public int Id  { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string AccountNo { get; set; }
+        public string latlong { get; set; }
+        public string image1 { get; set; }
+        public string image2 { get; set; }
+        public string Status { get; set; }
+        public string Remarks { get; set; }
+        public string VisitDate { get; set; }
+        public string UserId { get; set; }
+    }
+
     public class ProjectCost
     {
         [Key]
@@ -484,7 +498,7 @@ namespace MobileBackend.Models
             collection_amount_type = "FIXED";
             
             mandate_type_category_code = "L001";
-            is_until_cancel = true;
+            untill_30_years = true;
             quick_invite = true;
             authentication_mode = "netBanking";
            
@@ -512,7 +526,7 @@ namespace MobileBackend.Models
         public string collection_amount_type { get; set; }
         public int amount { get; set; }
         public string mandate_type_category_code { get; set; }
-        public bool is_until_cancel { get; set; }
+        public bool untill_30_years { get; set; }
         public bool quick_invite { get; set; }
         public string authentication_mode { get; set; }
         public string instructed_agent_code { get; set; }

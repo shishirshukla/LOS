@@ -55,7 +55,7 @@
             @foreach(var x in Model)
             {
                 <tr>
-                    <td><a href="/LoanFlow/Application/@_protector.Decode(x.Id.ToString())">@x.Id</a></td>
+                    <td><a href="/LoanFlow/ControlForm/@_protector.Decode(x.Id.ToString())">@x.Id</a></td>
                     <td>@x.Branch.BranchName (@x.Branch.Id)</td>
                     <td>@x.ApplicantShortName</td>
                     

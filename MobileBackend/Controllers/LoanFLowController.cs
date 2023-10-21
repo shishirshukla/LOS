@@ -9,9 +9,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MobileBackend.Models;
 using RestSharp;
+
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -1587,7 +1588,7 @@ namespace MobileBackend.Controllers
         [Authorize]
         public IActionResult SaveResidence(string ac, string vill)
         {
-            _context.Database.ExecuteSqlRaw($"UPDATE loanflow.\"Basic_Details\" SET  residential_vill='{vill}' WHERE \"ApplicationId\" = '{ac}' ");
+            _context.Database.ExecuteSqlRaw($"UPDATE loanflow.\"Basic_Details\" SET  residential_vill='{vill}' WHERE \"ApplicationId\" = LPAD('{ac}',17,'0') ");
 
            return Ok(0);
         }
@@ -1873,7 +1874,9 @@ namespace MobileBackend.Controllers
         {
             var u = await _userManager.FindByNameAsync(User.Identity.Name);
             var mandates = _context.ExistingAcMandates.Where(a => a.branch == u.BranchId).ToList();
-
+            var mandates1 = _context.Mandates.Include(a=> a.ApplicationDetail).Where(a=> a.ApplicationDetail.BranchId == u.BranchId).ToList();
+            
+            ViewBag.MandateLMS = mandates1;
 
             return View(mandates);
         }
@@ -2025,6 +2028,11 @@ namespace MobileBackend.Controllers
                 ViewBag.IsControl = false;
             }
             if (formName == "control")
+            {
+                ViewBag.IsSanction = false;
+                ViewBag.IsControl = true;
+            }
+            if (formName == "control1")
             {
                 ViewBag.IsSanction = false;
                 ViewBag.IsControl = true;
@@ -2195,6 +2203,10 @@ namespace MobileBackend.Controllers
             {
                 return RedirectToAction("Control", new { Id = _protector.Decode(application.ApplicationId.ToString()) });
             }
+            if (formName == "control1")
+            {
+                return RedirectToAction("ControlDetails", new { Id = _protector.Decode(application.ApplicationId.ToString()) });
+            }
             return RedirectToAction("Application", new { Id = _protector.Decode(application.ApplicationId.ToString()) });
 
         }
@@ -2259,6 +2271,33 @@ namespace MobileBackend.Controllers
             AddLog(application.ApplicationId, user.UserName, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", "Disbursement Added");
             return RedirectToAction("Sanction", new { Id = _protector.Decode(application.ApplicationId.ToString()) });
         }
+
+
+        [Authorize]
+        public IActionResult DownloadAllDocuments(int Id)
+        {
+            var dd = _context.Documents.Where(a => a.ApplicationId == Id).ToList();
+            var filePath = Path.Join(_appEnvironment.WebRootPath, $"App-{Id}");
+            if (Directory.Exists(filePath))
+            {
+                Directory.Delete(filePath);
+                Directory.CreateDirectory(filePath);
+            }
+            else
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            foreach (var item in dd)
+            {
+                System.IO.File.Copy(Path.Join(_appEnvironment.WebRootPath, item.FilePath), Path.Join(filePath,$"{item.Details}-{item.FilePath}"));
+            }
+            System.IO.Compression.ZipFile.CreateFromDirectory(filePath, Path.Join(_appEnvironment.WebRootPath, $"App-{Id}.zip"));
+
+
+            return File( $"~/App-{Id}.zip", "application/zip");
+        }
+
+
 
 
         [Authorize]
@@ -2496,10 +2535,15 @@ namespace MobileBackend.Controllers
             {
                 applications = _context.Applications.Include(a=> a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == "AMH Head" || a.SanctioningLevel == "Manager Business" || a.SanctioningLevel == "Manager Advance")).ToList();
             }
-            else if (user.Designation == "Manager Business" || user.Designation == "AMH Head")
+            else if (user.Designation == "Manager Business")
+            {
+                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == null  || a.SanctioningLevel == "Branch Manager")).ToList();
+            }
+            else if (user.Designation == "AMH Head")
             {
                 applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == "AMH 2nd Officer" || a.SanctioningLevel == "Branch Manager")).ToList();
             }
+
             return View(applications);
         }
         [Authorize]
@@ -2733,6 +2777,7 @@ namespace MobileBackend.Controllers
             }
             else if (sch == "Other")
             {
+                ls.Add("Gold-LMS");
                 ls.Add("LAP");
                 ls.Add("Topup");
                 ls.Add("Sme");
@@ -2760,6 +2805,7 @@ namespace MobileBackend.Controllers
             }
             else
             {
+                ls.Add("Gold-LMS");
                 ls.Add("PL");
                 ls.Add("KCC");
                 ls.Add("KCC-20");
@@ -2968,6 +3014,53 @@ namespace MobileBackend.Controllers
             _context.SaveChanges();
             return RedirectToAction("ListApplication");
         }
+
+        [Authorize]
+        public async Task<IActionResult> ControlForm(string Id)
+        {
+
+            int id = int.Parse(_protector.Encode(Id));
+            var app = _context.Applications.Find(id);
+
+            _context.Entry(app).Collection(a => a.Applicants).Load();
+            List<int> applicantIds = app.Applicants.Where(a => a.ApplicationId == id && a.Driving_Lic != "Deleted").Select(b => b.Id).ToList();
+            List<CIBILRequest> cs = _context.CIBILRequests.Include(a => a.CibilLoans).Include(a => a.ApplicantDetail).Where(a => applicantIds.Contains(a.ApplicantId) && a.CiibilControlNumber != "Deleted" && a.Score2 != "Failed").ToList();
+            var acc_no = "00";
+            if (app.MappedTLAccount != null)
+            {
+                if (app.MappedTLAccount != "0")
+                {
+                    acc_no = app.MappedTLAccount;
+                }
+
+            }
+            if (app.MappedCCAccount != null)
+            {
+                if (app.MappedCCAccount != "0")
+                {
+                    acc_no = app.MappedCCAccount;
+                }
+
+            }
+
+            var ac = _context.AccountData.FromSqlRaw($"SELECT account_no,  acctopendate, currentbalance,  odlimit,  accounttype, interestcat, intrate,name,cust_name 	FROM public.temp_loan Where upload_date = (select max(upload_date)  FROM public.temp_loan) and  account_no = LPAD('{acc_no}',17,'0')").FirstOrDefault();
+            ViewBag.AccountDetails = ac;
+            var application = _context.Applications.Include(a => a.Applicants).Include(a => a.LoanApplications).Include(a => a.Documents).Include(a => a.Remarks).Include(a => a.Charges).Include(a => a.Disbursements).Include(a => a.Logs).Where(a => a.Id == id).FirstOrDefault();
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var branch = _context.Branches.Find(user.BranchId);
+            ViewBag.IsAbleToControl = false;
+            if ((user.Designation == "Manager Business" || user.Designation == "Regional Manager") && branch.BrType == "RO")
+            {
+                ViewBag.IsAbleToControl = true;
+            }
+            ViewBag.Editable = false;
+            ViewData["CreditScore"] = cs;
+            ViewBag.CreditScore = cs;
+            return View(application);
+        }
+
+       
+
         [Authorize]
         public async Task<IActionResult> Control(string Id)
         {
@@ -3015,15 +3108,44 @@ namespace MobileBackend.Controllers
         public IActionResult ControlDetails(string Id)
         {
             int id = int.Parse(_protector.Encode(Id));
-            var application = _context.Applications.Include(a => a.Applicants).Include(a=> a.ControlInformations).Where(a => a.Id == id).FirstOrDefault();
-            if (application.ControlInformations is null)
+            var app = _context.Applications.Find(id);
+            _context.Entry(app).Collection(a => a.Applicants).Load();
+            _context.Entry(app).Collection(a => a.Remarks).Load();
+            _context.Entry(app).Reference(a => a.ControlInformations).Load();
+
+            List<int> applicantIds = app.Applicants.Where(a => a.ApplicationId == id && a.Driving_Lic != "Deleted").Select(b => b.Id).ToList();
+            List<CIBILRequest> cs = _context.CIBILRequests.Include(a => a.CibilLoans).Include(a => a.ApplicantDetail).Where(a => applicantIds.Contains(a.ApplicantId) && a.CiibilControlNumber != "Deleted" && a.Score2 != "Failed").ToList();
+            var acc_no = "00";
+            if (app.MappedTLAccount != null)
             {
-                application.ControlInformations = new ControlInformation();
+                if (app.MappedTLAccount != "0")
+                {
+                    acc_no = app.MappedTLAccount;
+                }
+
             }
+            if (app.MappedCCAccount != null)
+            {
+                if (app.MappedCCAccount != "0")
+                {
+                    acc_no = app.MappedCCAccount;
+                }
+
+            }
+
+            var ac = _context.AccountData.FromSqlRaw($"SELECT account_no,  acctopendate, currentbalance,  odlimit,  accounttype, interestcat, intrate,name,cust_name 	FROM public.temp_loan Where account_no = LPAD('{acc_no}',17,'0')").FirstOrDefault();
+            ViewBag.AccountDetails = ac;
+           // var application = _context.Applications.Include(a => a.Applicants).Include(a => a.LoanApplications).Include(a => a.Documents).Include(a => a.Inspections).Include(a => a.Charges).Include(a => a.Disbursements).Include(a => a.Remarks).Where(a => a.Id == id).FirstOrDefault();
+
+            if (app.ControlInformations is null)
+            {
+                app.ControlInformations = new ControlInformation();
+            }
+
             ViewBag.Editable = false;
+            ViewBag.CreditScore = cs;
 
-
-            return View(application);
+            return View(app);
         }
 
 
@@ -3185,9 +3307,15 @@ namespace MobileBackend.Controllers
             }
             else if (application.LoanScheme == "Gold-LMS")
             {
-                var dist1 = _context.KeyValues.FromSqlRaw($"SELECT circ_no as code, value::text FROM loanflow.goldrate_bank where start_dt <= Current_Date and end_dt >= Current_Date order by create_dt desc limit 1").ToList();
+                var cr = DateTime.Now.ToString("yyyy-MM-dd");
+                if (application.Status == "Sanctioned")
+                {
+                    cr = application.SanctionedDate.Value.ToString("yyyy-MM-dd");
+                }
+               
+                var dist1 = _context.KeyValues.FromSqlRaw($"SELECT circ_no as code, value::text FROM loanflow.goldrate_bank where start_dt <= '{cr}' and end_dt >= '{cr}' order by create_dt desc limit 1").ToList();
                 ViewBag.AdvRate = Single.Parse(dist1.FirstOrDefault().value) * 10;
-                var dist2 = _context.KeyValues.FromSqlRaw($"SELECT circ_no as code, value::text FROM loanflow.goldrate_ibja where start_dt <= Current_Date and end_dt >= Current_Date order by create_dt desc limit 1").ToList();
+                var dist2 = _context.KeyValues.FromSqlRaw($"SELECT circ_no as code, value::text FROM loanflow.goldrate_ibja where start_dt <= '{cr}' and end_dt >= '{cr}' order by create_dt desc limit 1").ToList();
                 ViewBag.IbjaRate = Single.Parse(dist2.FirstOrDefault().value) ; 
                 _context.Entry(application).Collection(a => a.Securities).Load();
                 ViewBag.GoldLoanCircular = dist1.FirstOrDefault().code;
@@ -3503,6 +3631,10 @@ namespace MobileBackend.Controllers
                     {
                         checkControl = true;
                     }
+                    if (userBranch.BrType == "RO" && (user.Designation == "Regional Manager") && application.SanctioningLevel == "Manager Business")
+                    {
+                        checkControl = true;
+                    }
                 }
                 if (checkControl)
                 {
@@ -3510,7 +3642,7 @@ namespace MobileBackend.Controllers
                     application.ControlStatus = "Controlled";
                     _context.Entry(application).State = EntityState.Modified;
                     _context.SaveChanges();
-                    //AddLog(id, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", action1);
+                    AddLog(id, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", action1);
                     return RedirectToAction("PendingControl", new { msg = "Application Controlled" });
                 }
                 return RedirectToAction("PendingControl", new { msg = "Control Not Allowed" });

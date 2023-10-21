@@ -141,6 +141,163 @@
         </tr>
     </table>
 
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <th colspan="8">Cibil Details (Latest enquiry will be used for calculation)</th>
+            </tr>
+            <tr>
+                <th>S.No.</th>
+                <th>Applicant Name</th>
+                <th>Cibil Score</th>
+                <th>Date</th>
+                <th>Total Accounts</th>
+                <th>Closed Accounts</th>
+                <th>Overdue Accounts</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="cibilTable">
+            @{
+                int crCount = 1;
+            }
+            @foreach (var x in (List<CIBILRequest>)ViewBag.CreditScore)
+            {
+                <tr>
+                    <td>@crCount</td>
+                    <td>@x.ApplicantDetail.Applicant_First_Name @x.ApplicantDetail.Applicant_Last_Name</td>
+                    <td><a href="/Home/CreditScore/@x.Id">@x.ScoreName1 </a>  </td>
+                    <td>@x.RequestDate</td>
+                    <td>@x.CibilLoans.Count()</td>
+                    <td>@x.CibilLoans.Where(a => a.currentBalance == "0").Count()</td>
+                    <td>@x.CibilLoans.Where(a => int.Parse(a.amountOverdue ?? "0") != 0).Count()</td>
+                    <td>
+                        @if (editable)
+                        {
+                            <a class="btn btn-sm btn-primary" href="/Home/UpdateEmi/@x.Id">Update EMI</a> <a class="btn btn-sm btn-info" href="/LoanFlow/AddCibil/@x.Id" data-toggle="modal" data-target="#applicantModal">Add Additional Loan</a>
+                        }
+                    </td>
+                </tr>
+                crCount++;
+            }
+        </tbody>
+    </table>
+
+
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="5">Details of Applicant</td>
+                <td colspan="2">
+                    @if (editable)
+                    {
+                        <a href="/LoanFlow/AddApplicant/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">
+                            Add Applicant
+                        </a> <a href="/LoanFlow/SearchApplicant/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#searchModal">
+                            Copy / Search
+                        </a>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Date of Birth
+                </th>
+                <th>
+                    Occupation
+                </th>
+                <th>
+                    KYC Document
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var x in Model.Applicants.Where(a => a.Driving_Lic != "Deleted"))
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Salutation @x.Applicant_First_Name @x.Applicant_Middle_Name @x.Applicant_Last_Name @x.Relationship @x.Guardian_Name</td>
+                    <td>@x.TypeofApplicant</td>
+                    <td>@x.Date_Of_Birth</td>
+                    <td>@x.Occupation</td>
+                    <td> <a href="/@x.KYC_Upload">Download KYC</a>  </td>
+                    <td>
+                        @if (editable)
+                        {
+                            <a class="btn-danger btn btn-sm" href="/LoanFlow/EditApplicant/@x.Id" data-toggle="modal" data-target="#applicantModal">Edit</a>  <button type="button" class="btn btn-sm btn-warning" onclick="deleteApp(@x.Id)">Delete</button>
+                        }
+
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+
+    
+      <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="2"><b>Remarks / Recommendation</b></td>
+                <td>
+                    <a id="addRem" href="/LoanFlow/AddRemark?Id=@Model.Id&formName=control" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">Add</a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Type
+                </th>
+                 <th>
+                    User Id
+                </th>
+                <th>
+                    Remark
+                </th>
+               
+               
+                
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach(var x in Model.Remarks)
+            {
+
+                <tr id="@x.TypeOfRemark.Replace(' ','_')">
+                    <td>@slno</td>
+                    <td>@x.TypeOfRemark </td>
+                    <td>@x.UserId</td>
+                    <td>@x.Statment</td>
+                    
+                   
+                     
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+
+
   <form method="post" action="#" enctype="multipart/form-data">
     <input type="hidden" value="@Model.Id" name="ApplicationId"/>
      <div class="row justify-content-between text-left">
@@ -148,7 +305,7 @@
                      <label>Applied Amount</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="AppliedAmt" value="@Model.ControlInformations.AppliedAmt" />
+                <input type="text" name="AppliedAmt" readonly value="@Model.ControlInformations.AppliedAmt" />
              </div>
      
             </div>
@@ -157,7 +314,7 @@
                      <label>Sanctioned TL</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="SanctionTL" value="@Model.ControlInformations.SanctionedTL" />
+                <input type="text" name="SanctionTL" readonly value="@Model.ControlInformations.SanctionedTL" />
              </div>
      
             </div>
@@ -166,7 +323,7 @@
                      <label>Sanctioned CC</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="SanctionCC" value="@Model.ControlInformations.SanctionedCC" />
+                <input type="text" name="SanctionCC" readonly value="@Model.ControlInformations.SanctionedCC" />
              </div>
      
             </div>
@@ -177,7 +334,7 @@
                      <label>@statement1</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement1" value="@Model.ControlInformations.Statement1" />
+                    <input type="text" name="statement1" readonly value="@Model.ControlInformations.Statement1" />
              </div>
      
             </div>
@@ -190,7 +347,7 @@
                      <label>@statement2</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement2"  value="@Model.ControlInformations.Statement2"/>
+                    <input type="text" name="statement2" readonly value="@Model.ControlInformations.Statement2" />
              </div>
      
             </div>
@@ -202,7 +359,7 @@
                      <label>@statement3</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement3" value="@Model.ControlInformations.Statement3" />
+                <input type="text" name="statement3" readonly value="@Model.ControlInformations.Statement3" />
              </div>
      
             </div>
@@ -214,7 +371,7 @@
                      <label>@statement4</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement4"  value="@Model.ControlInformations.Statement4"/>
+                    <input type="text" name="statement4" readonly value="@Model.ControlInformations.Statement4" />
              </div>
      
             </div>
@@ -226,7 +383,7 @@
                      <label>@statement5</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement5"  value="@Model.ControlInformations.Statement5"/>
+                    <input type="text" name="statement5" readonly value="@Model.ControlInformations.Statement5" />
              </div>
      
             </div>
@@ -238,7 +395,7 @@
                      <label>@statement6</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement6" value="@Model.ControlInformations.Statement6"/>
+                <input type="text" name="statement6" readonly value="@Model.ControlInformations.Statement6"/>
              </div>
      
             </div>
@@ -250,7 +407,7 @@
                      <label>@statement7</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement7" value="@Model.ControlInformations.Statement7"/>
+                    <input type="text" name="statement7" readonly value="@Model.ControlInformations.Statement7" />
              </div>
      
             </div>
@@ -262,7 +419,7 @@
                      <label>@statement8</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement8" value="@Model.ControlInformations.Statement8" />
+                    <input type="text" name="statement8" readonly value="@Model.ControlInformations.Statement8" />
              </div>
      
             </div>
@@ -274,7 +431,7 @@
                      <label>@statement9</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement9" value="@Model.ControlInformations.Statement9"/>
+                    <input type="text" name="statement9" readonly value="@Model.ControlInformations.Statement9" />
              </div>
      
             </div>
@@ -286,7 +443,7 @@
                      <label>@statement10</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement10" value="@Model.ControlInformations.Statement10"/>
+                    <input type="text" name="statement10" readonly value="@Model.ControlInformations.Statement10" />
              </div>
      
             </div>
@@ -298,7 +455,7 @@
                      <label>@statement11</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement11" value="@Model.ControlInformations.Statement11"/>
+                    <input type="text" name="statement11" readonly value="@Model.ControlInformations.Statement11" />
              </div>
      
             </div>
@@ -310,7 +467,7 @@
                      <label>@statement12</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement12" value="@Model.ControlInformations.Statement12"/>
+                    <input type="text" name="statement12" readonly value="@Model.ControlInformations.Statement12" />
              </div>
      
             </div>
@@ -323,7 +480,7 @@
                      <label>@statement13</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement13" value="@Model.ControlInformations.Statement13" />
+                <input type="text" name="statement13" readonly value="@Model.ControlInformations.Statement13" />
              </div>
      
             </div>
@@ -335,7 +492,7 @@
                      <label>@statement14</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement14" value="@Model.ControlInformations.Statement14" />
+                    <input type="text" name="statement14" readonly value="@Model.ControlInformations.Statement14" />
              </div>
      
             </div>
@@ -347,7 +504,7 @@
                      <label>@statement15</label>
                </div>
             <div class="form-group col-sm-5 flex-column d-flex">
-                <input type="text" name="statement15" value="@Model.ControlInformations.Statement15" />
+                    <input type="text" name="statement15" readonly value="@Model.ControlInformations.Statement15" />
              </div>
      
             </div>
@@ -373,67 +530,48 @@
 </div> 
 
 <div class="modal" id="applicantModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Applicant</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        
-      </div>
-      <div class="modal-footer">
-       
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remarks</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-<div class="modal" id="searchModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Search Applicant</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        
-      </div>
-      <div class="modal-footer">
-       
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal" id="loadingModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-       
-      <div class="modal-body">
-        <img src="/images/loading-6.gif" class="img-fluid"/>
-      </div>
-       
-    </div>
-  </div>
-</div>
+
+
 
 
 @section scripts
 {
     <script type="text/javascript">
-        function sanction(a)
-    {
-        if(confirm("Are you sure ?"))
-        {
-            window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Control';
+
+        $('#addRem').on('click', function () {
+            $('.modal-body').load('/LoanFlow/AddRemark?Id=@Model.Id&formName=control1', function () {
+                $('#applicantModal').modal({ show: true });
+            });
+        });
+
+        function sanction(a) {
+            if (confirm("Are you sure ?")) {
+                var count = $("#Control_Remarks").length;
+                if (count == 0) {
+                    alert('No Control Remarks present , Cannot proceed   !');
+                    return;
+                }
+                window.location = '/LoanFlow/UpdateStatus?Id=' + a + '&action1=Control';
+            }
+
         }
-        
-    }
     function returnp(a)
     {
         if(confirm("Are you sure ?"))

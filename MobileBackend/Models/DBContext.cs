@@ -6,6 +6,7 @@ namespace MobileBackend.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<KYCInfo> KycInfo { get; set; }
+        public DbSet<Cust360N> Cust360New { get; set; }
 
         public DbSet<PANValidation> PANValidation { get; set; }
         public DbSet<KYCInfoExisting> KycInfoExisting { get; set; }
@@ -70,6 +71,7 @@ namespace MobileBackend.Models
         public DbSet<LeadRoadMapGen> LeadCommentsGen { get; set; }
         public DbSet<TPLDetail> TPLDetails { get; set; }
         public DbSet<MudraDetail> MudraDetails { get; set; }
+        public DbSet<PostSanctionVisit> PostSanctionVisits { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -90,6 +92,7 @@ namespace MobileBackend.Models
             builder.Entity<VillageMaster>().HasNoKey().ToView("VillMaster");
             builder.Entity<KCCInfo>().HasNoKey().ToView("KccInf");
             builder.Entity<CibilAccounts>().HasNoKey().ToView("CibilA");
+            builder.Entity<Cust360N>().HasNoKey().ToView("Cust360NN");
         }
     }
 }

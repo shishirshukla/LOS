@@ -1,5 +1,15 @@
 ﻿namespace MobileBackend.Models
 {
+    public class Cust360N
+    {
+        //irac_old,  pmjjby, pmsby, apy,sbi_pai
+        public string irac_old { get; set; }
+        public string pmjjby { get; set; }
+        public string pmsby { get; set; }
+        public string apy { get; set; }
+        public string sbi_pai { get; set; }
+
+    }
     public class eMandate
     {
         public eMandate()

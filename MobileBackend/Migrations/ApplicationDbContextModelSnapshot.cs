@@ -1375,9 +1375,6 @@ namespace MobileBackend.Migrations
                     b.Property<string>("is_cancelled")
                         .HasColumnType("text");
 
-                    b.Property<bool>("is_until_cancel")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTime?>("last_run_date")
                         .HasColumnType("timestamp without time zone");
 
@@ -1413,6 +1410,9 @@ namespace MobileBackend.Migrations
 
                     b.Property<string>("umrn_mandate")
                         .HasColumnType("text");
+
+                    b.Property<bool>("untill_30_years")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -2382,9 +2382,6 @@ namespace MobileBackend.Migrations
                     b.Property<string>("is_cancelled")
                         .HasColumnType("text");
 
-                    b.Property<bool>("is_until_cancel")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTime?>("last_run_date")
                         .HasColumnType("timestamp without time zone");
 
@@ -2420,6 +2417,9 @@ namespace MobileBackend.Migrations
 
                     b.Property<string>("umrn_mandate")
                         .HasColumnType("text");
+
+                    b.Property<bool>("untill_30_years")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -2573,6 +2573,45 @@ namespace MobileBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PostInspectionVisitRemark");
+                });
+
+            modelBuilder.Entity("MobileBackend.Models.PostSanctionVisit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("AccountNo")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("VisitDate")
+                        .HasColumnType("text");
+
+                    b.Property<string>("image1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("image2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("latlong")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PostSanctionVisits");
                 });
 
             modelBuilder.Entity("MobileBackend.Models.PreInspection", b =>

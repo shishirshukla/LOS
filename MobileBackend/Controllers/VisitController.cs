@@ -31,7 +31,8 @@ namespace MobileBackend.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         public readonly CustomIDataProtection _protector;
         private IConfiguration _config;
-        public VisitController(CustomIDataProtection protector,ILogger<VisitController> logger, IWebHostEnvironment webHostEnvironment, ApplicationDbContext database, IConfiguration config, UserManager<ApplicationUser> userManager)
+        private readonly IWebHostEnvironment _appEnvironment;
+        public VisitController(IWebHostEnvironment appEnvironment, CustomIDataProtection protector,ILogger<VisitController> logger, IWebHostEnvironment webHostEnvironment, ApplicationDbContext database, IConfiguration config, UserManager<ApplicationUser> userManager)
         {
             _database = database;
             _logger = logger;
@@ -39,6 +40,7 @@ namespace MobileBackend.Controllers
             _config = config;
             _userManager = userManager;
             _protector = protector;
+            _appEnvironment = appEnvironment;
         }
 
         async Task<ApplicationUser> getEmp(string token) {
@@ -683,6 +685,59 @@ namespace MobileBackend.Controllers
                 return Json($"Fail {ex.Message}");
             }
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> PostSanctionVisitAsync(string acc_no , string latlong , string Status , string Remarks ,string visitDate ,IFormFile selfie , IFormFile assetImage)
+        {
+            //var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            PostSanctionVisit pv = new PostSanctionVisit();
+            pv.AccountNo = acc_no.PadLeft(17,'0');
+            pv.Status = Status;
+            pv.Remarks = Remarks;
+            pv.VisitDate = visitDate;
+            pv.latlong = latlong;
+            pv.UserId = User.Identity.Name;
+            var fileName = Guid.NewGuid().ToString().Replace("-", "").Substring(1, 6) + selfie.FileName;
+            if (selfie.Length > 0)
+            {
+
+                var filePath = Path.Join(_appEnvironment.WebRootPath,"PSV", fileName);
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await selfie.CopyToAsync(stream);
+                }
+                pv.image1 = fileName;
+            }
+            else
+            {
+                pv.image1 = "";
+            }
+            var fileName1 = Guid.NewGuid().ToString().Replace("-", "").Substring(1, 6) + assetImage.FileName;
+            if (assetImage.Length > 0)
+            {
+
+                var filePath = Path.Join(_appEnvironment.WebRootPath,"PSV", fileName1);
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await assetImage.CopyToAsync(stream);
+                }
+                pv.image2 = fileName1;
+            }
+            else
+            {
+                pv.image2 = "";
+            }
+            pv.CreateDate = DateTime.Now;
+            _database.PostSanctionVisits.Add(pv);
+            _database.SaveChanges();
+            return Ok("Done");
+        }
+
+
+
         [HttpPost]
         public IActionResult InspectionStart(int VisitId, IFormCollection formCollection, string token)
         {

@@ -66,6 +66,56 @@ namespace MobileBackend.Controllers
             return BadRequest();
         }
 
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> custinfo(string uidd)
+        {
+            Console.WriteLine("Customer360: Start");
+            var user = "";
+            var key = "";
+            if (Request.Headers.ContainsKey("x-user"))
+            {
+                user = Request.Headers["x-user"];
+            }
+            else
+            {
+                Console.WriteLine("Customer360:Header Not Found");
+            }
+            if (Request.Headers.ContainsKey("x-key"))
+            {
+                key = Request.Headers["x-key"];
+            }
+            else
+            {
+                Console.WriteLine("Customer360:Key Not Found");
+            }
+            if (user == "IRIX" && key == "2bPRixRaXKJprAltl3jnohMJM7bAbstQ")
+            {
+                var aa = _context.Cust360New.FromSqlRaw($"SELECT irac_old,  pmjjby, pmsby, apy,sbi_pai FROM public.check_360_new where uidd = '{uidd}'").FirstOrDefault();
+                if (aa != null)
+                {
+                    Console.WriteLine("Customer360:Success");
+                    return Ok(aa);
+                }
+                Console.WriteLine($"Customer360:Invalid Adhaar {uidd}");
+                return BadRequest(); 
+            }
+            else
+            {
+                Console.WriteLine("Customer360:Header & Key Mismatch");
+                return BadRequest();
+            }
+
+            return BadRequest();
+
+        }
+
+
+
+
+
         [Authorize]
         public async Task<IActionResult> UpdateDeviceId(string fcmId)
         {

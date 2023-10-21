@@ -56,6 +56,83 @@ namespace MobileBackend.Controllers
         {
             return RedirectToAction("Login");
         }
+        private  async Task<string> SaveImageAsBase64(string imageUrl )
+        {
+          
+            var proxy = new WebProxy
+            {
+                Address = new Uri($"http://10.43.5.6:3128"),
+                BypassProxyOnLocal = false,
+                UseDefaultCredentials = false,
+            };
+
+
+
+            // Create a client handler that uses the proxy
+            var httpClientHandler = new HttpClientHandler
+            {
+                Proxy = proxy,
+            };
+            try
+            {
+                Console.WriteLine($"Google API | Client initiated");
+
+                using (HttpClient client = new HttpClient(httpClientHandler))
+                {
+                    // Fetch the image from the URL
+                    HttpResponseMessage response = await client.GetAsync(imageUrl);
+                    Console.WriteLine($"Google API | Inside Using");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
+
+                        // Convert the image to base64
+                        string base64Image = Convert.ToBase64String(imageBytes);
+
+                        // Save the base64 data to a file
+                       return base64Image;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Google API | Failed to retrieve image. HTTP status code: " + response.StatusCode);
+                        return "";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Google API | An error occurred: " + ex.Message);
+                return "";
+            }
+        }
+        public async Task<IActionResult> GetMap()
+        {
+            var s = await SaveImageAsBase64("https://maps.googleapis.com/maps/api/staticmap?markers=color:red|21.1636016,81.7702507&zoom=16&size=600x600&key=AIzaSyC_jI2iRe__2DPzkCXT-wEQmUWuoRjAFog");
+            ViewBag.Img = s;
+            return View();
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult GetPostSanction(string acc)
+        {
+            var ll = _context.PostSanctionVisits.Where(a => a.AccountNo == acc.PadLeft(17,'0')).ToList();
+
+            return View(ll);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ViewPostReport(int Id)
+        {
+            var ll = _context.PostSanctionVisits.Find(Id);
+            var s = await SaveImageAsBase64($"https://maps.googleapis.com/maps/api/staticmap?markers=color:red|{ll.latlong.Replace('_', ',')}&zoom=16&size=600x600&key=AIzaSyC_jI2iRe__2DPzkCXT-wEQmUWuoRjAFog");
+            ViewBag.Img = s;
+            var ac = _context.AccountData.FromSqlRaw($"SELECT account_no,  acctopendate, currentbalance,  odlimit,  accounttype, interestcat, intrate,name,cust_name 	FROM public.temp_loan Where upload_date = (select max(upload_date)  FROM public.temp_loan) and account_no = LPAD('{ll.AccountNo}',17,'0')").FirstOrDefault();
+            ViewBag.AccountDetails = ac;
+            return View(ll);
+        }
+
 
         [Authorize]
         public IActionResult ValidatePAN()

@@ -1,0 +1,89 @@
+﻿@model PostSanctionVisit
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_BaseImport3";
+    int sl = 1;
+    AccountData acct = new AccountData();
+    if (ViewBag.AccountDetails != null)
+    {
+        acct = (AccountData)ViewBag.AccountDetails;
+    }
+}
+
+
+
+
+
+
+<div class="border-1 text-center">
+    <h3>Chhattisgarh Rajya Gramin Bank</h3>
+    <b>Post Sanction Visit Report</b>
+</div>
+
+@if (acct != null)
+{
+    <table class="table table-bordered table-sm">
+        <tr>
+            <td><b>Account </b></td>
+            <td>@acct.cust_name ( @acct.account_no) </td>
+            <td><b>Limit</b></td>
+            <td>@acct.odlimit</td>
+            <td><b>Current Balance</b></td>
+            <td>@acct.currentbalance</td>
+        </tr>
+        <tr>
+            <td><b>Product Code</b></td>
+            <td>@acct.accounttype - @acct.interestcat</td>
+            <td><b>ROI</b></td>
+            <td>@acct.intrate</td>
+            <td><b>Product Desc</b></td>
+            <td>@acct.name</td>
+        </tr>
+
+    </table>
+}
+
+<table class="table table-bordered table-sm">
+    <tr>
+        <td>Inspection Date</td>
+        <td>@Model.VisitDate</td>
+        <td>System Date</td>
+        <td>@Model.CreateDate.ToString("dd-MMM-yyyy")</td>
+    </tr>
+    <tr>
+        <td>Inspection Done By</td>
+        <td>@Model.UserId</td>
+        <td>Ownership of Asset</td>
+        <td>@Model.Status</td>
+    </tr>
+    <tr>
+        <td>
+            Remarks
+        </td>
+        <td colspan="3">
+            @Model.Remarks
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p>Image 1</p>
+            <img  src="/PSV/@Model.image1" class="img-thumbnail" style="max-height:450px;"/>
+        </td>
+        <td colspan="2">
+        <p>Image 2</p>
+            <img src="/PSV/@Model.image2" class="img-thumbnail" style="max-height:450px;" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <b>Location of Asset | @Model.latlong </b>
+            <img src="data:image/png;base64, @ViewBag.Img" class="img-thumbnail" style="max-height:450px;" />
+        </td>
+    </tr>
+</table>
+
+
+
+ 

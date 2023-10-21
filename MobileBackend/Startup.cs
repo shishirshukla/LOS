@@ -103,6 +103,7 @@ namespace MobileBackend
             });
             services.AddSingleton<UniqueCode>();
             services.AddSingleton<CustomIDataProtection>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -181,6 +182,7 @@ namespace MobileBackend
                     response.Redirect("/Home/Login");
                 }
             });
+            //RotativaConfiguration.Setup("/wwwroot","rotativa");
 
           
 

@@ -17,10 +17,16 @@
             <b>Sanctioned By : @Model.SanctioningUserId (@Model.SanctioningLevel)</b>
            
             <span>Control Status : @Model.ControlStatus</span>
-           
+
+            if (Model.ControlStatus == "Controlled")
+            {
+                <a href="/LoanFlow/ControlForm?Id=@_protector.Decode(Model.Id.ToString())">Control Form</a>
+            }
+
         }
         
     </div>
+
 
  
 
@@ -936,7 +942,11 @@
 </a> 
                     
 
-                    
+              <a href="/LoanFlow/DownloadAllDocuments/@Model.Id" class="btn btn-primary btn-sm" style="margin-left:10px;">
+                        Download Zip
+                    </a>
+
+          
 
 </td>
             </tr>
@@ -954,7 +964,7 @@
                     File Download
                 </th>
                
-                <th></th>
+                <th><a href="/LoanFlow/DownloadAllDocuments/@Model.Id">Download Zip</a></th>
             </tr>
         </thead>
         <tbody id="docTable">
@@ -1391,7 +1401,7 @@
             @{
                 slno = 1;
             }
-            @foreach(var x in Model.Remarks.Where(a=> a.DataType == "Movement"))
+            @foreach(var x in Model.Remarks.Where(a=> a.DataType == "Movement").OrderBy(a=> a.Timestamp))
             {
 
                 <tr>
@@ -1558,12 +1568,13 @@
                             
                         </div>
 
-                         @if (Model.LoanScheme == "MUDRA-Transport"  )
+                         @if (Model.LoanScheme == "MUDRA-Transport"   || Model.LoanScheme == "Gold-LMS" )
                 {
                     <div class="form-group col-sm-2 flex-column d-flex"> 
                             <button class="btn btn-success" onclick="sanction('@_protector.Decode(Model.Id.ToString())');">Proceed For Sanction</button>  
                         </div>
                 }
+
 
                  @if (  Model.LoanScheme == "KCC"   || Model.LoanScheme == "KCC-20" )
                 {

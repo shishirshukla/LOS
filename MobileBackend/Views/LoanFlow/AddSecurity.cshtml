@@ -31,6 +31,7 @@
          <option value="RM">Registered Mortgage </option>
          <option value="Lien">Lien </option>
          <option value="Assignment">Assignment</option>
+                <option value="Pledge">Pledge</option>
      </select>
  
   </div>
@@ -233,8 +234,11 @@
                 $('#orna').text('Ornament Type');
                 $('#wt1').removeAttr('placeholder');
                 $('#wt1').attr('type','number');
+                $('#wt1').attr('step','0.01');
+
                 $('#wt2').removeAttr('placeholder');
                 $('#wt2').attr('type','number');
+                $('#wt2').attr('step', '0.01');
                 $('#qty1').removeAttr('placeholder');
                 $('#qty1').attr('type','number');
                 $('#qty1').val('1');
@@ -248,7 +252,8 @@
                 $('#wt1').attr('type','text');
                 $('#wt2').attr('placeholder','Detail / Location');
                 $('#wt2').attr('type','text');
-               
+                $('#wt2').removeAttr('step');
+                $('#wt1').removeAttr('step');
                 $('#qty1').attr('type','text');
                 $('#qty1').val('North : , South : , East : , West :');
             }
