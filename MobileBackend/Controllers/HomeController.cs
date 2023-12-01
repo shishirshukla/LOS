@@ -15,7 +15,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
+using System.Globalization; 
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -31,6 +31,7 @@ using System.Xml.Serialization;
 using MobileBackend.Models.PAN;
 using System.Net;
 using MobileBackend.Models.CIBILRespone;
+using MobileBackend.Models.Cibil3;
 
 namespace MobileBackend.Controllers
 {
@@ -1157,6 +1158,85 @@ namespace MobileBackend.Controllers
 
             return Ok("Done");
         }
+
+        public async Task<IActionResult> AddUser1()
+        { 
+            return View();
+        }
+
+
+       [HttpPost]
+        public async Task<IActionResult> AddBC(IFormFile fileName)
+        {
+            using (System.IO.StreamReader sr = new System.IO.StreamReader("D:\\emp.csv"))
+            {
+                sr.ReadLine();
+                while (!sr.EndOfStream)
+                {
+                    var x = sr.ReadLine();
+                    ApplicationUser user = new ApplicationUser();
+                    user.UserName = x.Split(',')[0];
+                    user.EmployeeName = x.Split(',')[2];
+                    user.Scale = "BC";
+                    user.BranchId = x.Split(',')[1].PadLeft(5, '0');
+                    user.Role = "BC";
+                    user.Designation = "BC";
+                    var c = await _userManager.CreateAsync(user, "admin@123");
+                }
+            }
+
+
+            return Json("Done");
+        }
+
+
+     
+        public async Task<IActionResult> ReMandate(int Id)
+        {
+
+            Mandate man = _context.Mandates.Find(Id);
+            man.instructed_agent_id_type = "IFSC";
+            StreamReader sr = new StreamReader(Path.Combine(_appEnvironment.WebRootPath, "livebanks.csv"));
+            Dictionary<string, string> bb = new Dictionary<string, string>();
+            while (!sr.EndOfStream)
+            {
+                var s = sr.ReadLine();
+                bb.Add(s.Split(',')[0], s.Split(',')[1]);
+            }
+
+            man.instructed_agent_id = bb[man.instructed_agent_code];
+            man.reference_id = Guid.NewGuid().ToString().Replace("-", "");
+            var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
+            var o1 = new RestClientOptions();
+            o1.Proxy = new WebProxy("10.43.5.6:3128");
+            var client = new RestClient(o1);
+            var request1 = new RestRequest("https://api.signdesk.in/api/live/emandateRequest");
+            request1.AddHeader("Accept", "*/*");
+            request1.AddHeader("Accept-Encoding", "gzip, deflate, br");
+            request1.AddHeader("Connection", "keep-alive");
+
+            request1.AddHeader("x-parse-rest-api-key", "49eba9893d6ca293d80ac67d2d645bd5");
+            request1.AddHeader("x-parse-application-id", "chhattisgarh-rajya-gramin-bank_enach_production");
+            request1.AddHeader("Content-Type", "application/json");
+            request1.AddBody(js, "application/json");
+
+            var token_response = await client.ExecuteAsync(request1, Method.Post);
+            if (token_response.StatusCode == HttpStatusCode.OK)
+            {
+                var st = token_response.Content.ToString();
+                var d = Newtonsoft.Json.JsonConvert.DeserializeObject<MandateResponse>(st);
+                man.createDate = DateTime.Now;
+                man.emandate_id = d.emandate_id;
+                man.api_response_id = d.status;
+                man.mandate_status = "Created";
+                man.is_cancelled = "False";
+                _context.Entry(man).State = EntityState.Modified;
+                _context.SaveChanges();
+                return Ok(d.status);
+            }
+            return  Ok("Please check");
+        }
+
 
         public async Task<IActionResult> AddUser()
         {

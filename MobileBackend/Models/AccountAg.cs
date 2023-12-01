@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MobileBackend.Models
 {
@@ -70,7 +71,7 @@ namespace MobileBackend.Models
             occurance_sequence_type = "RCUR";
             occurance_frequency_type = "MNTH";
 
-
+            final_collection_date = DateTime.Now.AddYears(30).ToString("yyyy-MM-dd");
             collection_amount_type = "FIXED";
 
             mandate_type_category_code = "L001";
@@ -85,6 +86,12 @@ namespace MobileBackend.Models
 
         [JsonIgnore]
         public string LoanAc { get; set; }
+        [NotMapped]
+        public string final_collection_date { get; set; }
+        [NotMapped]
+        public string instructed_agent_id_type { get; set; }
+        [NotMapped]
+        public string instructed_agent_id { get; set; }
         public string reference_id { get; set; }
         public string debtor_account_type { get; set; }
         public string debtor_account_id { get; set; }
@@ -100,6 +107,7 @@ namespace MobileBackend.Models
         public string collection_amount_type { get; set; }
         public int amount { get; set; }
         public string mandate_type_category_code { get; set; }
+        [JsonIgnore]
         public bool untill_30_years { get; set; }
        // public bool is_until_cancel { get; set; }
         public bool quick_invite { get; set; }

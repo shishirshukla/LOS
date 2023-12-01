@@ -57,7 +57,7 @@
         <tbody>
             @foreach(var x in Model)
             {
-                <tr>
+                <tr id="rw-@x.Id">
                     <td>  @if (!ls.Contains(x.LoanScheme))
                         { 
                            <a href="/LoanFlow/AddControlDetails?Id=@_protector.Decode(x.Id.ToString())" onclick="showModal();">@x.Id</a>
@@ -80,7 +80,7 @@
                          <input type="text" class="form-control form-control-sm" id="cc-@x.Id" value="0"/>
                     </td>
                     <td>
-                        <button class=" btn btn-primary btn-sm" onclick="mapac(@x.Id);">Map</button>
+                        <button id="bt-@x.Id" class=" btn btn-primary btn-sm" onclick="mapac(@x.Id);">Map</button>
                     </td>
                 </tr>
             }
@@ -103,9 +103,32 @@
                alert('Both accounts cannot be Zero');
                return;
            }
-           window.location = '/LoanFlow/MapAccount?Id=' + a + '&Cc='+ccac + '&Tl=' + tlac;
-             
-            
+           else
+           {
+                    $('#bt-' + a).text('Working');
+
+                    $.ajax({
+                        url: "/LoanFlow/MapAccount",
+                        type: "GET",
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        data: { 'Id': a, 'Tl': tlac , 'CC': ccac  }
+                    }).done(function (data) {
+                        $('#bt-' + a).text('Map');
+                        if(data.status == 'Ok')
+                        {
+                            alert(data.msg);
+                            $('#rw-' + a).hide();
+                        }
+                        else
+                        {
+                            alert(data.msg);
+                        }
+                        
+                    });
+           }
+                
+
+
         }
        
     }

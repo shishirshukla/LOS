@@ -1296,6 +1296,7 @@ namespace MobileBackend.Controllers
             return Ok("New Password is admin@123");
         }
 
+        [Authorize]
         public async Task<IActionResult> GetCIFDetails(string Id)
         {
             Id = Id.PadLeft(17,'0');
@@ -1623,22 +1624,24 @@ namespace MobileBackend.Controllers
         {
             var app = _context.Applications.Find(Id);
             if (app == null) {
-                return RedirectToAction("MapAccounts", new { msg = "Something went wrong" });
+                return Ok(new {msg = "Some Error Occured" , status = "Failed" });
             }
             
-            var c = _context.Applications.Where(a=> a.MappedCCAccount == Cc || a.MappedTLAccount == Cc ).Count();
+            var c1 = _context.Applications.Where(a=> a.MappedCCAccount == Cc || a.MappedTLAccount == Cc ).ToList();
+            var c = c1.Count();
             if (Cc == "0") {
                 c = 0;
             }
-            var d = _context.Applications.Where(a => a.MappedCCAccount == Tl || a.MappedTLAccount == Tl).Count();
+            var d1 = _context.Applications.Where(a => a.MappedCCAccount == Tl || a.MappedTLAccount == Tl).ToList();
+            var d = d1.Count();
             if (Tl == "0")
             {
                 d = 0;
             }
             if (c + d > 0)
             {
-
-                return RedirectToAction("MapAccounts",new { msg="Already Mapped Accounts"});
+                return Ok(new { msg = $"Already Mapped Accounts CC-{c1.FirstOrDefault().Id} , TL-{d1.FirstOrDefault().Id}", status = "Failed" });
+                //return RedirectToAction("MapAccounts","LoanFlow",new {msg = $"Already Mapped Accounts CC-{c1.FirstOrDefault().Id} , TL-{d1.FirstOrDefault().Id}" });
             }
 
             var tl_acc = _context.KeyValues.FromSqlRaw($"SELECT * from public.check_acc('{Tl}');").ToList();
@@ -1646,24 +1649,24 @@ namespace MobileBackend.Controllers
 
             if (tl_acc.Count == 0 && Tl != "0")
             {
-                return RedirectToAction("MapAccounts", new { msg = "Invalid TL Account" });
+                return Ok(new { msg = "Invalid TL Account", status = "Failed" });
             }
             else if (tl_acc.Count > 0)
             {
                 if (tl_acc[0].value == "C")
                 {
-                    return RedirectToAction("MapAccounts", new { msg = "Invalid TL Account" });
+                    return Ok(new { msg = "Invalid CC Account", status = "Failed" });
                 }
             }
             if (cc_acc.Count == 0 && Cc != "0")
             {
-                return RedirectToAction("MapAccounts", new { msg = "Invalid CC Account" });
+                return Ok(new { msg = "Invalid CC Account", status = "Failed" });
             }
             else if (cc_acc.Count > 0  )
             {
                 if (cc_acc[0].value == "L")
                 {
-                    return RedirectToAction("MapAccounts", new { msg = "Invalid CC Account" });
+                    return Ok(new { msg = "Invalid CC Account", status = "Failed" });
                 }
             }
 
@@ -1671,7 +1674,7 @@ namespace MobileBackend.Controllers
             app.MappedCCAccount = Cc;
             _context.Entry(app).State = EntityState.Modified;
             _context.SaveChanges();
-            return RedirectToAction("MapAccounts", new { msg = "Mapped Successfully" }); ;
+            return Ok(new { msg = "Success", status = "Ok" });
         }
 
         [Authorize]
@@ -1909,6 +1912,16 @@ namespace MobileBackend.Controllers
             man.first_collection_date = startDate;
             man.email_address = emailid;
             man.created_by = User.Identity.Name;
+            man.instructed_agent_id_type = "IFSC";
+            StreamReader sr = new StreamReader(Path.Combine(_appEnvironment.ContentRootPath, "livebanks.csv"));
+            Dictionary<string, string> bb = new Dictionary<string, string>();
+            while (!sr.EndOfStream)
+            {
+                var s = sr.ReadLine();
+                bb.Add(s.Split(',')[0], s.Split(',')[1]);
+            }
+
+            man.instructed_agent_id = bb[man.instructed_agent_code];
             var u = await _userManager.FindByNameAsync(User.Identity.Name);
             man.branch = u.BranchId;
             var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
@@ -1970,6 +1983,16 @@ namespace MobileBackend.Controllers
             man.instructed_agent_code = bankName;
             man.first_collection_date = startDate;
             man.email_address = emailid;
+            man.instructed_agent_id_type = "IFSC";
+            StreamReader sr = new StreamReader(Path.Combine(_appEnvironment.ContentRootPath, "livebanks.csv"));
+            Dictionary<string, string> bb = new Dictionary<string, string>();
+            while (!sr.EndOfStream)
+            {
+                var s = sr.ReadLine();
+                bb.Add(s.Split(',')[0], s.Split(',')[1]);
+            }
+
+            man.instructed_agent_id = bb[man.instructed_agent_code];
 
             var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
             var o1 = new RestClientOptions();
@@ -2613,7 +2636,37 @@ namespace MobileBackend.Controllers
             return View(applications);
         }
         [Authorize]
-        public async Task<IActionResult> MapAccounts(string msg = "")
+        public async Task<IActionResult> MapAccounts()
+        {
+            ViewBag.Message = "";
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var branch = _context.Branches.Find(user.BranchId);
+            List<string> list = new List<string>();
+            var brInfo = _context.Branches.Find(user.BranchId);
+            if (brInfo.BrType == "Branch")
+            {
+                list.Add(brInfo.Id);
+            }
+            else if (brInfo.BrType == "AMH")
+            {
+                list.AddRange(_context.Branches.Where(a => a.AMHCode == user.BranchId).Select(a => a.Id).ToList());
+            }
+            else if (brInfo.BrType == "HO")
+            {
+                list.AddRange(_context.Branches.Select(a => a.Id).ToList());
+            }
+            else
+            {
+                list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchDetails.RegionalOffice && a.BrType == "Branch").Select(a => a.Id).ToList());
+            }
+            ViewBag.UserLevel = branch.BrType;
+            var applications = _context.Applications.Where(a => a.Status == "Sanctioned" && list.Contains(a.BranchId) && (a.MappedTLAccount == null && a.MappedCCAccount == null)).ToList();
+            return View(applications);
+        }
+        [Authorize]
+       
+        [HttpPost]
+        public async Task<IActionResult> MapAccounts(string msg )
         {
             ViewBag.Message = msg;
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -2674,9 +2727,9 @@ namespace MobileBackend.Controllers
         //        data = empList
         //    };
         //}
-    
 
-    [Authorize]
+
+        [Authorize]
         public async Task<IActionResult> AppSanctionedAjax()
         {
         int totalRecord = 0;
@@ -3520,6 +3573,10 @@ namespace MobileBackend.Controllers
             {
                 return Ok("Yes");
             }
+            if (application.LoanScheme == "KCC-20")
+            {
+                return Ok("KCC-20 cannot be sanctioned");
+            }
 
             return Ok("Loan Limit not approved");
         }
@@ -3540,6 +3597,9 @@ namespace MobileBackend.Controllers
         }
 
 
+
+
+
         [Authorize]
         public async Task<IActionResult> UpdateStatus(string Id,string action1)
         {
@@ -3547,6 +3607,29 @@ namespace MobileBackend.Controllers
             var application = _context.Applications.Find(id);
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var userBranch = _context.Branches.Find(user.BranchId);
+            List<string> allowedAtBranch = new List<string>();
+            allowedAtBranch.Add("PL");
+            allowedAtBranch.Add("Car");
+            allowedAtBranch.Add("HL");
+            allowedAtBranch.Add("PL-Ag");
+            allowedAtBranch.Add("Express");
+            allowedAtBranch.Add("PL-Express");
+            allowedAtBranch.Add("PL-SECL");
+            allowedAtBranch.Add("KCC");
+            allowedAtBranch.Add("KCC-20");
+            allowedAtBranch.Add("MUDRA-Simplified");
+            allowedAtBranch.Add("MUDRA-Transport");
+            allowedAtBranch.Add("Gold-LMS");
+
+            List<string> allowedAtBranch1 = new List<string>();
+            allowedAtBranch1.Add("MUDRA-Transport");
+            allowedAtBranch1.Add("Express");
+            allowedAtBranch1.Add("PL-Express");
+            allowedAtBranch1.Add("KCC");
+            allowedAtBranch1.Add("KCC-20");
+            allowedAtBranch1.Add("Gold-LMS");
+
+
             if (action1 == "Return")
             {
                 if (application.Owner != "Branch")
@@ -3579,20 +3662,39 @@ namespace MobileBackend.Controllers
             }
             else if (action1 == "Sanction")
             {
+
                 if (user.Designation == "Branch Manager" || user.Designation == "AMH Head" || user.Designation == "AMH 2nd Officer" || user.Designation == "Manager Advance" || user.Designation == "Manager Business")
                 {
+                    if (user.Designation != "Branch Manager" && allowedAtBranch.Contains(application.LoanScheme))
+                    {
+                        application.SanctionedLevel = application.Owner;
+                        application.Owner = "Branch";
+                        application.Status = "Sanctioned";
+                        application.ControlStatus = "Pending";
+                        application.SanctioningLevel = user.Designation;
+                        application.SanctioningUserId = user.UserName;
+                        application.SanctionedDate = DateTime.Now;
+                        _context.Entry(application).State = EntityState.Modified;
+                        _context.SaveChanges();
 
-                    application.SanctionedLevel = application.Owner;
-                    application.Owner = "Branch";
-                    application.Status = "Sanctioned";
-                    application.ControlStatus = "Pending";
-                    application.SanctioningLevel = user.Designation;
-                    application.SanctioningUserId = user.UserName;   
-                    application.SanctionedDate = DateTime.Now;
-                    _context.Entry(application).State = EntityState.Modified;
-                    _context.SaveChanges();
+                        AddLog(id, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", action1);
+                    }
+                    else if (user.Designation == "Branch Manager" && allowedAtBranch1.Contains(application.LoanScheme))
+                    {
+                        application.SanctionedLevel = application.Owner;
+                        application.Owner = "Branch";
+                        application.Status = "Sanctioned";
+                        application.ControlStatus = "Pending";
+                        application.SanctioningLevel = user.Designation;
+                        application.SanctioningUserId = user.UserName;
+                        application.SanctionedDate = DateTime.Now;
+                        _context.Entry(application).State = EntityState.Modified;
+                        _context.SaveChanges();
 
-                    AddLog(id, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", action1);
+                        AddLog(id, User.Identity.Name, Request.HttpContext.Connection.RemoteIpAddress.ToString(), "Portal", action1);
+                    }
+
+                   
                 }
                 
             }
