@@ -91,9 +91,9 @@
             if('@ViewBag.Scheme' == 'HL' && b == 'Home Loan: Cost of Interior')
             {
                 console.log('In If');
-                 if(new_app > (cost * .10))
+                 if(new_app > (cost * .20))
                 {
-                    alert('Interior Amount Greater than 10% of Cost, cannot proceed');
+                    alert('Interior Amount Greater than 20% of Cost, cannot proceed');
                     event.preventDefault();
                     return false;
                 }

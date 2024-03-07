@@ -248,6 +248,67 @@
 
     </table>
 
+    <table class="table table-bordered table-sm" style="padding-top:5px;">
+        <thead>
+            <tr>
+                <td colspan="3"><b>Attached Documents</b></td>
+                <td colspan="2">
+
+                    <a href="/LoanFlow/AddDocument/@Model.Id" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applicantModal">
+                        Add
+                    </a>
+
+
+                    <a href="/LoanFlow/DownloadAllDocuments/@Model.Id" class="btn btn-primary btn-sm" style="margin-left:10px;">
+                        Download Zip
+                    </a>
+
+
+
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    S.No.
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    UserId
+                </th>
+                <th>
+                    File Download
+                </th>
+
+                <th><a href="/LoanFlow/DownloadAllDocuments/@Model.Id">Download Zip</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                slno = 1;
+            }
+            @foreach (var x in Model.Documents)
+            {
+
+                <tr>
+                    <td>@slno</td>
+                    <td>@x.Details </td>
+                    <td>@x.UserId</td>
+                    <td><a href="/@x.FilePath">Download</a></td>
+
+                    <td>
+                        
+
+
+                    </td>
+                </tr>
+                slno++;
+            }
+        </tbody>
+
+    </table>
+
     
       <table class="table table-bordered table-sm" style="padding-top:5px;">
         <thead>

@@ -16,14 +16,12 @@
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-dark" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Control Points</a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" asp-controller="LoanFlow" asp-action="">Summary</a>
-            <a class="dropdown-item" asp-controller="LoanFlow" asp-action="">Account Opened in CBS not mapped to LMS</a>
-            <a class="dropdown-item" asp-controller="LoanFlow" asp-action="">Mismatch in Rate of Intt</a>
-            <a class="dropdown-item" asp-controller="LoanFlow" asp-action="">Mismatch in Limit</a>
-            <a class="dropdown-item" asp-controller="LoanFlow" asp-action="">Mismatch in Moratorium</a>
-            <a class="dropdown-item" asp-controller="LoanFlow" asp-action="">Mismatch in EMI </a>
-            <a class="dropdown-item" asp-controller="LoanFlow" asp-action="">Mismatch in repay Terms</a>
-            
+            <a class="dropdown-item" asp-controller="ControlPoint" asp-action="Summary">Summary</a>
+            <a class="dropdown-item" asp-controller="ControlPoint" asp-action="Index">Account Opened in CBS not mapped to LMS</a>
+            <a class="dropdown-item" asp-controller="ControlPoint" asp-action="IndexROI">Mismatch in Rate of Intt</a>
+            <a class="dropdown-item" asp-controller="ControlPoint" asp-action="IndexLimit">Mismatch in Limit</a>
+         
+             
 
         </div>
     </li>

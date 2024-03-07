@@ -435,7 +435,9 @@ namespace MobileBackend.Controllers
         [Authorize]
         public async Task<IActionResult> Dashboard()
         {
+            
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            Console.WriteLine("LMS | In Dashboard");
             List<string> list = new List<string>();
             var brInfo = _context.Branches.Find(user.BranchId);
             ViewBag.UserInfo = $"{user.EmployeeName} ({user.UserName}) , Branch : {user.BranchId} ({brInfo.BrType})";
@@ -483,6 +485,7 @@ namespace MobileBackend.Controllers
                 ViewBag.Report1111 = chart_report2;
                 list.AddRange(_context.Branches.Where(a => a.RegionalOffice == user.BranchDetails.RegionalOffice && a.BrType == "Branch").Select(a => a.Id).ToList());
             }
+            Console.WriteLine("LMS | In Dashboard Reports Done");
             var applications = _context.Applications.Include(a=> a.Inspections).Include(a=> a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
             var appCnt = _context.Applications.Where(a => a.OwnerUser == user.UserName && a.Status == "Pending").Count();
             ViewBag.Applications = applications.Where(a=> a.Status == "Pending").Count();
@@ -503,6 +506,7 @@ namespace MobileBackend.Controllers
             var genLeads = _context.CommonLeads.Include(a => a.Branch).Where(a => list.Contains(a.BranchId)).ToList();
             int Leads = tplleads.Count() + kccleads.Count() + goldleads.Count() + genLeads.Count();
             ViewBag.LeadCount = Leads;
+            Console.WriteLine("LMS | Going to View");
             return View();
         }
 
@@ -1099,6 +1103,7 @@ namespace MobileBackend.Controllers
                      signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
                 HttpContext.Session.SetString("Token", new JwtSecurityTokenHandler().WriteToken(token));
+                Console.WriteLine("LMS | Redirecting to Dashboard");
                 return RedirectToAction("Dashboard","Home",null);
             }
             return View();
@@ -1159,14 +1164,46 @@ namespace MobileBackend.Controllers
             return Ok("Done");
         }
 
+        public async Task<IActionResult> AddBCApi(string empCode, string empName,  string branchId)
+        {
+            ApplicationUser user = new ApplicationUser();
+            user.UserName = empCode;
+            user.EmployeeName = empName;
+            user.Scale = "BC";
+            user.Designation = "BC";
+            user.BranchId = branchId;
+            user.Role = "BC";
+            var c = await _userManager.CreateAsync(user, "crgb@123");
+
+            return Ok("Done");
+        }
+
+
+        public async Task<IActionResult> ChangePasswordApi(string empCode, string oldPassword, string newPassword)
+        {
+            try
+            {
+                var u = await _userManager.FindByNameAsync(empCode);
+                var b = await _userManager.ChangePasswordAsync(u, oldPassword, newPassword);
+                return Ok("Done");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Mismatch in Details"); 
+            }
+
+            
+        }
+
+
         public async Task<IActionResult> AddUser1()
         { 
             return View();
         }
 
 
-       [HttpPost]
-        public async Task<IActionResult> AddBC(IFormFile fileName)
+     
+        public async Task<IActionResult> AddBC()
         {
             using (System.IO.StreamReader sr = new System.IO.StreamReader("D:\\emp.csv"))
             {

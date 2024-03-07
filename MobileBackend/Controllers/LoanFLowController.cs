@@ -1632,6 +1632,11 @@ namespace MobileBackend.Controllers
             if (Cc == "0") {
                 c = 0;
             }
+            var k = _context.KeyValues.FromSqlRaw($"SELECT * from public.check_nrlm('{Cc}');").ToList();
+            if (k.Count() > 0)
+            {
+                c = 0;
+            }
             var d1 = _context.Applications.Where(a => a.MappedCCAccount == Tl || a.MappedTLAccount == Tl).ToList();
             var d = d1.Count();
             if (Tl == "0")
@@ -2560,12 +2565,9 @@ namespace MobileBackend.Controllers
             }
             else if (user.Designation == "Manager Business")
             {
-                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == null  || a.SanctioningLevel == "Branch Manager")).ToList();
+                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == null  || a.SanctioningLevel == "Branch Manager" || a.SanctioningLevel == "AMH 2nd Officer")).ToList();
             }
-            else if (user.Designation == "AMH Head")
-            {
-                applications = _context.Applications.Include(a => a.Branch).Where(a => a.Status == "Sanctioned" && a.ControlStatus == "SendToControl" && list.Contains(a.BranchId) && (a.SanctioningLevel == "AMH 2nd Officer" || a.SanctioningLevel == "Branch Manager")).ToList();
-            }
+            
 
             return View(applications);
         }
@@ -3164,6 +3166,7 @@ namespace MobileBackend.Controllers
             var app = _context.Applications.Find(id);
             _context.Entry(app).Collection(a => a.Applicants).Load();
             _context.Entry(app).Collection(a => a.Remarks).Load();
+            _context.Entry(app).Collection(a => a.Documents).Load();
             _context.Entry(app).Reference(a => a.ControlInformations).Load();
 
             List<int> applicantIds = app.Applicants.Where(a => a.ApplicationId == id && a.Driving_Lic != "Deleted").Select(b => b.Id).ToList();
@@ -3228,6 +3231,14 @@ namespace MobileBackend.Controllers
             
 
             var app = _context.AccountInfo.Find(AId.PadLeft(17,'0'));
+            if (app == null)
+            {
+                var x = _context.Applications.Where(a => a.MappedTLAccount.PadLeft(17, '0') == AId.PadLeft(17, '0') || a.MappedCCAccount.PadLeft(17, '0') == AId.PadLeft(17, '0')).FirstOrDefault();
+                if (x != null)
+                {
+                    return RedirectToAction("GoToApplication", new {appid = x.Id });
+                }
+            }
 
             app.Applicants = _context.ExistingApplicant.Where(a => a.AccountInfoId == AId.PadLeft(17, '0')).ToList();
             app.Applicants.FirstOrDefault().ExistingKYCs = _context.KycInfoExisting.Where(a => a.ExistingApplicantId == AId.PadLeft(17, '0')).ToList();
@@ -3662,6 +3673,10 @@ namespace MobileBackend.Controllers
             }
             else if (action1 == "Sanction")
             {
+                //if (application.LoanScheme == "KCC-20")
+                //{
+                //    return RedirectToAction("Application", new { Id = Id });
+                //}
 
                 if (user.Designation == "Branch Manager" || user.Designation == "AMH Head" || user.Designation == "AMH 2nd Officer" || user.Designation == "Manager Advance" || user.Designation == "Manager Business")
                 {
@@ -3733,7 +3748,7 @@ namespace MobileBackend.Controllers
                     {
                         checkControl = true;
                     }
-                    if (userBranch.BrType == "RO" && (user.Designation == "Regional Manager") && application.SanctioningLevel == "Manager Business")
+                    if (userBranch.BrType == "RO" && (user.Designation == "Regional Manager") && (application.SanctioningLevel == "Manager Business" || application.SanctioningLevel == "AMH Head"))
                     {
                         checkControl = true;
                     }

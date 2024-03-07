@@ -108,11 +108,11 @@
          <tr>
             
             <td class="font-weight-bold">Tire Replacement Expense (Yearly)</td>
-            <td>@tireExpense</td>
+            <td>@Math.Round(tireExpense,2)</td>
              <td class="font-weight-bold">Fuel Expense (Yearly)</td>
-            <td>@fuelExpense</td>
+            <td>@Math.Round(fuelExpense,2)</td>
              <td class="font-weight-bold"> Service Expense (Yearly)</td>
-            <td> @serviceCost  </td>
+            <td> @Math.Round(serviceCost,2)  </td>
 
         </tr>
          <tr>
@@ -120,9 +120,9 @@
             <td class="font-weight-bold">Other Expense (Yearly)</td>
             <td>@otherCost</td>
              <td class="font-weight-bold">Yearly Expenses</td>
-            <td>@yearlyExpense</td>
+            <td>@Math.Round(yearlyExpense,2)</td>
              <td class="font-weight-bold"> Gross Profit</td>
-            <td> @(yearlyIncome - yearlyExpense)  </td>
+            <td> @Math.Round((yearlyIncome - yearlyExpense),2)  </td>
 
         </tr>
               
@@ -146,7 +146,7 @@
             <tr>
                 <td>1.</td>
                 <td>Gross Profit</td>
-                <td>@(yearlyIncome - yearlyExpense)</td>
+                    <td>@Math.Round((yearlyIncome - yearlyExpense),2)</td>
                 @*<td>@(yearlyIncome - yearlyExpense)</td>
                 <td>@(yearlyIncome - yearlyExpense)</td>
                 <td>@(yearlyIncome - yearlyExpense)</td>

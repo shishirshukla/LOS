@@ -93,7 +93,7 @@ namespace MobileBackend.Controllers
             }
             if (user == "IRIX" && key == "2bPRixRaXKJprAltl3jnohMJM7bAbstQ")
             {
-                var aa = _context.Cust360New.FromSqlRaw($"SELECT irac_old,  pmjjby, pmsby, apy,sbi_pai FROM public.check_360_new where uidd = '{uidd}'").FirstOrDefault();
+                var aa = _context.Cust360New.FromSqlRaw($"SELECT irac_old,  pmjjby, pmsby, apy,sbi_pai FROM public.check_360_new where account_no = LPAD('{uidd}',17,'0')").FirstOrDefault();
                 if (aa != null)
                 {
                     Console.WriteLine("Customer360:Success");

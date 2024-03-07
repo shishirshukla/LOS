@@ -1,0 +1,129 @@
+﻿@using System.Data
+@model System.Data.DataTable
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    int cols = 0;
+    DataTable dt = Model;
+    //List<int> colSums = ViewBag.colSums;
+    //Dictionary<int, string[]> collinks = ViewBag.collink;
+    //int minCols = colSums.Min();
+
+    if (Model != null)
+    {
+        dt = Model;
+        cols = dt.Columns.Count;
+
+    }
+    decimal ConvertToNumeric(object value, Type targetType)
+    {
+        if (targetType == typeof(decimal))
+        {
+            return Convert.ToDecimal(value);
+        }
+        else if (targetType == typeof(Int64))
+        {
+            return Convert.ToInt32(value);
+        }
+        else if (targetType == typeof(Int32))
+        {
+            return Convert.ToInt32(value);
+        }
+        else if (targetType == typeof(Int16))
+        {
+            return Convert.ToInt32(value);
+        }
+        // Add more cases for other numeric types as needed...
+
+        // Handle unsupported types or defaults to 0
+        return 0;
+    }
+}
+
+
+
+<div class="text-center">
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                @for (var i = 0; i < cols; i++)
+                {
+                    <th>@dt.Columns[i].ColumnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (DataRow item in dt.Rows)
+            {
+                <tr>
+                    @for (var i = 0; i < cols; i++)
+                    {
+
+                        if (i == 2)
+                        {
+                            <td>@item[i]</td>
+                        }
+                        else
+                        { 
+                        <td>@item[i]</td>
+                        }
+                        
+                        
+
+                    }
+                    
+                </tr>
+            }
+
+        </tbody>
+        
+    </table>
+
+
+
+</div>
+
+<div class="modal" id="applicantModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="appModal">
+                <b>Please wait , processing</b>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            console.log('ok1');
+            $('#applicantModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); 
+                var recipient = button.data('aa');
+                console.log('ok');
+                var modal = $(this);
+                modal.find('.modal-title').text('New message to ' + recipient);
+                
+            });
+        
+        });
+
+        
+    </script>
+}

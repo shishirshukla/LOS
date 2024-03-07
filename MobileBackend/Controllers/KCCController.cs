@@ -611,6 +611,8 @@ namespace MobileBackend.Controllers
         private Tuple<string, decimal> GetLandDetails(string aa)
         {
             var arr = aa.Split('(');
+            int k = arr[1].IndexOf(")");
+            arr[1] = arr[1].Substring(0, k+1);
             var land = decimal.Parse(arr[1].Replace("हे॰ )", "").Replace("हे॰)", "").Trim());
             Tuple<string, decimal> t = new Tuple<string, decimal>(arr[0].Trim(), land );
             return t;
@@ -619,8 +621,8 @@ namespace MobileBackend.Controllers
         public async Task<IActionResult> InsertBhuiyan(int AppId = 441,string dDistrict = "सूरजपुर", string dTehsil = "", string dRI = "", string dVillage = "", string ownKhasra = "", string otherKhasra = "393/1 (0.2300 हे॰), 394/1 (0.6200 हे॰)", string dharanAdhikar = "भूमिस्वामी - कृषि भूमि", string bhuswami = "(1) रतन कुमार जोत का प्रकार - अकेला", string b1 = "https://bhuiyan.cg.nic.in/administrator/CheckSignedFileExistance.aspx?DscUrl=B1/6407218/20220928640700027.pdf", string charge = "", string dCode = "", string dTeh = "", string dVill = "")
         {
             string state = "URL Hit";
-            try
-            {
+           // try
+          //  {
                 string b1copy = "";
                 List<Tuple<string, decimal>> dists = new List<Tuple<string, decimal>>();
                 dists.Add(GetLandDetails(ownKhasra));
@@ -709,12 +711,12 @@ namespace MobileBackend.Controllers
                 
 
                 return Ok($"Success {AppId} | {dVillage} | {state} | {b1copy}");
-            }
-            catch (Exception exp)
-            {
+           // }
+            //catch (Exception exp)
+            //{
 
-                return Ok($"Error {state} | {exp.Message} | {ownKhasra} | {dVillage} | {otherKhasra} | {AppId}");
-            }
+            //    return Ok($"Error {state} | {exp.Message} | {ownKhasra} | {dVillage} | {otherKhasra} | {AppId}");
+            //}
            
         }
         public async Task<IActionResult> InsertBhuiyanAccount(string AppId = "441", string dDistrict = "सूरजपुर", string dTehsil = "", string dRI = "", string dVillage = "", string ownKhasra = "", string otherKhasra = "393/1 (0.2300 हे॰), 394/1 (0.6200 हे॰)", string dharanAdhikar = "भूमिस्वामी - कृषि भूमि", string bhuswami = "(1) रतन कुमार जोत का प्रकार - अकेला", string b1 = "https://bhuiyan.cg.nic.in/administrator/CheckSignedFileExistance.aspx?DscUrl=B1/6407218/20220928640700027.pdf", string charge = "",string dCode = "",string dTeh = "",string dVill = "")
