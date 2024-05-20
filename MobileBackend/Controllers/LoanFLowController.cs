@@ -1931,8 +1931,9 @@ namespace MobileBackend.Controllers
             man.branch = u.BranchId;
             var js = Newtonsoft.Json.JsonConvert.SerializeObject(man);
             var o1 = new RestClientOptions();
-            o1.Proxy = new WebProxy("10.43.5.6:3128");
+              o1.Proxy = new WebProxy("10.43.5.6:3128");
             var client = new RestClient(o1);
+            //var client = new RestClient();
             var request1 = new RestRequest("https://api.signdesk.in/api/live/emandateRequest");
             request1.AddHeader("Accept", "*/*");
             request1.AddHeader("Accept-Encoding", "gzip, deflate, br");

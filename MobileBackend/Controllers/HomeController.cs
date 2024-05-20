@@ -127,7 +127,7 @@ namespace MobileBackend.Controllers
         public async Task<IActionResult> ViewPostReport(int Id)
         {
             var ll = _context.PostSanctionVisits.Find(Id);
-            var s = await SaveImageAsBase64($"https://maps.googleapis.com/maps/api/staticmap?markers=color:red|{ll.latlong.Replace('_', ',')}&zoom=16&size=600x600&key=AIzaSyC_jI2iRe__2DPzkCXT-wEQmUWuoRjAFog");
+            var s = await SaveImageAsBase64($"https://maps.googleapis.com/maps/api/staticmap?markers=color:red|{ll.latlong.Replace('_', ',')}&zoom=16&size=600x600&key=AIzaSyD4Nr4xdFtsV8IeER4X4-XmlHmnHphUZ1I");
             ViewBag.Img = s;
             var ac = _context.AccountData.FromSqlRaw($"SELECT account_no,  acctopendate, currentbalance,  odlimit,  accounttype, interestcat, intrate,name,cust_name 	FROM public.temp_loan Where upload_date = (select max(upload_date)  FROM public.temp_loan) and account_no = LPAD('{ll.AccountNo}',17,'0')").FirstOrDefault();
             ViewBag.AccountDetails = ac;
