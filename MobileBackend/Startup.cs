@@ -58,6 +58,9 @@ namespace MobileBackend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Console.WriteLine("Hosting Started");
+            Console.WriteLine($"Current Environment: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("ConnStr")));
@@ -78,7 +81,10 @@ namespace MobileBackend
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                
+                Console.WriteLine($"Configuration Code");
+                var cc = Configuration["JWT:Secret"];
+                Console.Write($"Configuration Code {cc}");
+
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
